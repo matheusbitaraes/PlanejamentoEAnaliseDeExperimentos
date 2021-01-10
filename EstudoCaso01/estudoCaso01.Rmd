@@ -1,37 +1,31 @@
 ---
-title: "Estudo de Caso 01"
+title: "Estudo de Caso 01: Comparação do IMC médio de alunos do PPGEE-UFMG ao longo de dois semestres"
 author: "Diego Pontes, Elis Vieira, Matheus Bitarães"
-output: pdf_document
+date: "Janeiro, 2021"
+output:
+    pdf_document:
+    fig_caption: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Lendo os arquivos de entrada do trabalho
+## Descrição do problema
+...
 
-Inicialmente iremos carregar os dois arquivos de entrada do trabalho.
+## Design do Experimento
+...
 
-#### imc_20162
+## Análise Estatística
+...
 
-``` {r echo=TRUE}
-imc_data <- read.csv(file = './imc_20162.csv')
-summary(imc_data)
-```
+### Discussão e Conclusão
+...
 
-``` {r echo=TRUE}
-imc_data <- read.csv(file = './CS01_20172.csv', sep =";")
-summary(imc_data)
-```
+### Atividades dos membros
+...
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Referencias
 
 
