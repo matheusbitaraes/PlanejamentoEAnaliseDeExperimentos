@@ -1,5 +1,6 @@
 ---
-title: "estudoCaso01"
+title: "Estudo de Caso 01"
+author: "Diego Pontes, Elis Vieira, Matheus Bitarães"
 output: pdf_document
 ---
 
@@ -7,14 +8,20 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Lendo os arquivos de entrada do trabalho
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Inicialmente iremos carregar os dois arquivos de entrada do trabalho.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+#### imc_20162
 
-```{r cars}
-summary(cars)
+``` {r echo=TRUE}
+imc_data <- read.csv(file = './imc_20162.csv')
+summary(imc_data)
+```
+
+``` {r echo=TRUE}
+imc_data <- read.csv(file = './CS01_20172.csv', sep =";")
+summary(imc_data)
 ```
 
 ## Including Plots
@@ -26,3 +33,5 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
