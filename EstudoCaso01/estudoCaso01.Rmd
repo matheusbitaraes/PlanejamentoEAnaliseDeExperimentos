@@ -1,6 +1,6 @@
 ---
 title: "Estudo de Caso 01: Comparação do IMC médio de alunos do PPGEE-UFMG ao longo de dois semestres"
-author: "Diego Pontes, Elis Vieira, Matheus Bitarães"
+author: "Diego Pontes, Elias Vieira, Matheus Bitarães"
 date: "Janeiro, 2021"
 output:
     pdf_document:
