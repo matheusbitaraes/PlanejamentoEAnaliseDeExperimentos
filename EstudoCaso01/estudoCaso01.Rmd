@@ -1,5 +1,5 @@
 ---
-title: "Estudo de Caso 01: Comparação do IMC médio de alunos do PPGEE-UFMG ao longo de dois semestres"
+title: "Estudo de Caso 02: Comparação do IMC médio de alunos do PPGEE-UFMG ao longo de dois semestres"
 author: "Diego Pontes, Elias Vieira, Matheus Bitarães"
 date: "Janeiro, 2021"
 output:
@@ -12,17 +12,72 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Descrição do problema
-...
-A descrição é o seguinte
+
+  Neste estudo, deseja-se comparar o IMC médio de duas populações de alunos da pós-graduação da Engenharia Elétrica (PPGEE) da UFMG no segundo semestre de 2016 e de 2017.
+Para este estudo, foram disponibilizadas duas amostras, sendo uma para cada semestre em questão, onde serão feitas as análises para o estudo já mencionado.
+
+## Introdução
+
+  Reconhecido internacionalmente pela Organização Mundial da Saúde (OMS), o IMC indica o peso adequado para cada pessoa, fazendo uma relação entre sua massa corpórea (em kg) e sua altura (em m) [1], conforme a Equação 1, mostrada abaixo.
+
+
+IMC = peso/ (altura * altura) (1) (transformar em fórmula)
+
+  Pode-se classificar o valor do IMC conforme listado abaixo [1]:
+
+IMC abaixo de 18,5: Peso abaixo do normal;
+
+IMC entre 18,5 e 24,9: São pesos considerados normais pela OMS;
+
+IMC entre 25 e 29,9: Peso em pré-obesidade ou acima do peso;
+
+IMC entre 30 e 34,9: Este índice indica obesidade grau um;
+
+IMC acima 35 e 39,9: Indica obesidade grau dois
+
+IMC acima de 40: Indica obesidade grau três ou mórbida							
 
 ## Design do Experimento
-...
+
+  Como já mencionado, deseja-se comparar o IMC dos alunos do PPGEE-UFMG de dois semestres distintos, conforme amostradas recebidas. Para tal estudo, serão feitas duas análises e testes estatísticos independentes considerando duas subpopulações distintas, uma considerando somente o sexo masculino e outra para o sexo feminino. 
+
+  As seguintes hipóteses estatísticas foram definidas:
+
+1) Há evidências de que a média do IMC dos alunos do PPGEE-UFMG de 2/2016 é diferente da média do IMC dos alunos do PPGEE-UFMG de 2/2017? (subpopulação masculina)
+
+2) Há evidências de que a mediana do IMC das alunas do PPGEE-UFMG de 2/2016 é diferente da mediana do IMC das alunas do PPGEE-UFMG de 2/2017? (subpopulação feminina)
+
+No decorrer do estudo ficará claro o motivo pela qual foi utilizado média e mediana para a subpopulação masculina e feminina, respectivamente.
+
+  Dadas as hipóteses estatísticas descritas acima, podem-se definir as seguintes hipóteses de testes, em função da média (ou mediana devido a análise da distribuição dos valores) do IMC dos alunos entre os dois semestres distintos, para os alunos do sexo masculino e feminino, separadamente:
+
+H0 : X(m_2016) = X(m_2017)
+
+H1 : X(m_2016) (diferente) X(m_2017)
+
+
+H0 : X(f_2016) = X(f_2017)
+
+H1 : X(f_2016) (diferente) X(f_2017)
+
+
+(considerei X, pois ainda não sabemos a forma da distribuição dos valores)
+
+
+
+  Além das hióteses estatísticas definidas acima, tem-se as seguintes definições:
+
+1) Nível de significância (alfa) de 0,0X. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese [2].
+2) Potência de teste = 1 - beta = 0,X.  Onde beta é a probabilidade de ocorrência de um falso negativo em qualquer procedimento de teste de hipótese [2] e, portanto, a potência de teste quantifica a sensibilidade do teste à efeitos que violam sua hipótese nula [2].
+
 
 ## Análise Estatística
-...
+
 
 ### Importação dos dados
-Foram importados os arquivos *imc_20162.csv* e *CS01_20172.csv* para o problema
+
+  Foram importados os arquivos *imc_20162.csv* e *CS01_20172.csv* para o estudo proposto.
+
 ```{r, include=TRUE, echo=TRUE}
 
 # importação dos dados
@@ -32,27 +87,24 @@ raw_data_2017 <- read.csv(file = 'CS01_20172.csv', sep=';')
 head(raw_data_2016)
 head(raw_data_2017)
 ```
-Podemos observar que os arquivos possuem algumas diferenças estruturais. Alguns nomes de colunas estão diferentes e o arquivo de 2016 contém dados de alunos de fora do PPGEE. Estes dados devem portanto ser tratados para que fiquem similares.
+
+  Como pode ser visto, há diferenças estruturais entre os arquivos, como colunas com nomes diferentes, além de dados de alunos que não pertencem ao PPGEE-UFMG no arquivo de dados de 2016. Portanto, estes dados foram tratados para que ficassem com mesma estrutura, conforme códigos abaixo.
 
 ```{r, include=TRUE}
 
 # Filtra dados apenas de estudantes do ppgee (necessario apenas em 2016)
 raw_data_2016 <- subset(raw_data_2016, Course=="PPGEE")
-
 # renomeia coluna de 2016
 names(raw_data_2016)[names(raw_data_2016) == "Gender"] <- "Sex"
-
 # renomeia coluna de 2017
 names(raw_data_2017)[names(raw_data_2017) == "height.m"] <- "Height.m"
 ```
-
-Agora devemos criar uma nova coluna com o calculo do IMC e separar os dados entre masculino e feminino
+  Na sequência, deve-se criar uma nova coluna com o calculo do IMC e separar os dados entre masculino e feminino, conforme códigos abaixo.
 ```{r, include=TRUE}
 
 # cria coluna com calculo do IMC
-raw_data_2016$IMC = raw_data_2016$Weight.kg * (raw_data_2016$Height.m * raw_data_2016$Height.m)
-raw_data_2017$IMC = raw_data_2017$Weight.kg * (raw_data_2017$Height.m * raw_data_2017$Height.m)
-
+raw_data_2016$IMC = raw_data_2016$Weight.kg / (raw_data_2016$Height.m * raw_data_2016$Height.m)
+raw_data_2017$IMC = raw_data_2017$Weight.kg / (raw_data_2017$Height.m * raw_data_2017$Height.m)
 # separa entre masculino e feminino e armazena apenas o IMC
 imc_m_2016 <- subset(raw_data_2016, Sex=="M")$IMC
 imc_f_2016 <- subset(raw_data_2016, Sex=="F")$IMC
@@ -62,14 +114,19 @@ imc_f_2017 <- subset(raw_data_2017, Sex=="F")$IMC
 
 
 ### Informação dos dados
-Após amostras estarem tratadas e o imc calculado, seguem alguns dados estatisticos
+  Com as amostras tratadas e separadas conforme proposta inicial e em posse do IMC destas subpopulações, tem-se os seguintes  dados estatísticos:
+
 ```{r, include=TRUE}
 # imprime um sumario com as principais informações estatisticas dos IMCs
 summary(imc_m_2016)
 summary(imc_m_2017)
 summary(imc_f_2016)
 summary(imc_f_2017)
+```
 
+A fim de avaliar a distribuição empírica dos dados obtidos, foi feita uma análise gráfica a partir do boxplot das subpopulações separadas pelo ano.
+
+```{r, include=TRUE}
 # boxplot
 boxplot(imc_m_2016, imc_m_2017, imc_f_2016, imc_f_2017,
 main = "Boxplots dos IMCs",
@@ -81,20 +138,27 @@ horizontal = TRUE,
 notch = FALSE
 )
 ```
+**OBS1: Necessário uma análise mais detalhada do boxplot(diego)**
 
-**obs: tem muito pouca amostra feminina. Acredito que precisamos falar sobre o impacto disso nas analises** 
+**OBS2: tem muito pouca amostra feminina. Acredito que precisamos falar sobre o impacto disso nas analises (Matheus)** 
 
-Agora precisa verificar se amostras podem ser analisadas como distribuições normais (teste de Shapiro-Wilk)
+**Opinião do diego sobre OBS2: Vamos falar, mas precisamos pensar a hora certa, pois até esta etapa são apenas dados. Acho que em algum momento dará uma discrepancia sei la, além do que podemos propor como  (Discussão sobre possíveis formas de melhorar este
+experimento)**
+
+Em uma análise visual, pode-se supor que os dados referentes a subpopulação masculina dos dois anos possuem uma distribuição normal, embora exista um outlier na distribuição de 2016. Em relação a subpopulação feminina, pode-se supor que a distribuição em 2016 é normal, enquanto a de 2017 não. No entanto, para uma avaliação estatística sobre a validação da hipótese de uma distribuiçã normal para as amostras, pode-se usar o teste Shapiro-Wilk.
+
+
 ```{r, include=TRUE}
-# teste de shapiro-wilk. Se o p-valor < 0.05, não podemos assumir que as amostras apresentam normalidade
+# teste de Shapiro-Wilk
 shapiro.test(imc_m_2016)
 shapiro.test(imc_m_2017)
 shapiro.test(imc_f_2016)
 shapiro.test(imc_f_2017)
 ```
 
+A hipótese nula do teste de Shapiro-Wilk é que a população possui distribuição normal. Portanto, um valor de p < 0.05 indica rejeição da hipótese nula, ou seja, os dados não possuem distribuição normal[3]. Portanto, analisando os resultados dos testes, tem-se uma confirmação das suposições feitas anteriormente, onde somente os dados da subpopulação feminina de 2017 não possui uma distriuição normal.
 
-depois, caso sim, pode-se realizar o teste t:
+
 ```{r, include=TRUE}
 # teste t de student
 t.test(imc_m_2016, imc_m_2017, "two.sided", mu=0, conf.level = 0.95)
@@ -109,4 +173,8 @@ t.test(imc_f_2016, imc_f_2017, "two.sided", mu=0, conf.level = 0.95)
 
 ### Referencias
 
+[1] https://www.unimedfortaleza.com.br/blog/cuidar-de-voce/como-calcular-imc
 
+[2] Notas de aula
+
+[3] https://rpubs.com/paternogbc/46768
