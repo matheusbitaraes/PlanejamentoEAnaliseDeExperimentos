@@ -18,28 +18,28 @@ Para este estudo, foram disponibilizadas duas amostras, sendo uma para cada seme
 
 ## Introdução
 
-  Reconhecido internacionalmente pela Organização Mundial da Saúde (OMS), o IMC indica o peso adequado para cada pessoa, fazendo uma relação entre sua massa corpórea (em kg) e sua altura (em m) [1], conforme a Equação 1, mostrada abaixo.
+  Reconhecido internacionalmente pela Organização Mundial da Saúde (OMS), o IMC indica o peso adequado para cada pessoa, fazendo uma relação entre sua massa corpórea (em kg) e sua altura (em m) [1], conforme a Equação 1.
+
+\begin{equation} IMC = \frac{peso}{altura*altura} \end{equation}
+
+  Pode-se classificar o valor do IMC conforme apresentado abaixo [1]:
 
 
-IMC = peso/ (altura * altura) (1) (transformar em fórmula)
+•	IMC abaixo de 18,5: Peso abaixo do normal;
 
-  Pode-se classificar o valor do IMC conforme listado abaixo [1]:
+•	IMC entre 18,5 e 24,9: São pesos considerados normais pela OMS;
 
-IMC abaixo de 18,5: Peso abaixo do normal;
+•	IMC entre 25 e 29,9: Peso em pré-obesidade ou acima do peso;
 
-IMC entre 18,5 e 24,9: São pesos considerados normais pela OMS;
+•	IMC entre 30 e 34,9: Este índice indica obesidade grau um;
 
-IMC entre 25 e 29,9: Peso em pré-obesidade ou acima do peso;
+•	IMC acima 35 e 39,9: Indica obesidade grau dois
 
-IMC entre 30 e 34,9: Este índice indica obesidade grau um;
-
-IMC acima 35 e 39,9: Indica obesidade grau dois
-
-IMC acima de 40: Indica obesidade grau três ou mórbida							
+•	IMC acima de 40: Indica obesidade grau três ou mórbida							
 
 ## Design do Experimento
 
-  Como já mencionado, deseja-se comparar o IMC dos alunos do PPGEE-UFMG de dois semestres distintos, conforme amostradas recebidas. Para tal estudo, serão feitas duas análises e testes estatísticos independentes considerando duas subpopulações distintas, uma considerando somente o sexo masculino e outra para o sexo feminino. 
+Como já mencionado, deseja-se comparar o IMC dos alunos do PPGEE-UFMG de dois semestres distintos, conforme mostras fornecidas. Para tal estudo, serão feitas duas análises e testes estatísticos independentes considerando duas subpopulações distintas, uma considerando somente o sexo masculino e outra para o sexo feminino. 
 
   As seguintes hipóteses estatísticas foram definidas:
 
@@ -49,7 +49,7 @@ IMC acima de 40: Indica obesidade grau três ou mórbida
 
 No decorrer do estudo ficará claro o motivo pela qual foi utilizado média e mediana para a subpopulação masculina e feminina, respectivamente.
 
-  Dadas as hipóteses estatísticas descritas acima, podem-se definir as seguintes hipóteses de testes, em função da média e mediana do IMC dos alunos do sexo masculino e do sexo feminino, respectivamente:
+Dadas as hipóteses estatísticas descritas acima, podem-se definir as seguintes hipóteses de testes, em função da média e mediana do IMC dos alunos do sexo masculino e do sexo feminino, respectivamente:
 
 $$\begin{cases} H_0: \mu_{m2016} = \mu_{m2017}&\\H_1: \mu_{m2016} \neq \mu_{m2017} \end{cases}$$
 
@@ -59,8 +59,8 @@ $$\begin{cases} H_0: \mu_{f2016} = \mu_{f2017}&\\H_1: \mu_{f2016} \neq \mu_{f201
 
   Além das hipóteses estatísticas acima, tem-se as seguintes definições:
 
-1) Nível de significância (alfa) de 0,05. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese [2].
-2) Potência de teste = 1 - beta = 0,X.  Onde beta é a probabilidade de ocorrência de um falso negativo em qualquer procedimento de teste de hipótese [2] e, portanto, a potência de teste quantifica a sensibilidade do teste à efeitos que violam sua hipótese nula [2].
+1) Nível de significância ($\alpha$) de 0,05. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese [2].
+2) Potência do Teste ($\pi$) = 1 - ($\beta$) = 0,80.  Onde beta é a probabilidade de ocorrência de um falso negativo em qualquer procedimento de teste de hipótese [2] e, portanto, a potência de teste quantifica a sensibilidade do teste à efeitos que violam sua hipótese nula [2].
 
 
 ## Análise Estatística
@@ -106,8 +106,9 @@ imc_f_2016 <- subset(raw_data_2016, Sex=="F")$IMC
 imc_m_2017 <- subset(raw_data_2017, Sex=="M")$IMC
 imc_f_2017 <- subset(raw_data_2017, Sex=="F")$IMC
 ```
-### Informação dos dados
-  Com as amostras tratadas e separadas conforme proposta inicial e em posse do IMC destas subpopulações, tem-se os seguintes  dados estatísticos:
+### Dados estatísticos
+
+  Com as amostras tratadas e separadas conforme proposta inicial e em posse do IMC destas subpopulações, tem-se os seguintes dados estatísticos:
 
 ```{r, include=TRUE}
 
@@ -118,7 +119,7 @@ summary(imc_f_2016)
 summary(imc_f_2017)
 ```
 
-A fim de avaliar a distribuição empírica dos dados obtidos, foi feita uma análise gráfica a partir do boxplot das subpopulações separadas pelo ano.
+A fim de avaliar a distribuição dos dados obtidos, foi feita uma análise gráfica a partir do boxplot das subpopulações separadas pelo ano.
 
 ```{r, include=TRUE}
 # boxplot
@@ -132,13 +133,18 @@ horizontal = TRUE,
 notch = FALSE
 )
 ```
-**OBS1: Necessário uma análise mais detalhada do boxplot(diego)**
 
-**OBS2: tem muito pouca amostra feminina. Acredito que precisamos falar sobre o impacto disso nas analises (Matheus)** 
+
+**OBS1: tem muito pouca amostra feminina. Acredito que precisamos falar sobre o impacto disso nas analises (Matheus)** 
 
 **Opinião do diego sobre OBS2: Vamos falar, mas precisamos pensar a hora certa, pois até esta etapa são apenas dados. Acho que em algum momento dará uma discrepancia sei la, além do que podemos propor como  (Discussão sobre possíveis formas de melhorar este experimento)**
 
-Em uma análise visual, pode-se supor que os dados referentes a subpopulação masculina dos dois anos possuem uma distribuição normal, embora exista um outlier na distribuição de 2016. Em relação a subpopulação feminina, pode-se supor que a distribuição em 2016 é normal, enquanto a de 2017 não. No entanto, para uma avaliação estatística sobre a validação da hipótese de uma distribuiçã normal para as amostras, pode-se usar o teste Shapiro-Wilk.
+**Necessário uma análise mais detalhada do boxplot(diego)**
+
+
+Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk. Para este teste, temos:
+
+$$\begin{cases} H_0: \text{A amostra provém de uma população Normal}\\H_1: \text{A amostra não provém de uma população Normal} \end{cases}$$
 
 
 ```{r, include=TRUE}
@@ -149,7 +155,7 @@ shapiro.test(imc_f_2016)
 shapiro.test(imc_f_2017)
 ```
 
-A hipótese nula do teste de Shapiro-Wilk é que a população possui distribuição normal. Portanto, um valor de p < 0.05 indica rejeição da hipótese nula, ou seja, os dados não possuem distribuição normal[3]. Portanto, analisando os resultados dos testes, tem-se uma confirmação das suposições de normalidade feitas anteriormente, com exceção da da subpopulação feminina de 2017, a qual não podemos assumir normalidade.
+Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal[3], caso contrário, não é possível concluir que os dados não seguem uma distribuição normal. Portanto, analisando os resultados dos testes dispostos acima, tem-se uma confirmação das suposições de normalidade feitas anteriormente, com exceção da da subpopulação feminina de 2017, a qual não podemos assumir uma distribuição normal.
 
 Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas[6]. **[matheus]não entendi este paragrafo** 
 
@@ -159,14 +165,17 @@ Em posse dessas conclusões, o estudo será dividido em duas partes (masculino e
 ### 1) Subpopulação masculina
 
 
-Dados os resultados do teste de Shapiro-Wilk, podemos assumir normalidade para as amostras da subpopulação masculina de 2016 e 2017. Pretendemos utilizar o Teste T para comparação das amostras e, para isto, é necessário haver homocedasticidade (as variâncias poderem ser consideradas iguais). Para a análise da variância dos dados, pode-se usar o Teste F.
+Em posse do resultado do teste de Shapiro-Wilk, podemos assumir normalidade para as amostras da subpopulação masculina de 2016 e 2017. Pretende-se utilizar o Teste T para comparação das amostras e, para isto, é necessário que as variâncias possam ser consideradas iguais (homocedasticidade). Para a análise da variância dos dados, pode-se usar o Teste F, onde tem-se:
+
+$$\begin{cases} H_0: \sigma_1^2 = \sigma_2^2&\\H_1: \sigma_1^2 \neq \sigma_2^2 \end{cases}$$
+
 
 ```{r, include=TRUE}
 # Teste F
 var.test(imc_m_2016, imc_m_2017, alternative = "two.sided")
 ```
 
-Analisando o p-valor, podemos concluir que não há evidência estatistica forte o suficiente que indique que as variâncias não são iguais. Iremos portanto considerar homocedasticidade entre as subpopulações.
+Analisando o p-valor, temos que p-valor>0,05 ($\alpha$) e, portanto, não há evidência estatistica forte o suficiente que indique que as variâncias não são iguais. Portanto, será considerada a homocedasticidade entre as subpopulações.
 
 Para a hipótese estatística proposta para as médias do IMC masculino, pode-se usar o teste t de student, visto que a distribuição normal dos valores já foi  validada, assim como a variância constante dos erros experimentais para observações distintas. Neste teste, tem-se as seguintes hipóteses:
 
@@ -178,6 +187,7 @@ t.test(imc_m_2016, imc_m_2017, var.equal=TRUE)
 ```
 
 Como pode ser visto, o resultado do teste t de student retornou um p-valor igual a 0,5923, cujo valor é maior que o nível de significâcia adotado (0,05). Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
+Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}1.784943 3.085836].
 
 Um outro teste pode ser feito para validação do resultado que é o Teste T de Welch. Percebe-se que ele também falhou em rejeitar a hipótese nula do estudo. 
 
@@ -191,37 +201,59 @@ Embora o nível de significância tenha sido definido inicialmente, é interessa
 médias ou variâncias [4].
 Existem várias maneiras de se fazer isto tais como: o Teste de Cohen, Teste de Glass, Teste de Hedges, Teste Psi, dentre outros [4].
 O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal[5].
-Como visto, temos um p-valor maior que o nível de significância e, por isso, não há evidências para rejeitar a hipótese nula, onde as variâncias são iguais. Portanto, dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
-
-**o cohen.d não funcionou no meu R. É como se a bliblioteca não estivesse instalada, mas tentei de tudo quanto é jeito e não foi**
+  Dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
 
 ```{r, include=TRUE}
 # d de Cohen
+library(effsize)
+cohen.d(imc_m_2016, imc_m_2017)
 ```
 
-Para se calcular a Potência do Teste, pode-se utilizar a função power.t.test.
+O tamanho de efeito retornado pela função foi de d = 0,1665.
 
-**Precisamos entender como fazer e, pelo que vi, precisaremos do valor de d de cohen**
+Para se calcular a Potência do Teste, pode-se utilizar a função power.t.test. Nela deve ser inserido o parâmetro o número de observações por grupo (n = 21), delta (d de cohen = 0,1665831), desvio padrão conjugado (sd = 3,9046). O desvio padrão conjugado pode ser obtido pela Equação 2, onde s$_1$ e s$_2$ podem ser obtidos pela função sd.
 
 ```{r, include=TRUE}
-# Poder do Teste - Ainda não implementado
+# Desvio padrão
+sd(imc_m_2016)
+sd(imc_m_2017)
 ```
 
+\begin{equation} sd = \sqrt{\frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2}} \end{equation} 
 
+
+```{r, include=TRUE}
+# Potência do Teste
+power.t.test(21,0.1665831, 3.9046, sig.level = 0.05)
+```
+
+Observa-se que a potencia de teste obtida é de 3,4% que é muito menor que a potência desejada (80%) e, portanto, não é aceitável. Mantendo o tamanho de efeito calculado, seriam  necessárias 8626 amostras para cada ano, o que não é possível. 
+
+```{r, include=TRUE}
+# Número de amostras para o Potência do Teste de 75%
+power.t.test(NULL, 0.1665831, 3.9046, sig.level = 0.05, power = 0.80)
+```
 
 ### 2) Subpopulação feminina
 
-Diferente da subpopulaçõa masculina, não podemos tratar a amostra feminina em uma disitribuição normal. Quanta a análise da variância das amostras, o teste F não pode ser utilizado devido a não-normalidade da população. Uma alternativa é o teste ...
+Diferente da subpopulação masculina, não podemos tratar a amostra feminina em uma distribuição normal. Quanta a análise da variância das amostras, o teste F não pode ser utilizado devido a não-normalidade da população. Uma alternativa é o teste ...
 
 ```{r, include=TRUE}
-# teste de ??? - ainda não implementado
+# teste de Fligner-Killeen??? - ainda não implementado por erro de tamanho
 ```
+
 Como pode ser visto, ....
+
+
+```{r, include=TRUE}
+# teste de Wilcoxon??? - ainda não implementado por erro de tamanho
+```
+
 
 **análise do resultado do teste escolhido e escolha do teste para encontrarmos o Poder de Teste**
 
 ```{r, include=TRUE}
-# Poder do Teste - ainda não implementado 
+# Potência do Teste - ainda não implementado 
 ```
 Como pode ser visto, ....
 
@@ -262,3 +294,5 @@ Como pode ser visto, ....
 [5] https://www.lume.ufrgs.br/bitstream/handle/10183/158388/000944613.pdf?sequence=1#:~:text=Cohen%20introduziu%20uma%20medida%20similar,padr%C3%A3o%20amostrais%20(equa%C3%A7%C3%A3o%201)
 
 [6] https://support.zendesk.com/hc/pt-br/articles/228989407-M%C3%A9dia-versus-Mediana#:~:text=A%20m%C3%A9dia%20%C3%A9%20usada%20para,central%20para%20distribui%C3%A7%C3%B5es%20num%C3%A9ricas%20distorcidas.
+
+[7] https://www.researchgate.net/profile/Helena_Espirito_Santo/publication/273143169_Calcular_e_apresentar_tamanhos_do_efeito_em_trabalhos_cientificos_1_As_limitacoes_do_p_005_na_analise_de_diferencas_de_medias_de_dois_grupos_Calculating_and_reporting_effect_sizes_on_scientific_papers/links/54fa10290cf2040df21b1b1c/Calcular-e-apresentar-tamanhos-do-efeito-em-trabalhos-cientificos-1-As-limitacoes-do-p-0-05-na-analise-de-diferencas-de-medias-de-dois-grupos-Calculating-and-reporting-effect-sizes-on-scientific-pap.pdf
