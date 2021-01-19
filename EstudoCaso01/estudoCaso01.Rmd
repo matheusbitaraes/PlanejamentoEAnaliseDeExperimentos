@@ -51,14 +51,10 @@ No decorrer do estudo ficará claro o motivo pela qual foi utilizado média e me
 
   Dadas as hipóteses estatísticas descritas acima, podem-se definir as seguintes hipóteses de testes, em função da média e mediana do IMC dos alunos do sexo masculino e do sexo feminino, respectivamente:
 
-H0 : media(m_2016) = media(m_2017)
+$$\begin{cases} H_0: \mu_{m2016} = \mu_{m2017}&\\H_1: \mu_{m2016} \neq \mu_{m2017} \end{cases}$$
 
-H1 : media(m_2016) (diferente) media(m_2017)
+$$\begin{cases} H_0: \mu_{f2016} = \mu_{f2017}&\\H_1: \mu_{f2016} \neq \mu_{f2017} \end{cases}$$
 
-
-H0 : mediana(f_2016) = mediana(f_2017)
-
-H1 : mediana(f_2016) (diferente) mediana(f_2017)
 
 
   Além das hipóteses estatísticas acima, tem-se as seguintes definições:
@@ -90,8 +86,10 @@ head(raw_data_2017)
 
 # Filtra dados apenas de estudantes do ppgee (necessario apenas em 2016)
 raw_data_2016 <- subset(raw_data_2016, Course=="PPGEE")
+
 # renomeia coluna de 2016
 names(raw_data_2016)[names(raw_data_2016) == "Gender"] <- "Sex"
+
 # renomeia coluna de 2017
 names(raw_data_2017)[names(raw_data_2017) == "height.m"] <- "Height.m"
 ```
@@ -101,6 +99,7 @@ names(raw_data_2017)[names(raw_data_2017) == "height.m"] <- "Height.m"
 # cria coluna com calculo do IMC
 raw_data_2016$IMC = raw_data_2016$Weight.kg / (raw_data_2016$Height.m * raw_data_2016$Height.m)
 raw_data_2017$IMC = raw_data_2017$Weight.kg / (raw_data_2017$Height.m * raw_data_2017$Height.m)
+
 # separa entre masculino e feminino e armazena apenas o IMC
 imc_m_2016 <- subset(raw_data_2016, Sex=="M")$IMC
 imc_f_2016 <- subset(raw_data_2016, Sex=="F")$IMC
@@ -111,6 +110,7 @@ imc_f_2017 <- subset(raw_data_2017, Sex=="F")$IMC
   Com as amostras tratadas e separadas conforme proposta inicial e em posse do IMC destas subpopulações, tem-se os seguintes  dados estatísticos:
 
 ```{r, include=TRUE}
+
 # imprime um sumario com as principais informações estatisticas dos IMCs
 summary(imc_m_2016)
 summary(imc_m_2017)
@@ -149,45 +149,28 @@ shapiro.test(imc_f_2016)
 shapiro.test(imc_f_2017)
 ```
 
-A hipótese nula do teste de Shapiro-Wilk é que a população possui distribuição normal. Portanto, um valor de p < 0.05 indica rejeição da hipótese nula, ou seja, os dados não possuem distribuição normal[3]. Portanto, analisando os resultados dos testes, tem-se uma confirmação das suposições feitas anteriormente, onde somente os dados da subpopulação feminina de 2017 não possui uma distriuição normal.
+A hipótese nula do teste de Shapiro-Wilk é que a população possui distribuição normal. Portanto, um valor de p < 0.05 indica rejeição da hipótese nula, ou seja, os dados não possuem distribuição normal[3]. Portanto, analisando os resultados dos testes, tem-se uma confirmação das suposições de normalidade feitas anteriormente, com exceção da da subpopulação feminina de 2017, a qual não podemos assumir normalidade.
 
-Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas[6].
+Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas[6]. **[matheus]não entendi este paragrafo** 
 
 Em posse dessas conclusões, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
 
 
-### 1)Subpopulação masculina
+### 1) Subpopulação masculina
 
-Como já concluído, podemos tratar a amostra masculina em uma disitribuição normal. Embora o nível de significância tenha sido definido inicialmente, é interessante encontrar o tamanho de efeito, sendo este a medida da importância prática dos resultados de eventuais diferenças encontradas entre duas ou mais
-médias ou variâncias [4].
-Existem várias maneiras de se fazer isto tais como: o Teste de Cohen, Teste de Glass, Teste de Hedges, Teste Psi, dentre outros [4].
-O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal[5]. Pelo teste de Shapiro-Wilk já mostrado, tem-se a premissa tem-se que hipótese da normalidade não pôde ser rejeitada. Para a análise da variância dos dados, pode-se usar o Teste F.
+
+Dados os resultados do teste de Shapiro-Wilk, podemos assumir normalidade para as amostras da subpopulação masculina de 2016 e 2017. Pretendemos utilizar o Teste T para comparação das amostras e, para isto, é necessário haver homocedasticidade (as variâncias poderem ser consideradas iguais). Para a análise da variância dos dados, pode-se usar o Teste F.
 
 ```{r, include=TRUE}
 # Teste F
 var.test(imc_m_2016, imc_m_2017, alternative = "two.sided")
 ```
-Como visto, temos um p-valor maior que o nível de significância e, por isso, não há evidências para rejeitar a hipótese nula, onde as variâncias são iguais. Portanto, dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
 
-**o cohen.d não funcionou no meu R. É como se a bliblioteca não estivesse instalada, mas tentei de tudo quanto é jeito e não foi**
+Analisando o p-valor, podemos concluir que não há evidência estatistica forte o suficiente que indique que as variâncias não são iguais. Iremos portanto considerar homocedasticidade entre as subpopulações.
 
-```{r, include=TRUE}
-# d de Cohen - Ainda não implementado
-```
+Para a hipótese estatística proposta para as médias do IMC masculino, pode-se usar o teste t de student, visto que a distribuição normal dos valores já foi  validada, assim como a variância constante dos erros experimentais para observações distintas. Neste teste, tem-se as seguintes hipóteses:
 
-Para se calcular o Poder do Teste, pode-se utilizar a função power.t.test.
-
-**Precisamos entender como fazer e, pelo que vi, precisaremos do valor de d de cohen**
-
-```{r, include=TRUE}
-# Poder do Teste - Ainda não implementado
-```
-
-Para a hipótese estatística proposta para as médias do IMC masculino, pode-se usar o teste t de student, visto que a distribuição normal dos valores já foi  validada, assim como a variância constante dos erros experimentais para observações distintas, conhecida como homocedasticidade. Neste teste, tem-se as seguintes hipóteses:
-
-H0 : diferenca entre as medias = 0
-
-H1 : diferenca entre as medias (diferente) 0
+$$\begin{cases} H_0: \mu1 = \mu2&\\H_1: \mu1 \neq \mu2 \end{cases}$$
 
 ```{r, include=TRUE}
 # teste t de student
@@ -196,14 +179,37 @@ t.test(imc_m_2016, imc_m_2017, var.equal=TRUE)
 
 Como pode ser visto, o resultado do teste t de student retornou um p-valor igual a 0,5923, cujo valor é maior que o nível de significâcia adotado (0,05). Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
 
-Um outro teste pode ser feito para validação do resultado que é o teste t de Welch. Percebe-se que ele também falhou em rejeitar a hipótese nula do estudo. 
+Um outro teste pode ser feito para validação do resultado que é o Teste T de Welch. Percebe-se que ele também falhou em rejeitar a hipótese nula do estudo. 
 
 ```{r, include=TRUE}
 # teste t de Welch
 t.test(imc_m_2016, imc_m_2017, "two.sided", mu=0, conf.level = 0.95)
 ```
 
-### 2)Subpopulação feminina
+**VER ONDE COLOCAR ESTA PARTE**
+Embora o nível de significância tenha sido definido inicialmente, é interessante encontrar o tamanho de efeito, sendo este a medida da importância prática dos resultados de eventuais diferenças encontradas entre duas ou mais
+médias ou variâncias [4].
+Existem várias maneiras de se fazer isto tais como: o Teste de Cohen, Teste de Glass, Teste de Hedges, Teste Psi, dentre outros [4].
+O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal[5].
+Como visto, temos um p-valor maior que o nível de significância e, por isso, não há evidências para rejeitar a hipótese nula, onde as variâncias são iguais. Portanto, dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
+
+**o cohen.d não funcionou no meu R. É como se a bliblioteca não estivesse instalada, mas tentei de tudo quanto é jeito e não foi**
+
+```{r, include=TRUE}
+# d de Cohen
+```
+
+Para se calcular a Potência do Teste, pode-se utilizar a função power.t.test.
+
+**Precisamos entender como fazer e, pelo que vi, precisaremos do valor de d de cohen**
+
+```{r, include=TRUE}
+# Poder do Teste - Ainda não implementado
+```
+
+
+
+### 2) Subpopulação feminina
 
 Diferente da subpopulaçõa masculina, não podemos tratar a amostra feminina em uma disitribuição normal. Quanta a análise da variância das amostras, o teste F não pode ser utilizado devido a não-normalidade da população. Uma alternativa é o teste ...
 
