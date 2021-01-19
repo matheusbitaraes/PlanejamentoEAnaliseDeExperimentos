@@ -18,11 +18,11 @@ Para este estudo, foram disponibilizadas duas amostras, sendo uma para cada seme
 
 ## Introdução
 
-  Reconhecido internacionalmente pela Organização Mundial da Saúde (OMS), o IMC indica o peso adequado para cada pessoa, fazendo uma relação entre sua massa corpórea (em kg) e sua altura (em m) [1], conforme a Equação 1.
+  Reconhecido internacionalmente pela Organização Mundial da Saúde (OMS), o IMC indica o peso adequado para cada pessoa, fazendo uma relação entre sua massa corpórea (em kg) e sua altura (em m) \cite{imc_site}, conforme a Equação 1.
 
 \begin{equation} IMC = \frac{peso}{altura*altura} \end{equation}
 
-  Pode-se classificar o valor do IMC conforme apresentado abaixo [1]:
+  Pode-se classificar o valor do IMC conforme apresentado abaixo \cite{imc_site}:
 
 
 •	IMC abaixo de 18,5: Peso abaixo do normal;
@@ -59,7 +59,7 @@ $$\begin{cases} H_0: \mu_{f2016} = \mu_{f2017}&\\H_1: \mu_{f2016} \neq \mu_{f201
 
   Além das hipóteses estatísticas acima, tem-se as seguintes definições:
 
-1) Nível de significância ($\alpha$) de 0,05. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese [2].
+1) Nível de significância ($\alpha$) de 0,05. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese \cite{NotasdeAula}.
 2) Potência do Teste ($\pi$) = 1 - ($\beta$) = 0,80.  Onde beta é a probabilidade de ocorrência de um falso negativo em qualquer procedimento de teste de hipótese [2] e, portanto, a potência de teste quantifica a sensibilidade do teste à efeitos que violam sua hipótese nula [2].
 
 
@@ -149,9 +149,11 @@ shapiro.test(imc_f_2016)
 shapiro.test(imc_f_2017)
 ```
 
-Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal[3], caso contrário, não é possível concluir que os dados não seguem uma distribuição normal. Portanto, analisando os resultados dos testes dispostos acima, tem-se uma confirmação das suposições de normalidade feitas anteriormente, com exceção da da subpopulação feminina de 2017, a qual não podemos assumir uma distribuição normal.
+Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não é possível concluir que os dados não seguem uma distribuição normal. Portanto, analisando os resultados dos testes dispostos acima, tem-se uma confirmação das suposições de normalidade feitas anteriormente, com exceção da da subpopulação feminina de 2017, a qual não podemos assumir uma distribuição normal.
 
-Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas[6]. **[matheus]não entendi este paragrafo** 
+Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas \cite{media_mediana}. 
+
+**[matheus]não entendi este paragrafo** 
 
 Em posse dessas conclusões, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
 
@@ -193,7 +195,7 @@ t.test(imc_m_2016, imc_m_2017, "two.sided", mu=0, conf.level = 0.95)
 Embora o nível de significância tenha sido definido inicialmente, é interessante encontrar o tamanho de efeito, sendo este a medida da importância prática dos resultados de eventuais diferenças encontradas entre duas ou mais
 médias ou variâncias [4].
 Existem várias maneiras de se fazer isto tais como: o Teste de Cohen, Teste de Glass, Teste de Hedges, Teste Psi, dentre outros [4].
-O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal[5].
+O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal\cite{tamanho_efeito_1}.
 Dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
 
 ```{r, include=TRUE}
@@ -254,11 +256,11 @@ cat('Magnitude:', vd_a$magnitude)
 
 A medida $A$ pertence ao domínio $[0, \ 1]$ com as seguintes características:
 
-• Quando a medida $A = 0,5$, pode-se afirmar que não há diferenças evidentes na estatística que se estuda;
+• Se a medida $A = 0,5$, pode-se afirmar que não há diferenças evidentes na estatística que se estuda;
 
-• Quando a medida $A < 0,5$, a primeira população apresenta valores menores da estatística de interesse
+• Se a medida $A < 0,5$, a primeira população apresenta valores menores da estatística de interesse
 
-• Quando a medida $A > 0,5$, a segunda população apresenta valores menores da estatística de interesse.
+• Se a medida $A > 0,5$, a segunda população apresenta valores menores da estatística de interesse.
 
 Desta forma, pode-se concluir que, em 85$\%$ das vezes, alunas de $2/2016$ possuem maior IMC mediano que as alunas do $2/2017$, podendo encontrar diferenças maiores ou iguais a 4.
 
@@ -283,18 +285,6 @@ A ausência de normalidade da distribuição feminina do segundo semestre de $20
 ### Atividades dos membros
 ...
 
-### Referencias
-
-[1] https://www.unimedfortaleza.com.br/blog/cuidar-de-voce/como-calcular-imc
-
-[2] Notas de aula
-
-[3] https://rpubs.com/paternogbc/46768
-
-[4] http://www.cpaqv.org/estatistica/tamanho_do_efeito.pdf
-
-[5] https://www.lume.ufrgs.br/bitstream/handle/10183/158388/000944613.pdf?sequence=1#:~:text=Cohen%20introduziu%20uma%20medida%20similar,padr%C3%A3o%20amostrais%20(equa%C3%A7%C3%A3o%201)
-
-[6] https://support.zendesk.com/hc/pt-br/articles/228989407-M%C3%A9dia-versus-Mediana#:~:text=A%20m%C3%A9dia%20%C3%A9%20usada%20para,central%20para%20distribui%C3%A7%C3%B5es%20num%C3%A9ricas%20distorcidas.
-
-[7] https://www.researchgate.net/profile/Helena_Espirito_Santo/publication/273143169_Calcular_e_apresentar_tamanhos_do_efeito_em_trabalhos_cientificos_1_As_limitacoes_do_p_005_na_analise_de_diferencas_de_medias_de_dois_grupos_Calculating_and_reporting_effect_sizes_on_scientific_papers/links/54fa10290cf2040df21b1b1c/Calcular-e-apresentar-tamanhos-do-efeito-em-trabalhos-cientificos-1-As-limitacoes-do-p-0-05-na-analise-de-diferencas-de-medias-de-dois-grupos-Calculating-and-reporting-effect-sizes-on-scientific-pap.pdf
+\renewcommand\refname{Referências Bibliográficas}
+\bibliographystyle{unsrt}
+\bibliography{referencias}
