@@ -133,18 +133,12 @@ horizontal = TRUE,
 notch = FALSE
 )
 ```
-
-
-**OBS1: tem muito pouca amostra feminina. Acredito que precisamos falar sobre o impacto disso nas analises (Matheus)** 
-
-**Opinião do diego sobre OBS2: Vamos falar, mas precisamos pensar a hora certa, pois até esta etapa são apenas dados. Acho que em algum momento dará uma discrepancia sei la, além do que podemos propor como  (Discussão sobre possíveis formas de melhorar este experimento)**
-
 **Necessário uma análise mais detalhada do boxplot(diego)**
 
 
 Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk. Para este teste, temos:
 
-$$\begin{cases} H_0: \text{A amostra provém de uma população Normal}\\H_1: \text{A amostra não provém de uma população Normal} \end{cases}$$
+$$\begin{cases} H_0: \text{A amostra provém de uma população com distribuição normal}\\H_1: \text{A amostra não provém de uma população com distribuição normal} \end{cases}$$
 
 
 ```{r, include=TRUE}
@@ -186,7 +180,7 @@ $$\begin{cases} H_0: \mu1 = \mu2&\\H_1: \mu1 \neq \mu2 \end{cases}$$
 t.test(imc_m_2016, imc_m_2017, var.equal=TRUE)
 ```
 
-Como pode ser visto, o resultado do teste t de student retornou um p-valor igual a 0,5923, cujo valor é maior que o nível de significâcia adotado (0,05). Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
+Como pode ser visto, o teste t de student retornou um p-valor igual a 0,5923, cujo valor é maior que o nível de significâcia adotado (0,05). Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
 Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}1.784943 3.085836].
 
 Um outro teste pode ser feito para validação do resultado que é o Teste T de Welch. Percebe-se que ele também falhou em rejeitar a hipótese nula do estudo. 
@@ -196,12 +190,11 @@ Um outro teste pode ser feito para validação do resultado que é o Teste T de 
 t.test(imc_m_2016, imc_m_2017, "two.sided", mu=0, conf.level = 0.95)
 ```
 
-**VER ONDE COLOCAR ESTA PARTE**
 Embora o nível de significância tenha sido definido inicialmente, é interessante encontrar o tamanho de efeito, sendo este a medida da importância prática dos resultados de eventuais diferenças encontradas entre duas ou mais
 médias ou variâncias [4].
 Existem várias maneiras de se fazer isto tais como: o Teste de Cohen, Teste de Glass, Teste de Hedges, Teste Psi, dentre outros [4].
 O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal[5].
-  Dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
+Dado a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
 
 ```{r, include=TRUE}
 # d de Cohen
@@ -227,46 +220,55 @@ sd(imc_m_2017)
 power.t.test(21,0.1665831, 3.9046, sig.level = 0.05)
 ```
 
-Observa-se que a potencia de teste obtida é de 3,4% que é muito menor que a potência desejada (80%) e, portanto, não é aceitável. Mantendo o tamanho de efeito calculado, seriam  necessárias 8626 amostras para cada ano, o que não é possível. 
+Observa-se que a potencia de teste obtida foi de 3,4% que é muito menor que a potência desejada (80%). Mantendo o tamanho de efeito calculado, para que a Potência do Teste fosse a desejada, seriam  necessárias 8626 amostras para cada ano, o que não é possível. 
 
 ```{r, include=TRUE}
-# Número de amostras para o Potência do Teste de 75%
+# Número de amostras para o Potência do Teste de 80%
 power.t.test(NULL, 0.1665831, 3.9046, sig.level = 0.05, power = 0.80)
 ```
 
 ### 2) Subpopulação feminina
 
-Diferente da subpopulação masculina, não podemos tratar a amostra feminina em uma distribuição normal. Quanta a análise da variância das amostras, o teste F não pode ser utilizado devido a não-normalidade da população. Uma alternativa é o teste ...
+Diferente da subpopulação masculina, não podemos tratar a amostra feminina em uma distribuição normal. Para a análise da proposta estatística da população feminina, pode-se usar o teste não-paramétrico de Wilcoxon com as seguintes hipóteses:
+
+$$\begin{cases} H_0: \text{As medianas das populações são iguais}\\H_1: \text{As medianas das populações não são iguais} \end{cases}$$
 
 ```{r, include=TRUE}
-# teste de Fligner-Killeen??? - ainda não implementado por erro de tamanho
+# teste de Wilcoxon
+wilcox.test(imc_f_2016, imc_f_2017, alternative = "two.sided",conf.int = TRUE)
 ```
 
-Como pode ser visto, ....
+Como pode ser visto, o teste de Wilcoxon retornou um p-valor igual a 0,07273, cujo valor é maior que o nível de significância adotado (0,05).
+Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
+Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}0, 6374374; 5, 22844].
+
+**Abordagem do tamanho de efeito**
 
 
 ```{r, include=TRUE}
-# teste de Wilcoxon??? - ainda não implementado por erro de tamanho
+# Tamanho de efeito
+(vd_a <- VD.A(na.omit(imc_f_2016), na.omit(imc_f_2017)))
+
+cat('Magnitude:', vd_a$magnitude)
 ```
 
+A medida $A$ pertence ao domínio $[0, \ 1]$ com as seguintes características:
 
-**análise do resultado do teste escolhido e escolha do teste para encontrarmos o Poder de Teste**
+• Quando a medida $A = 0,5$, pode-se afirmar que não há diferenças evidentes na estatística que se estuda;
 
-```{r, include=TRUE}
-# Potência do Teste - ainda não implementado 
-```
-Como pode ser visto, ....
+• Quando a medida $A < 0,5$, a primeira população apresenta valores menores da estatística de interesse
 
-**análise do resultado do teste escolhido**
+• Quando a medida $A > 0,5$, a segunda população apresenta valores menores da estatística de interesse.
 
-Para a hipótese estatística proposta para as medianas do IMC feminino, pode-se usar o...
+Desta forma, pode-se concluir que, em 85$\%$ das vezes, alunas de $2/2016$ possuem maior IMC mediano que as alunas do $2/2017$, podendo encontrar diferenças maiores ou iguais a 4.
 
-```{r, include=TRUE}
-# Teste para a hipótese estatística - ainda não implementado 
-```
-Como pode ser visto, ....
 
-**análise do resultado do teste escolhido**
+**Abordagem do Potência do Teste**
+
+**A menina me passou o que colocou nessa parte, mas acho que devemos encontrar algum teste para jsutificar isso**
+
+A ausência de normalidade da distribuição feminina do segundo semestre de $2017$ impossibilita a aplicação da função `power.t.test` para análise do poder do teste, uma vez que esse cálculo de potência é específico para o teste t de Student. Nesse caso, o apropriado é calcular o poder do teste a partir de variações dessa função para o teste de Wilcoxon. No R existem algumas possibilidades dentro do pacote `wmwpow` \cite{wmwpow}, como o cálculo do poder usando a abordagem de Shieh \cite{Shieh2006} e outros dois baseados no método de Monte Carlo. Todavia, tais abordagens requerem que o tipo de distribuição seja passado por parâmetro, e portanto, conhecido previamente. Em vista disso e principalmente pelo baixo tamanho amostral que impossibilita a estimativa empírica da distribuição amostral, o cálculo do poder não pôde ser realizado. No entanto, dado que os tamanhos amostrais são distintos ($n_{F2016} \neq n_{F2017}$) e extremamente pequenos, é bem provável que a potência para efeitos maiores ou iguais a $4 \ kg/m^2$ seja substancialmente menor que a desejada ($\pi = 0,80$).
+
 
 ### Discussão e Conclusão
 
