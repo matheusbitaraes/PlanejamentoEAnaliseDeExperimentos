@@ -106,6 +106,7 @@ imc_f_2016 <- subset(raw_data_2016, Sex=="F")$IMC
 imc_m_2017 <- subset(raw_data_2017, Sex=="M")$IMC
 imc_f_2017 <- subset(raw_data_2017, Sex=="F")$IMC
 ```
+
 ### Dados estatísticos
 
   Com as amostras tratadas e separadas conforme proposta inicial e em posse do IMC destas subpopulações, tem-se os seguintes dados estatísticos:
@@ -140,31 +141,31 @@ Se quiserem fazer alguma análise aqui, acredito que pode ser algo como:
 Em contra partida, as subpopulações masculinas apresentam dados mais semelhantes o que sugere pouca distinção entre elas (mesma coisa, seria interessante relacionar com algum indicador)." (Foi Elias que escreveu aqui e estou manjando menos que vocês, se acharem que está muito papagaiado pode editar/remover)
 
 
-Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk. Para este teste, temos:
+
+
+Em posse dos dados iniciais, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
+
+
+### 1. Subpopulação masculina  
+
+###  a. Verificação de premissas para o teste de hipóteses
+
+A intenção inicial é realizar um Teste T para a comparação destas amostras. Para isso, precisamos garantir que as amostras apresentam uma distribuição normal e que suas variâncias possam ser consideradas iguais (homocedasticidade).
+
+**Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk. Para este teste, temos:
 
 $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuição normal}\\H_1: \text{A amostra não provém de uma população com distribuição normal} \end{cases}$$
-
-
 ```{r, include=TRUE}
 # teste de Shapiro-Wilk
 shapiro.test(imc_m_2016)
 shapiro.test(imc_m_2017)
-shapiro.test(imc_f_2016)
-shapiro.test(imc_f_2017)
 ```
 
-Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não é possível concluir que os dados não seguem uma distribuição normal. Portanto, analisando os resultados dos testes dispostos acima, tem-se uma confirmação das suposições de normalidade feitas anteriormente, com exceção para a da subpopulação feminina de 2017, a qual não podemos assumir uma distribuição normal.
+Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não é possível concluir que os dados não seguem uma distribuição normal. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as amostras masculinas seguem distribuição normal.
 
-Em posse dessas conclusões, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
-
-
-### 1) Subpopulação masculina
-
-
-Em posse do resultado do teste de Shapiro-Wilk, podemos assumir normalidade para as amostras da subpopulação masculina de 2016 e 2017. Pretende-se utilizar o Teste T para comparação das amostras e, para isto, é necessário que as variâncias possam ser consideradas iguais (homocedasticidade). Para a análise da variância dos dados, pode-se usar o Teste F, onde tem-se:
+**Verificação de homocesdaticidade**: Para a análise da variância dos dados, pode-se usar o Teste F, onde tem-se:
 
 $$\begin{cases} H_0: \sigma_1^2 = \sigma_2^2&\\H_1: \sigma_1^2 \neq \sigma_2^2 \end{cases}$$
-
 
 ```{r, include=TRUE}
 # Teste F
@@ -173,26 +174,10 @@ var.test(imc_m_2016, imc_m_2017, alternative = "two.sided")
 
 Analisando o p-valor, temos que p-valor > 0,05 ($\alpha$) e, portanto, não há evidência estatística forte o suficiente que indique que as variâncias não são iguais. Portanto, será considerada a homocedasticidade entre as subpopulações.
 
-Para a hipótese estatística proposta para as médias do IMC masculino, pode-se usar o Teste T, visto que a distribuição normal dos valores já foi  validada, assim como a variância constante dos erros experimentais para observações distintas. Neste teste, tem-se as seguintes hipóteses:
 
-$$\begin{cases} H_0: \mu1 = \mu2&\\H_1: \mu1 \neq \mu2 \end{cases}$$
+###  b. Tamanho de efeito e potência do teste
 
-```{r, include=TRUE}
-# teste t de student
-t.test(imc_m_2016, imc_m_2017, var.equal=TRUE)
-```
-
-Como pode ser visto, o teste t de student retornou um p-valor igual a 0,5923, cujo valor é maior que o nível de significâcia adotado (0,05). Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
-Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}1.784943 3.085836].
-
-Um outro teste pode ser feito para validação do resultado que é o Teste T de Welch. Percebe-se que ele também falhou em rejeitar a hipótese nula do estudo. 
-
-```{r, include=TRUE}
-# teste t de Welch
-t.test(imc_m_2016, imc_m_2017, "two.sided", mu=0, conf.level = 0.95)
-```
-
-Embora o nível de significância tenha sido definido inicialmente, é interessante encontrar o tamanho de efeito, sendo este a medida da importância prática dos resultados de eventuais diferenças encontradas entre duas ou mais médias ou variâncias [4].
+**Tamanho de efeito:** Embora o nível de significância tenha sido definido inicialmente, é interessante encontrar o tamanho de efeito, sendo este a medida da importância prática dos resultados de eventuais diferenças encontradas entre duas ou mais médias ou variâncias [4].
 Existem várias maneiras de se fazer isto tais como: o Teste de Cohen, Teste de Glass, Teste de Hedges, Teste Psi, dentre outros [4].
 O Teste de Cohen, por exemplo, foi desenhado para ser utilizado quando os escores das duas populações que estão sendo comparadas são contínuos e de distribuição normal\cite{tamanho_efeito_1}.
 Dada a distribução normal e a igualdade de variâncias assumidas de acordo com os testes de Shapiro-Wilk e F, respectivamente, pode-se usar o d de Cohen como estimativa do tamanho de efeito dos dados masculinos.
@@ -206,7 +191,7 @@ cohen.d(imc_m_2016, imc_m_2017)
 
 O tamanho de efeito retornado pela função foi de d = 0,1665.
 
-Para se calcular a Potência do Teste, pode-se utilizar a função power.t.test. Nela deve ser inserido o parâmetro do número de observações por grupo (n = 21), delta (d de cohen = 0,1665831), desvio padrão conjugado (sd = 3,9046). O desvio padrão conjugado pode ser obtido pela Equação 2, onde s$_1$ e s$_2$ podem ser obtidos pela função sd.
+**Potencia do teste:** Para se calcular a Potência do Teste, pode-se utilizar a função power.t.test. Nela deve ser inserido o parâmetro do número de observações por grupo (n = 21), delta (d de cohen = 0,1665831), desvio padrão conjugado (sd = 3,9046). O desvio padrão conjugado pode ser obtido pela Equação 2, onde s$_1$ e s$_2$ podem ser obtidos pela função sd.
 
 ```{r, include=TRUE}
 # Desvio padrão
@@ -231,24 +216,48 @@ Mantendo o tamanho de efeito calculado, para que a Potência do Teste fosse a de
 power.t.test(NULL, 0.1665831, 3.9046, sig.level = 0.05, power = 0.80)
 ```
 
-### 2) Subpopulação feminina
 
-Diferente da subpopulação masculina, não podemos tratar a amostra feminina em uma distribuição normal. Para a análise da proposta estatística da população feminina, pode-se usar o teste não-paramétrico de Wilcoxon com as seguintes hipóteses:
+###  c. Teste de hipóteses
 
-$$\begin{cases} H_0: \text{As medianas das populações são iguais}\\H_1: \text{As medianas das populações não são iguais} \end{cases}$$
+Para a hipótese estatística proposta para as médias do IMC masculino, pode-se usar o Teste T, visto que a distribuição normal dos valores já foi  validada, assim como a variância constante dos erros experimentais para observações distintas. Neste teste, tem-se as seguintes hipóteses:
+
+$$\begin{cases} H_0: \mu1 = \mu2&\\H_1: \mu1 \neq \mu2 \end{cases}$$
 
 ```{r, include=TRUE}
-# teste de Wilcoxon
-wilcox.test(imc_f_2016, imc_f_2017, alternative = "two.sided",conf.int = TRUE)
+# teste t de student
+t.test(imc_m_2016, imc_m_2017, var.equal=TRUE)
 ```
 
-Como pode ser visto, o teste de Wilcoxon retornou um p-valor igual a 0,07273, cujo valor é maior que o nível de significância adotado (0,05).
-Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações femininas dos dois anos são iguais.
-Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}0, 6374374; 5, 22844].
+Como pode ser visto, o teste t de student retornou um p-valor igual a 0,5923, cujo valor é maior que o nível de significâcia adotado (0,05). Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações masculinas dos dois anos são iguais.
+Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}1.784943 3.085836].
 
-**Abordagem do tamanho de efeito**
+Um outro teste pode ser feito para validação do resultado que é o Teste T de Welch. Percebe-se que ele também falhou em rejeitar a hipótese nula do estudo. 
 
+```{r, include=TRUE}
+# teste t de Welch
+t.test(imc_m_2016, imc_m_2017, "two.sided", mu=0, conf.level = 0.95)
+```
 
+### 2. Subpopulação feminina
+
+###  a. Verificação de premissas para o teste de hipóteses
+
+Assim como foi feito com a subpopulação masculina, a intenção inicial é realizar o Teste T para a comparação das amostras da subpopulação feminina. Para isso, precisamos garantir que as amostras apresentam uma distribuição normal e que suas variâncias possam ser consideradas iguais (homocedasticidade).
+
+**Verificação de Normalidade:** Assim como na análisa da subpopulação masculina, será usado o teste Shapiro-Wilk.
+```{r, include=TRUE}
+# teste de Shapiro-Wilk
+shapiro.test(imc_f_2016)
+shapiro.test(imc_f_2017)
+```
+
+Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não é possível concluir que os dados não seguem uma distribuição normal. Portanto, analisando os resultados dos testes dispostos acima, temos evidencia para inferir que as amostras de 2017 não seguem uma distribuição normal.
+
+Portanto, não podemos seguir com o Teste T para comparação destas amostras. Será necessario utilizar um método não paramétrico de comparação de amostras. Para este trabalho, escolhemos o metodo de Wilcoxon.
+
+###  b. Tamanho de efeito e potência do teste
+
+**Tamanho de efeito:** Uma forma de se calcular o tamanho de efeito neste caso é utilizar a Medida A, de Vargha-Delaney. Esta é uma forma de se medir o tamanho de efeito sem levar em conta o tipo da distruibuição dos dados.
 ```{r, include=TRUE}
 # Tamanho de efeito
 (vd_a <- VD.A(na.omit(imc_f_2016), na.omit(imc_f_2017)))
@@ -269,10 +278,39 @@ Desta forma, pode-se concluir que, em 85$\%$ das vezes, alunas de $2/2016$ possu
 
 **Abordagem do Potência do Teste**
 
-**A menina me passou o que colocou nessa parte, mas acho que devemos encontrar algum teste para jsutificar isso**
+**A menina me passou o que colocou nessa parte, mas acho que devemos encontrar algum teste para justificar isso**\
+A ausência de normalidade da distribuição feminina do segundo semestre de $2017$ impossibilita a aplicação da função `power.t.test` para análise do poder do teste, uma vez que esse cálculo de potência é específico para o teste t de Student. Nesse caso, o apropriado é calcular o poder do teste a partir de variações dessa função para o teste de Wilcoxon. No R existem algumas possibilidades dentro do pacote `wmwpow` \cite{wmwpow}, como o cálculo do poder usando a abordagem de Shieh \cite{Shieh2006} e outros dois baseados no método de Monte Carlo. Todavia, tais abordagens requerem que o tipo de distribuição seja passado por parâmetro, e portanto, conhecido previamente. Em vista disso e principalmente pelo baixo tamanho amostral que impossibilita a estimativa empírica da distribuição amostral, o cálculo do poder não pôde ser realizado. No entanto, dado que os tamanhos amostrais são distintos ($n_{F2016} \neq n_{F2017}$) e extremamente pequenos, é bem provável que a potência para efeitos maiores ou iguais a $4 \ kg/m^2$ seja substancialmente menor que a desejada ($\pi = 0,80$). 
+**deixando texto acima temporariamente como backup**
 
-A ausência de normalidade da distribuição feminina do segundo semestre de $2017$ impossibilita a aplicação da função `power.t.test` para análise do poder do teste, uma vez que esse cálculo de potência é específico para o teste t de Student. Nesse caso, o apropriado é calcular o poder do teste a partir de variações dessa função para o teste de Wilcoxon. No R existem algumas possibilidades dentro do pacote `wmwpow` \cite{wmwpow}, como o cálculo do poder usando a abordagem de Shieh \cite{Shieh2006} e outros dois baseados no método de Monte Carlo. Todavia, tais abordagens requerem que o tipo de distribuição seja passado por parâmetro, e portanto, conhecido previamente. Em vista disso e principalmente pelo baixo tamanho amostral que impossibilita a estimativa empírica da distribuição amostral, o cálculo do poder não pôde ser realizado. No entanto, dado que os tamanhos amostrais são distintos ($n_{F2016} \neq n_{F2017}$) e extremamente pequenos, é bem provável que a potência para efeitos maiores ou iguais a $4 \ kg/m^2$ seja substancialmente menor que a desejada ($\pi = 0,80$).
+**Potência do teste:** A ausência de normalidade da distribuição feminina do segundo semestre de $2017$ impossibilita a aplicação da função `power.t.test` para análise do poder do teste, uma vez que esse cálculo de potência é específico para o teste t de Student. Nesse caso, o apropriado é calcular o poder do teste a partir de uma variação dessa função para o teste de Wilcoxon. O que pode ser feito é 
 
+```{r, include=TRUE}
+
+# potencia do teste de wilcoxon
+
+# não consegui chegar em uma conclusão, olhei as referencias abaixo mas nao tive tempo de aprofundar hoje.
+
+# https://www.rdocumentation.org/packages/MKpower/versions/0.5/topics/sim.power.wilcox.test ??
+# rdocumentation.org/packages/litteR/versions/0.7.0/topics/power.wilcoxon ??
+# https://stats.stackexchange.com/questions/15540/how-to-compute-the-power-of-wilcoxon-test??
+# https://cran.r-project.org/web/packages/wmwpow/wmwpow.pdf??
+```
+
+
+###  c. Teste de hipóteses
+
+Para a análise da proposta estatística da população feminina, será utilizado o teste não-paramétrico de Wilcoxon com as seguintes hipóteses:
+
+$$\begin{cases} H_0: \text{As medianas das populações são iguais}\\H_1: \text{As medianas das populações não são iguais} \end{cases}$$
+
+```{r, include=TRUE}
+# teste de Wilcoxon
+wilcox.test(imc_f_2016, imc_f_2017, alternative = "two.sided",conf.int = TRUE)
+```
+
+Como pode ser visto, o teste de Wilcoxon retornou um p-valor igual a 0,07273, cujo valor é maior que o nível de significância adotado (0,05).
+Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações femininas dos dois anos são iguais.
+Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}0, 6374374; 5, 22844].
 
 ### Discussão e Conclusão
 
