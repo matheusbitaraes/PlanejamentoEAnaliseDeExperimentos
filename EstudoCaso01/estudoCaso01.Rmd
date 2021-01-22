@@ -317,17 +317,46 @@ Nesse cenário, você está em uma situação difícil sem alternativa válida. 
 
 
 
-### Discussão e Conclusão
+## Discussão e Conclusão
 
-**Lembrando que precisamos comentar ou incrementar o que foi comentado sobre:**
+Com o intuito de seguir o mesmo fluxo apresentado nas seções anteriores, as conclusões serão apresentadas de forma separada para cada uma das subpopulações, sendo uma somente do sexo masculino e outra somente do sexo feminino.
 
-**•Derivação de conclusões e recomendações.**
+Antes de iniciarmos as conclusões para cada subpopulação, é importante retomar algumas definições que foram feitas neste estudo e que são comuns para ambas subpopulações. Foi definido, portanto, um Nivel de Significância ($\alpha$) de 0,05 e uma Potência do Teste ($\pi$) de 0,80. Além disso, foi efetuado um tratamento nos dados das amostras para ficarem com um formato uniforme.
 
-**• Discussão sobre a potência do teste (se aplicável).**
-Aqui para o masculino podemos retomar a discussão que o Diego fez na parte de potência do teste e enfatizar a necessidade de mais amostras.
 
-**• Discussão sobre possíveis formas de melhorar este experimento.**
-Tomar cuidado para nao sermos repetitivos mas a forma de melhorar esse experimento é principalmente aumentar o numero de amostras, principalmente para as subpopulações fmeininas.
+###  a. Subpopulação masculina
+
+Para a subpopulação masculina foram elaboradas as seguintes hipóteses:
+
+$$\begin{cases} H_0: \mu_{m2016} = \mu_{m2017}&\\H_1: \mu_{m2016} \neq \mu_{m2017} \end{cases}$$
+
+Com base nas amostras fornecidas, nos estudos realizados e nos testes apresentados neste documento foi possível concluir que as amostras das subpopulações masculinas apresentaram distribuição normal através do teste de Shapiro-Wilk. Além disso, foi possível considerar que as subpopulações possuem homocedasticidade entre si através do Teste F.
+
+Por fim, foi possível utilizar o Teste T, que dependia de uma distribuição normal e também da homocedasticidade entre as subpopulações para ser empregado, e concluir através de seus resultados que com 95% de confiança nao foi possível rejeitar a hipótese de que as médias das populações masculinas dos dois anos são iguais.
+
+Posteriormente, foi utilizado o Teste de Cohen que nos permitiu concluir um tamanho de efeito de  d = 0,1665. Por último, foi utilizada a função `power.t.test` que retornou o valor de 3,4% para a Potência de Teste. Destes dados, foi possível inferir que para a Potência de Teste alcançar o valor de 80% conforme definido, seriam necessárias 8626 amostras.
+
+
+
+###  b. Subpopulação feminina
+
+Para a subpopulação feminina foram elaboradas as seguintes hipóteses:
+
+$$\begin{cases} H_0: med_{f2016} = med_{f2017}&\\H_1: med_{f2016} \neq med_{f2017} \end{cases}$$
+
+Com base nas amostras fornecidas, nos estudos realizados e nos testes
+apresentados neste documento foi possível concluir que as amostras das subpopulações femininas não apresentaram distribuição normal através do teste de Shapiro-Wilk, o que impossibilita de prosseguir com o Teste T.
+
+Por este motivo, foi necessário utilizar um método não paramétrico de comparação de amostras. O método utilizado foi o Teste de Wilcoxon e através de seu resultado pôde-se concluir com  95% de confiança que não foi possível rejeitar a hipótese de que as medianas das populações femininas dos dois anos são iguais.
+
+Posteriormente, foi utilizada a Medida A, de Vargha-Delaney, que nos permitiu concluir que em 85% das vezes as alunas de 2/2016 possuem maior mediana do IMC do que as alunas do 2/2017.
+
+Para a Potência de Teste no caso das subpopulações femininas é importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilita a aplicação da função `power.t.test`.
+
+###  c. Conclusão Geral
+
+Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a Potência de Teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma Potência de Teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da Potência de Teste para esta subpopulação de maneira confiável.
+
 
 ### Atividades dos membros
 ...
@@ -335,4 +364,3 @@ Tomar cuidado para nao sermos repetitivos mas a forma de melhorar esse experimen
 \renewcommand\refname{Referências Bibliográficas}
 \bibliographystyle{unsrt}
 \bibliography{referencias}
-
