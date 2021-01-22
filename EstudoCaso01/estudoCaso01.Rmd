@@ -240,7 +240,7 @@ power.t.test(NULL, 0.1665831, 3.9046, sig.level = 0.05, power = 0.80)
 
 Assim como foi feito com a subpopulação masculina, a intenção inicial é realizar o Teste T para a comparação das amostras da subpopulação feminina. Para isso, precisamos validar que as amostras apresentam uma distribuição normal e que suas variâncias possam ser consideradas iguais (homocedasticidade), como já mencionado.
 
-**Verificação de Normalidade:** Assim como na análisa da subpopulação masculina, será usado o teste Shapiro-Wilk.
+**Verificação de Normalidade:** Assim como na análise da subpopulação masculina, será usado o teste Shapiro-Wilk.
 
 ```{r, include=TRUE}
 # teste de Shapiro-Wilk
@@ -286,36 +286,18 @@ Ou seja, a medida A representa a probabilidade de um valor aleatório da primeir
 
 ###  c. Potência do Teste
 
-
-**Abordagem do Potência do Teste**
-
-**A menina me passou o que colocou nessa parte, mas acho que devemos encontrar algum teste para justificar isso**\
-A ausência de normalidade da distribuição feminina do segundo semestre de $2017$ impossibilita a aplicação da função `power.t.test` para análise do poder do teste, uma vez que esse cálculo de potência é específico para o Teste T. Nesse caso, o apropriado é calcular o poder do teste a partir de variações dessa função para o teste de Wilcoxon. No R existem algumas possibilidades dentro do pacote `wmwpow` \cite{wmwpow}, como o cálculo do poder usando a abordagem de Shieh \cite{Shieh2006} e outros dois baseados no método de Monte Carlo. Todavia, tais abordagens requerem que o tipo de distribuição seja passado por parâmetro, e portanto, conhecido previamente. Em vista disso e principalmente pelo baixo tamanho amostral que impossibilita a estimativa empírica da distribuição amostral, o cálculo do poder não pôde ser realizado. No entanto, dado que os tamanhos amostrais são distintos ($n_{F2016} \neq n_{F2017}$) e extremamente pequenos, é bem provável que a potência para efeitos maiores ou iguais a $4 \ kg/m^2$ seja substancialmente menor que a desejada ($\pi = 0,80$). 
-**deixando texto acima temporariamente como backup**
-
-
-**Achei neste site: https://blog.minitab.com/pt/como-escolher-entre-um-teste-nao-parametrico-e-um-teste-parametrico**
-Se você não atender às orientações de tamanho amostral para os testes paramétricos e não tiver certeza de que os dados seguem uma distribuição normal, deverá usar um teste não paramétrico. Quando você tem uma amostra muito pequena, pode não conseguir de determinar a distribuição de seus dados porque os testes de distribuição não terão poder suficiente para proporcionar resultados significativos.
-
-Nesse cenário, você está em uma situação difícil sem alternativa válida. Os testes não paramétricos têm menos poder para começar e, ter também um tamanho amostral baixo, representa aumenta o problema!
-
-
-**Potência do teste:** A ausência de normalidade da distribuição feminina do segundo semestre de $2017$ impossibilita a aplicação da função `power.t.test` para análise do poder do teste, uma vez que esse cálculo de potência é específico para o Teste T. Nesse caso, o apropriado é calcular o poder do teste a partir de uma variação dessa função para o teste de Wilcoxon. O que pode ser feito é 
+Existem algumas maneiras de calcular a potência de um teste não parmétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Por existirem estas amostrages, este metodo requer uma definição da distribuição das amostras para o cálculo da potência. O que podemos fazer é verificar o teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito. 
 
 ```{r, include=TRUE}
 
 # potencia do teste de wilcoxon
 
-# não consegui chegar em uma conclusão, olhei as referencias abaixo mas nao tive tempo de aprofundar hoje.
-
-# https://www.rdocumentation.org/packages/MKpower/versions/0.5/topics/sim.power.wilcox.test ??
-# rdocumentation.org/packages/litteR/versions/0.7.0/topics/power.wilcoxon ??
-# https://stats.stackexchange.com/questions/15540/how-to-compute-the-power-of-wilcoxon-test??
-# https://cran.r-project.org/web/packages/wmwpow/wmwpow.pdf??
+# install.packages("wmwpow")
+library(wmwpow)
+shiehpow(n = 7, m = 4, p = 0.8571429, alpha = 0.05, dist = "norm", sides = "two.sided")
 ```
 
-
-
+Apesar de não termos evidências para assumirmos que a distribuição de $2017$ é normal, podemos utilizar este valor de potência (considerando as distribuições normais) de 0,45 como uma aproximação da real potência do teste, para que ao menos tenhamos um direcionamento.
 
 ## Discussão e Conclusão
 
