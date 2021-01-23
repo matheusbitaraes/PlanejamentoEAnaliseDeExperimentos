@@ -33,9 +33,9 @@ Para isso, foram disponibilizadas duas amostras, sendo uma para cada semestre em
 
 •	IMC entre 30 e 34,9: Este índice indica obesidade grau um;
 
-•	IMC acima 35 e 39,9: Indica obesidade grau dois
+•	IMC acima 35 e 39,9: Indica obesidade grau dois;
 
-•	IMC acima de 40: Indica obesidade grau três ou mórbida							
+•	IMC acima de 40: Indica obesidade grau três ou mórbida.							
 
 ## Design do Experimento
 
@@ -47,7 +47,12 @@ Como já mencionado, deseja-se comparar o IMC dos alunos do PPGEE-UFMG de dois s
 
 2) Há evidências estatísticas  de que a mediana (med) do IMC das alunas do PPGEE-UFMG de 2/2016 é diferente da mediana do IMC das alunas do PPGEE-UFMG de 2/2017? (subpopulação feminina)
 
+**Isso só faz sentido estar escrito se for justificado depois, que era o que eu tinha feito com aquele parágrafo depois dos boxplots**
+
 No decorrer do estudo ficará claro o motivo pelo qual foi utilizado média e mediana para a subpopulação masculina e feminina, respectivamente.
+
+**Esse parágrafo que ficava depois do boxplot e antes das análises**
+Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas \cite{media_mediana}.
 
 Dadas as hipóteses estatísticas descritas acima, podem-se definir as seguintes hipóteses de testes, em função da média e mediana do IMC dos alunos do sexo masculino e do sexo feminino, respectivamente:
 
@@ -60,7 +65,7 @@ $$\begin{cases} H_0: med_{f2016} = med_{f2017}&\\H_1: med_{f2016} \neq med_{f201
   Além das hipóteses estatísticas acima, tem-se as seguintes definições:
 
 1) Nível de significância ($\alpha$) de 0,05. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese \cite{NotasdeAula}.
-2) Potência do Teste ($\pi$) = 1 - ($\beta$) = 0,80.  Onde $\beta$ é a probabilidade de ocorrência de um falso negativo em qualquer procedimento de teste de hipótese [2] e, portanto, a potência de teste quantifica a sensibilidade do teste a efeitos que violam sua hipótese nula [2].
+2) Potência do Teste ($\pi$) = 1 - $\beta$ = 0,80.  Onde $\beta$ é a probabilidade de ocorrência de um falso negativo em qualquer procedimento de teste de hipótese [2] e, portanto, a potência de teste quantifica a sensibilidade do teste a efeitos que violam sua hipótese nula [2].
 
 
 ## Análise Estatística
@@ -286,7 +291,9 @@ Ou seja, a medida A representa a probabilidade de um valor aleatório da primeir
 
 ###  c. Potência do Teste
 
-Existem algumas maneiras de calcular a potência de um teste não parmétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Por existirem estas amostrages, este metodo requer uma definição da distribuição das amostras para o cálculo da potência. O que podemos fazer é verificar o teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito. 
+Existem algumas maneiras de calcular a potência de um teste não paramétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Este método requer uma definição da distribuição das amostras para o cálculo da potência. O que pode ser feito é verificar o teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito. 
+
+**Mesmo tamnho de amostras? no teste tá n=7 e m=4. Não entendi...**
 
 ```{r, include=TRUE}
 
@@ -297,13 +304,15 @@ library(wmwpow)
 shiehpow(n = 7, m = 4, p = 0.8571429, alpha = 0.05, dist = "norm", sides = "two.sided")
 ```
 
-Apesar de não termos evidências para assumirmos que a distribuição de $2017$ é normal, podemos utilizar este valor de potência (considerando as distribuições normais) de 0,45 como uma aproximação da real potência do teste, para que ao menos tenhamos um direcionamento.
+Apesar de não termos evidências para assumirmos que a distribuição de $2017$ é normal, podemos utilizar este valor de potência (considerando as distribuições normais) de 0,456 como uma aproximação da real potência do teste, para que ao menos tenhamos um direcionamento.
+
+**Não termos evidências para assumirmos a ditribuição normal acho que não está certo... Acho que " Apesar de ter-se evidências pelo teste de Shapiro-Wilk para rejeitar-se a hipótese nula da distribuição normal de 2017**
 
 ## Discussão e Conclusão
 
 Com o intuito de seguir o mesmo fluxo apresentado nas seções anteriores, as conclusões serão apresentadas de forma separada para cada uma das subpopulações, sendo uma somente do sexo masculino e outra somente do sexo feminino.
 
-Antes de iniciarmos as conclusões para cada subpopulação, é importante retomar algumas definições que foram feitas neste estudo e que são comuns para ambas subpopulações. Foi definido, portanto, um Nivel de Significância ($\alpha$) de 0,05 e uma Potência do Teste ($\pi$) de 0,80. Além disso, foi efetuado um tratamento nos dados das amostras para ficarem com um formato uniforme.
+Antes de dar início as conclusões para cada subpopulação, é importante retomar algumas definições que foram feitas neste estudo e que são comuns para ambas subpopulações. Foi definido, portanto, um Nivel de Significância ($\alpha$) de 0,05 e uma Potência do Teste ($\pi$) de 0,80. Além disso, foi efetuado um tratamento nos dados das amostras para ficarem com um formato uniforme.
 
 
 ###  a. Subpopulação masculina
@@ -312,7 +321,7 @@ Para a subpopulação masculina foram elaboradas as seguintes hipóteses:
 
 $$\begin{cases} H_0: \mu_{m2016} = \mu_{m2017}&\\H_1: \mu_{m2016} \neq \mu_{m2017} \end{cases}$$
 
-Com base nas amostras fornecidas, nos estudos realizados e nos testes apresentados neste documento foi possível concluir que as amostras das subpopulações masculinas apresentaram distribuição normal através do teste de Shapiro-Wilk. Além disso, foi possível considerar que as subpopulações possuem homocedasticidade entre si através do Teste F.
+Com base nas amostras fornecidas, nos estudos realizados e nos testes apresentados neste documento, foi possível concluir que as amostras das subpopulações masculinas apresentaram distribuição normal através do teste de Shapiro-Wilk. Além disso, foi possível considerar que as subpopulações possuem homocedasticidade entre si através do Teste F.
 
 Por fim, foi possível utilizar o Teste T, que dependia de uma distribuição normal e também da homocedasticidade entre as subpopulações para ser empregado, e concluir através de seus resultados que com 95% de confiança nao foi possível rejeitar a hipótese de que as médias das populações masculinas dos dois anos são iguais.
 
@@ -337,7 +346,7 @@ Para a Potência de Teste no caso das subpopulações femininas é importante me
 
 ###  c. Conclusão Geral
 
-Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a Potência de Teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma Potência de Teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da Potência de Teste para esta subpopulação de maneira confiável.
+Por fim, é importante ressaltar que a quantidade de amostras fornecidas de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a Potência de Teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma Potência de Teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto, somado ao baixo número de amostras, impossibilitou de se chegar a um valor da Potência de Teste para esta subpopulação de maneira confiável.
 
 
 ### Atividades dos membros
