@@ -286,7 +286,7 @@ Ou seja, a medida A representa a probabilidade de um valor aleatório da primeir
 
 ###  c. Potência do Teste
 
-Existem algumas maneiras de calcular a potência de um teste não parmétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Por existirem estas amostrages, este metodo requer uma definição da distribuição das amostras para o cálculo da potência. O que podemos fazer é verificar o teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito. 
+Existem algumas maneiras de calcular a potência de um teste não paramétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Por existirem estas amostragens, este método requer uma definição da distribuição das amostras para o cálculo da potência. O que podemos fazer é verificar o teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito. 
 
 ```{r, include=TRUE}
 
@@ -314,7 +314,7 @@ $$\begin{cases} H_0: \mu_{m2016} = \mu_{m2017}&\\H_1: \mu_{m2016} \neq \mu_{m201
 
 Com base nas amostras fornecidas, nos estudos realizados e nos testes apresentados neste documento foi possível concluir que as amostras das subpopulações masculinas apresentaram distribuição normal através do teste de Shapiro-Wilk. Além disso, foi possível considerar que as subpopulações possuem homocedasticidade entre si através do Teste F.
 
-Por fim, foi possível utilizar o Teste T, que dependia de uma distribuição normal e também da homocedasticidade entre as subpopulações para ser empregado, e concluir através de seus resultados que com 95% de confiança nao foi possível rejeitar a hipótese de que as médias das populações masculinas dos dois anos são iguais.
+Por fim, foi possível utilizar o Teste T, que dependia de uma distribuição normal e também da homocedasticidade entre as subpopulações para ser empregado, e concluir através de seus resultados que com 95% de confiança não foi possível rejeitar a hipótese de que as médias das populações masculinas dos dois anos são iguais.
 
 Posteriormente, foi utilizado o Teste de Cohen que nos permitiu concluir um tamanho de efeito de  d = 0,1665. Por último, foi utilizada a função `power.t.test` que retornou o valor de 3,4% para a Potência de Teste. Destes dados, foi possível inferir que para a Potência de Teste alcançar o valor de 80% conforme definido, seriam necessárias 8626 amostras.
 
@@ -333,15 +333,33 @@ Por este motivo, foi necessário utilizar um método não paramétrico de compar
 
 Posteriormente, foi utilizada a Medida A, de Vargha-Delaney, que nos permitiu concluir que em 85% das vezes as alunas de 2/2016 possuem maior mediana do IMC do que as alunas do 2/2017.
 
-Para a Potência de Teste no caso das subpopulações femininas é importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilita a aplicação da função `power.t.test`.
+Como mencionado anteriormente, para as subpopulações femininas foi necessário prosseguir com testes não paramétricos, inclusive no cálculo da Potência de Teste. Foi escolhida a abordagem de Shieh e este método requer uma definição da distribuição das amostras para o cálculo. Neste caso, embora não tenhamos evidências para assumir que a distribuição de 2017 é normal, foi necessário considerar desta maneira para que o teste retornasse um valor conclusivo. Assim sendo, sabemos que o resultado de 0,45 não representa de fato o valor para as amostras em estudo, porém ele funciona como uma aproximação do valor real para os dados em questão. É importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilitou também a aplicação da função `power.t.test`.
 
-###  c. Conclusão Geral
+###  c. Discussões gerais e melhorias
 
-Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a Potência de Teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma Potência de Teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da Potência de Teste para esta subpopulação de maneira confiável.
+Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a Potência de Teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma Potência de Teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da Potência de Teste para esta subpopulação. Ainda sim, com o objetivo de encontrar algum valor que se relacionasse e se aproximasse da Potência de Teste para as amostras fornecidas, empregou-se um teste não paramétrico e assumiu-se distribuição normal.
+
+Tendo este cenário em vista, uma forma de melhorar este experimento seria o aumento do número de amostras para todas as subpopulações. Ressaltamos ainda a dificuldade principalmente em relação às amostras da população feminina de 2017 que, além de muito escassas, não apresentaram distruibuição normal o que impossibilitou a realização de alguns testes.
 
 
 ### Atividades dos membros
-...
+
+**Diego**
+
+Elaboração do experimento e construção textual.
+
+**Elias**
+
+Revisão textual do documento e elaboração das conclusões e discussões.
+
+**Matheus**
+
+Elaboração dos testes e estruturação dos códigos.
+
+**Todos**
+
+Elaboração das hipóteses e definição das premissas.
+
 
 \renewcommand\refname{Referências Bibliográficas}
 \bibliographystyle{unsrt}
