@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Descrição do problema
 
-   Neste estudo, deseja-se comparar o Índice de Massa Corpórea (IMC) médio de duas populações de alunos da pós-graduação da Engenharia Elétrica (PPGEE) da UFMG do segundo semestre de 2016 e do segundo semestre de 2017.
+   Neste estudo, deseja-se comparar o Índice de Massa Corpórea (IMC) médio de duas populações de alunos da pós-graduação da Engenharia Elétrica (PPGEE) da UFMG, uma do segundo semestre de 2016 e a outra do segundo semestre de 2017.
 Para isso, foram disponibilizadas duas amostras, sendo uma para cada semestre em questão, onde serão feitas as análises para o estudo mencionado.
 
 ## Introdução
@@ -43,16 +43,11 @@ Como já mencionado, deseja-se comparar o IMC dos alunos do PPGEE-UFMG de dois s
 
   As seguintes hipóteses estatísticas foram definidas:
 
-1) Há evidências estatísticas de que a média ($\mu$) do IMC dos alunos do PPGEE-UFMG de 2/2016 é diferente da média do IMC dos alunos do PPGEE-UFMG de 2/2017? (subpopulação masculina)
+1) Há evidências estatísticas de que a média ($\mu$) do IMC dos alunos do PPGEE-UFMG de 2/2016 é igual a média do IMC dos alunos do PPGEE-UFMG de 2/2017? (subpopulação masculina)
 
-2) Há evidências estatísticas  de que a mediana (med) do IMC das alunas do PPGEE-UFMG de 2/2016 é diferente da mediana do IMC das alunas do PPGEE-UFMG de 2/2017? (subpopulação feminina)
-
-**Isso só faz sentido estar escrito se for justificado depois, que era o que eu tinha feito com aquele parágrafo depois dos boxplots**
+2) Há evidências estatísticas de que a mediana (med) do IMC das alunas do PPGEE-UFMG de 2/2016 é igual a mediana do IMC das alunas do PPGEE-UFMG de 2/2017? (subpopulação feminina)
 
 No decorrer do estudo ficará claro o motivo pelo qual foi utilizado média e mediana para a subpopulação masculina e feminina, respectivamente.
-
-**Esse parágrafo que ficava depois do boxplot e antes das análises**
-Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas \cite{media_mediana}.
 
 Dadas as hipóteses estatísticas descritas acima, podem-se definir as seguintes hipóteses de testes, em função da média e mediana do IMC dos alunos do sexo masculino e do sexo feminino, respectivamente:
 
@@ -141,9 +136,14 @@ horizontal = TRUE,
 notch = FALSE
 )
 ```
-Através da análise gráfica é possível perceber alguns traços que serão avaliados por testes estatísticos posteriormente. Nota-se que o IMC das subpopulações femininas são bastante distintos de um ano para outro, inclusive o máximo do ano de 2017 é muito próximo do mínimo de 2016 o que sugere uma diferença grande entre as populações. Em contra partida, as subpopulações masculinas apresentam uma distribuição dos valores do IMC mais semelhantes, o que sugere pouca distinção entre elas. 
+**Acho que você estava querendo dizer algo sobre quartil e não sobre o máximo, mas não consegui pensar na forma de escrever**
+
+
+https://operdata.com.br/blog/como-interpretar-um-boxplot/#:~:text=Como%20interpretar%20o%20boxplot%3F,a%20mediana%20ou%20segundo%20quartil)
 
 Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas \cite{media_mediana}.
+
+Através da análise gráfica é possível perceber alguns traços que serão avaliados por testes estatísticos posteriormente. Nota-se que os IMCs das subpopulações femininas são bastante distintos de um ano para outro, inclusive o **máximo** do ano de 2017 é muito próximo do **mínimo** de 2016 o que sugere uma diferença grande entre as populações. Em contra partida, as subpopulações masculinas apresentam uma distribuição dos valores do IMC mais semelhantes, o que sugere pouca distinção entre elas. 
 
 Em posse dos dados iniciais, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
 
@@ -152,7 +152,7 @@ Em posse dos dados iniciais, o estudo será dividido em duas partes (masculino e
 
 ###  a. Verificação das premissas para o teste de hipóteses
 
-A intenção inicial é realizar o Teste T para a comparação destas amostras. Para isso, precisamos validar que as amostras apresentam uma distribuição normal e que suas variâncias possam ser consideradas iguais (homocedasticidade).
+A intenção inicial é realizar o Teste T para a comparação destas amostras. Para isso, precisamos validar que as amostras apresentem uma distribuição normal e que suas variâncias possam ser consideradas iguais (homocedasticidade).
 
 **Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde tem-se as seguintes hipóteses:
 
@@ -163,7 +163,7 @@ shapiro.test(imc_m_2016)
 shapiro.test(imc_m_2017)
 ```
 
-Como interpretação do teste, temos que se p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as amostras masculinas dos dois anos seguem uma distribuição normal.
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as amostras masculinas dos dois anos seguem uma distribuição normal.
 
 **Verificação de homocedasticidade**: Para a análise da variância dos dados, pode-se usar o Teste F, cuja premissa é a distribuição normal \cite{hipoteses}, onde tem-se as seguintes hipóteses:
 
@@ -174,7 +174,7 @@ $$\begin{cases} H_0: \sigma_1^2 = \sigma_2^2&\\H_1: \sigma_1^2 \neq \sigma_2^2 \
 var.test(imc_m_2016, imc_m_2017, alternative = "two.sided")
 ```
 
-Analisando o p-valor, temos que p-valor > 0,05 ($\alpha$) e, portanto, não há evidência estatística para que seja rejeitada a hipótese nula e, portanto, será considerada a homocedasticidade entre as subpopulações.
+Analisando o p-valor, temos que o p-valor > 0,05 ($\alpha$) e, portanto, não há evidência estatística para que seja rejeitada a hipótese nula e, portanto, será considerada a homocedasticidade entre as subpopulações.
 
 **Teste de hipóteses**: Para a hipótese estatística proposta para as médias do IMC masculino, pode-se usar o Teste T visto que a distribuição normal dos valores já foi  validada, assim como a variância constante dos erros experimentais para observações distintas. Neste teste, tem-se as seguintes hipóteses:
 
@@ -230,7 +230,7 @@ power.t.test(21, 0.1665831, 3.9046368, sig.level = 0.05)
 
 Observa-se que a potência de teste obtida foi de 3,4% que é muito menor que a potência desejada (80%). Isso significa que, para conseguirmos identificar diferenças de 0,1665831 nas médias padronizadas, com uma potência de 0,80, iremos precisar de um número maior de amostras (considerando o mesmo desvio padrão).
 
-Mantendo o tamanho de efeito calculado, para que a Potência do Teste fosse a desejada, seriam  necessárias 8626 amostras para cada ano, conforme descrito abaixo. Como não é possivel matricular mais alunos nas classes, a possibilidade de maior número de amostras é infactível.
+Mantendo o tamanho de efeito calculado, para que a Potência do Teste fosse a desejada, seriam  necessárias 8626 amostras para cada ano, conforme mostrado abaixo. Como não é possivel matricular mais alunos nas classes, a possibilidade de maior número de amostras é infactível.
 
 ```{r, include=TRUE}
 # Número de amostras para o Potência do Teste de 80%
@@ -258,7 +258,7 @@ Pode-se observar o p-valor retornado pelo teste para a subpopulação feminina d
 
 Será necessario utilizar um método não paramétrico de comparação de amostras. Para este trabalho, foi escolhido o Teste de Wilcoxon.
 
-**Teste de hipóteses:** Para a análise da proposta estatística da população feminina, será utilizado o teste não-paramétrico de Wilcoxon com as seguintes hipóteses:
+**Teste de hipóteses:** Para a análise da proposta estatística da população feminina, será utilizado o teste não paramétrico de Wilcoxon com as seguintes hipóteses:
 
 $$\begin{cases} H_0: \text{As medianas das populações são iguais}\\H_1: \text{As medianas das populações não são iguais} \end{cases}$$
 
@@ -269,7 +269,7 @@ wilcox.test(imc_f_2016, imc_f_2017, alternative = "two.sided",conf.int = TRUE)
 
 Como pode ser visto, o teste de Wilcoxon retornou um p-valor igual a 0,07273, cujo valor é maior que o nível de significância adotado (0,05).
 Portanto, com 95% de confiança não é possível rejeitar a hipótese nula do estudo proposto de que as médias das populações femininas dos dois anos são iguais.
-Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das médias é [\text{-}0, 6374374; 5, 22844].
+Sendo a hipótese alternativa H1 bilateral, o intervalo de confiança para a diferença das medianas é [\text{-}0, 6374374; 5, 22844].
 
 ###  b. Tamanho de efeito
 
@@ -292,7 +292,7 @@ Ou seja, a medida A representa a probabilidade de um valor aleatório da primeir
 
 ###  c. Potência do Teste
 
-Existem algumas maneiras de calcular a potência de um teste não paramétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Por existir esta reamostragem, este método requer uma definição da distribuição das amostras para o cálculo da potência. O que podemos fazer é verificar o teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito (um grupo com 4 amostras e outro com 7). 
+Existem algumas maneiras de calcular a potência de um teste não paramétrico. Uma delas é a abordagem de Shieh \cite{Shieh2006}, que está dentro do pacote `wmwpow` do R \cite{wmwpow}. Esta abordagem utiliza simulações de Monte Carlo, com amostragens aleatórias massivas para determinar a potência. Por existir esta reamostragem, este método requer uma definição da distribuição das amostras para o cálculo da potência. O que pode ser feito é a verificação do teste para duas subpopulações de distribuição normal com o mesmo tamanho de amostras das subpopulações reais e mesmo tamanho de efeito (um grupo com 4 amostras e outro com 7 amostras). 
 
 ```{r, include=TRUE}
 
@@ -311,7 +311,7 @@ Apesar de não termos evidências para assumirmos que a distribuição de $2017$
 
 Com o intuito de seguir o mesmo fluxo apresentado nas seções anteriores, as conclusões serão apresentadas de forma separada para cada uma das subpopulações, sendo uma somente do sexo masculino e outra somente do sexo feminino.
 
-Antes de dar início as conclusões para cada subpopulação, é importante retomar algumas definições que foram feitas neste estudo e que são comuns para ambas subpopulações. Foi definido, portanto, um Nivel de Significância ($\alpha$) de 0,05 e uma Potência do Teste ($\pi$) de 0,80. Além disso, foi efetuado um tratamento nos dados das amostras para ficarem com um formato uniforme.
+Antes de dar início as conclusões para cada subpopulação, é importante retomar algumas definições que foram feitas neste estudo e que são comuns para ambas subpopulações. Foi definido, portanto, um nível de significância ($\alpha$) de 0,05 e uma potência do teste ($\pi$) de 0,80. Além disso, foi efetuado um tratamento nos dados das amostras para ficarem com um formato uniforme.
 
 
 ###  a. Subpopulação masculina
@@ -324,7 +324,7 @@ Com base nas amostras fornecidas, nos estudos realizados e nos testes apresentad
 
 Por fim, foi possível utilizar o Teste T, que dependia de uma distribuição normal e também da homocedasticidade entre as subpopulações para ser empregado, e concluir através de seus resultados que com 95% de confiança não foi possível rejeitar a hipótese de que as médias das populações masculinas dos dois anos são iguais.
 
-Posteriormente, foi utilizado o Teste de Cohen que nos permitiu concluir um tamanho de efeito de  d = 0,1665. Por último, foi utilizada a função `power.t.test` que retornou o valor de 3,4% para a Potência de Teste. Destes dados, foi possível inferir que para a Potência de Teste alcançar o valor de 80% conforme definido, seriam necessárias 8626 amostras.
+Posteriormente, foi utilizado o Teste de Cohen que nos permitiu concluir um tamanho de efeito de  d = 0,1665. Por último, foi utilizada a função `power.t.test` que retornou o valor de 3,4% para a potência do teste. Destes dados, foi possível inferir que para a potência do teste alcançar o valor de 80% conforme definido, seriam necessárias 8626 amostras.
 
 
 
@@ -341,13 +341,13 @@ Por este motivo, foi necessário utilizar um método não paramétrico de compar
 
 Posteriormente, foi utilizada a Medida A, de Vargha-Delaney, que nos permitiu concluir que em 85% das vezes as alunas de 2/2016 possuem maior mediana do IMC do que as alunas do 2/2017.
 
-Como mencionado anteriormente, para as subpopulações femininas foi necessário prosseguir com testes não paramétricos, inclusive no cálculo da Potência de Teste. Foi escolhida a abordagem de Shieh e este método requer uma definição da distribuição das amostras para o cálculo. Neste caso, embora não tenhamos evidências para assumir que a distribuição de 2017 é normal, foi necessário considerar desta maneira para que o teste retornasse um valor conclusivo. Assim sendo, sabemos que o resultado de 0,45 não representa de fato o valor para as amostras em estudo, porém ele funciona como uma aproximação do valor real para os dados em questão. É importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilitou também a aplicação da função `power.t.test`.
+Como mencionado anteriormente, para as subpopulações femininas foi necessário prosseguir com testes não paramétricos, inclusive no cálculo da potência do teste. Foi escolhida a abordagem de Shieh e este método requer uma definição da distribuição das amostras para o cálculo. Neste caso, **embora não tenhamos evidências para assumir que a distribuição de 2017 é normal**, foi necessário considerar desta maneira para que o teste retornasse um valor conclusivo. O resultado de 0,45 não representa de fato o valor para as amostras em estudo, porém ele funciona como uma aproximação do valor real para os dados em questão. É importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilitou também a aplicação da função `power.t.test`.
 
 ###  c. Discussões gerais e melhorias
 
-Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a Potência de Teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma Potência de Teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da Potência de Teste para esta subpopulação. Ainda sim, com o objetivo de encontrar algum valor que se relacionasse e se aproximasse da Potência de Teste para as amostras fornecidas, empregou-se um teste não paramétrico e assumiu-se distribuição normal.
+Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a potência do teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma potência do teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da potência do teste para esta subpopulação. Ainda sim, com o objetivo de encontrar algum valor que se relacionasse e se aproximasse da potência do teste para as amostras fornecidas, empregou-se um teste não paramétrico e assumiu-se distribuição normal.
 
-Tendo este cenário em vista, uma forma de melhorar este experimento seria o aumento do número de amostras para todas as subpopulações. Ressaltamos ainda a dificuldade principalmente em relação às amostras da população feminina de 2017 que, além de muito escassas, não apresentaram distruibuição normal o que impossibilitou a realização de alguns testes.
+Tendo este cenário em vista, uma forma de melhorar este experimento seria o aumento do número de amostras para todas as subpopulações, embora infactível. Ressalta-se ainda a dificuldade, principalmente em relação às amostras da população feminina de 2017, que, além de muito escassas, não apresentaram distruibuição normal e acabou impossibilitando a realização de alguns testes.
 
 ### Atividades dos membros
 
