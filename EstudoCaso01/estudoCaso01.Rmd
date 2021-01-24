@@ -143,6 +143,7 @@ notch = FALSE
 ```
 Através da análise gráfica é possível perceber alguns traços que serão avaliados por testes estatísticos posteriormente. Nota-se que o IMC das subpopulações femininas são bastante distintos de um ano para outro, inclusive o máximo do ano de 2017 é muito próximo do mínimo de 2016 o que sugere uma diferença grande entre as populações. Em contra partida, as subpopulações masculinas apresentam uma distribuição dos valores do IMC mais semelhantes, o que sugere pouca distinção entre elas. 
 
+Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas \cite{media_mediana}.
 
 Em posse dos dados iniciais, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
 
