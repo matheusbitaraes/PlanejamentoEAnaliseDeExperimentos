@@ -136,14 +136,10 @@ horizontal = TRUE,
 notch = FALSE
 )
 ```
-**Acho que você estava querendo dizer algo sobre quartil e não sobre o máximo, mas não consegui pensar na forma de escrever**
 
-
-https://operdata.com.br/blog/como-interpretar-um-boxplot/#:~:text=Como%20interpretar%20o%20boxplot%3F,a%20mediana%20ou%20segundo%20quartil)
+Através da análise gráfica e dos dados estatísticos retornados é possível perceber alguns traços que serão avaliados por testes estatísticos posteriormente. Nota-se que os IMCs das subpopulações femininas são bastante distintos de um ano para outro, inclusive pode-se notar visualmente uma diferença nas medianas. Em contra partida, as subpopulações masculinas apresentam uma distribuição dos valores do IMC mais semelhantes, o que sugere pouca distinção entre elas, visto a proximidade das suas medianas.
 
 Com estas informações, justifica-se as hipóteses estatísticas definidas, pois a média é usada para distribuições numéricas normais, que têm uma baixa quantidade de valores discrepantes, enquanto a mediana é geralmente utilizada para retornar a tendência central para distribuições numéricas distorcidas \cite{media_mediana}.
-
-Através da análise gráfica é possível perceber alguns traços que serão avaliados por testes estatísticos posteriormente. Nota-se que os IMCs das subpopulações femininas são bastante distintos de um ano para outro, inclusive o **máximo** do ano de 2017 é muito próximo do **mínimo** de 2016 o que sugere uma diferença grande entre as populações. Em contra partida, as subpopulações masculinas apresentam uma distribuição dos valores do IMC mais semelhantes, o que sugere pouca distinção entre elas. 
 
 Em posse dos dados iniciais, o estudo será dividido em duas partes (masculino e feminino), devido às diferenças no processamento dos dados que ocorrerão.
 
@@ -303,9 +299,7 @@ library(wmwpow)
 shiehpow(n = 7, m = 4, p = 0.8571429, alpha = 0.05, dist = "norm", sides = "two.sided")
 ```
 
-Apesar de não termos evidências para assumirmos que a distribuição de $2017$ é normal, podemos utilizar este valor de potência (considerando as distribuições normais) de 0,456 como uma aproximação da real potência do teste, para que ao menos tenhamos um direcionamento.
-
-**Não termos evidências para assumirmos a ditribuição normal acho que não está certo... Acho que " Apesar de ter-se evidências pelo teste de Shapiro-Wilk para rejeitar-se a hipótese nula da distribuição normal de 2017**
+Apesar de não se ter evidências para assumir que a distribuição de $2017$ é normal, pode-se utilizar este valor de potência (considerando as distribuições normais) de 0,456 como uma aproximação da real potência do teste, para que ao menos se tenha um direcionamento.
 
 ## Discussão e Conclusão
 
@@ -334,20 +328,19 @@ Para a subpopulação feminina foram elaboradas as seguintes hipóteses:
 
 $$\begin{cases} H_0: med_{f2016} = med_{f2017}&\\H_1: med_{f2016} \neq med_{f2017} \end{cases}$$
 
-Com base nas amostras fornecidas, nos estudos realizados e nos testes
-apresentados neste documento foi possível concluir que as amostras das subpopulações femininas não apresentaram distribuição normal através do teste de Shapiro-Wilk, o que impossibilita de prosseguir com o Teste T.
+Com base nas amostras fornecidas, nos estudos realizados e nos testes apresentados neste documento foi possível concluir que as amostras da subpopulação feminina de 2017 não apresentaram distribuição normal através do teste de Shapiro-Wilk, o que impossibilita de prosseguir com o Teste T.
 
 Por este motivo, foi necessário utilizar um método não paramétrico de comparação de amostras. O método utilizado foi o Teste de Wilcoxon e através de seu resultado pôde-se concluir com  95% de confiança que não foi possível rejeitar a hipótese de que as medianas das populações femininas dos dois anos são iguais.
 
 Posteriormente, foi utilizada a Medida A, de Vargha-Delaney, que nos permitiu concluir que em 85% das vezes as alunas de 2/2016 possuem maior mediana do IMC do que as alunas do 2/2017.
 
-Como mencionado anteriormente, para as subpopulações femininas foi necessário prosseguir com testes não paramétricos, inclusive no cálculo da potência do teste. Foi escolhida a abordagem de Shieh e este método requer uma definição da distribuição das amostras para o cálculo. Neste caso, **embora não tenhamos evidências para assumir que a distribuição de 2017 é normal**, foi necessário considerar desta maneira para que o teste retornasse um valor conclusivo. O resultado de 0,45 não representa de fato o valor para as amostras em estudo, porém ele funciona como uma aproximação do valor real para os dados em questão. É importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilitou também a aplicação da função `power.t.test`.
+Como mencionado anteriormente, para as subpopulações femininas foi necessário prosseguir com testes não paramétricos, inclusive no cálculo da potência do teste. Foi escolhida a abordagem de Shieh e este método requer uma definição da distribuição das amostras para o cálculo. Neste caso, embora não haja evidências para assumir que a distribuição de 2017 é normal, foi necessário considerar desta maneira para que o teste retornasse um valor conclusivo. O resultado de 0,45 não representa de fato o valor para as amostras em estudo, porém ele funciona como uma aproximação do valor real para os dados em questão. É importante mencionar que  a ausência de normalidade da distribuição feminina do segundo semestre de 2017 impossibilitou também a aplicação da função `power.t.test`.
 
 ###  c. Discussões gerais e melhorias
 
 Por fim, é importante ressaltar que a quantidade de amostras fornecida de um modo geral foi baixa. Para as subpopulações masculinas, nas quais os dados seguiram distribuição normal, ainda foi possível determinar a potência do teste, mas notou-se um valor muito baixo, sendo necessário aumentar significativamente o número de amostras caso deseje-se uma potência do teste maior. Para as subpopulações femininas, as amostras não seguiram distribuição normal e, portanto, foi necessário empregar uma análise não paramétrica. Este tipo de análise tem menos poder e isto somado ao baixo número de amostras impossibilitou de se chegar a um valor da potência do teste para esta subpopulação. Ainda sim, com o objetivo de encontrar algum valor que se relacionasse e se aproximasse da potência do teste para as amostras fornecidas, empregou-se um teste não paramétrico e assumiu-se distribuição normal.
 
-Tendo este cenário em vista, uma forma de melhorar este experimento seria o aumento do número de amostras para todas as subpopulações, embora infactível. Ressalta-se ainda a dificuldade, principalmente em relação às amostras da população feminina de 2017, que, além de muito escassas, não apresentaram distruibuição normal e acabou impossibilitando a realização de alguns testes.
+Tendo este cenário em vista, uma forma de melhorar este experimento seria o aumento do número de amostras para todas as subpopulações, embora infactível. Ressalta-se ainda a dificuldade, principalmente em relação às amostras da população feminina de 2017, que além de muito escassas, não apresentaram distruibuição normal e acabou impossibilitando a realização de alguns testes.
 
 ### Atividades dos membros
 
