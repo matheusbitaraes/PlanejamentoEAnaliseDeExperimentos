@@ -1,0 +1,58 @@
+---
+title: "Estudo de Caso 02: Avaliação e comparação do retorno médio de ações"
+author: "Diego Pontes, Elias Vieira, Matheus Bitarães"
+date: "Fevereiro, 2021"
+output:
+    pdf_document:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Descrição do problema
+
+   
+## Introdução
+
+
+## Design do Experimento
+
+
+
+## Análise Estatística
+
+
+### Importação dos dados
+
+
+### Tratamento  dos dados
+
+
+
+### Dados estatísticos
+
+
+## Discussão e Conclusão
+
+
+### Atividades dos membros
+
+**Diego**
+
+
+**Elias**
+
+
+**Matheus**
+
+
+**Todos**
+
+Elaboração das hipóteses e definição das premissas.
+
+
+\renewcommand\refname{Referências Bibliográficas}
+\bibliographystyle{unsrt}
+\bibliography{referencias}
