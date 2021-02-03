@@ -26,6 +26,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Importação dos dados
 
+Os dados das ações foram importados do arquivo *DadosAcoesGrupoC.csv*. 
+
+```{r, include=TRUE, echo=TRUE}
+
+# importação dos dados
+data <- read.csv(file = 'DadosAcoesGrupoC.csv', header = FALSE)
+colnames(data) <- c("A1","A2","A3","A4","A5") # Adicionando nomes às colunas
+
+# plot dos primeiros 6 dados da tabela
+head(data)
+```
+
+
+Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mes anterior. Portanto, a linha 1 indica o preço de fechamento do mes atual - 1, a linha 2 representa o mes atual - 2, e assim sucessivamente.
+
+
+**[matheus] como compararemos as ações? Acho que uma forma pode ser armazenarmos os deltas entre meses e utilizarmos isso para compararmos (tipo, se os preços de fechamento forem 40, 35, 40, 50, 60 a gente teria um array de deltas assim: -5 5 10 10. Aí estimariamos o potencial do próximo mes assim. Mas não sei se é a melhor maneira...acho que no mercado financeiro o pessoal tenta estimar as series temporais, fazendo altas modelagens e tals. Mas acho que esse nao é o proposito desse trabalho...**
 
 ### Tratamento  dos dados
 
