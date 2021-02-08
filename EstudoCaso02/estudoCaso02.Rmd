@@ -11,15 +11,29 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, include=FALSE}
+
+# Importação das bibliotecas (descomentar caso não tenha instalado)
+# install.packages("ggplot2")
+
+# Importação de bibliotecas
+library(ggplot2)
+library(dplyr)
+
+```
+
 ## Descrição do problema
 
-   
+
 ## Introdução
 
 
 ## Design do Experimento
 
+Os dados de entrada do experimento são as informações de preços de fechamento mensais de 5 ações diferentes, onde cada coluna representa uma ação e cada linha representa um mes de fechamento. 
+O que se deseja é comparar o potencial de cada ação em gerar maior ganho mensal ao investidor. Como modelos regressivos de previsão não são o escopo deste trabalho, pode-se realizar uma transformação nestes dados, de forma que haja um vetor com as flutuações percentuais das ações em cada mês. Por exemplo, se houver uma ação com preços de fechamento $[10, 11, 12, 10]$, pode-se gerar o seguinte vetor de flutuações percentuais: $[10\%, 9\%, -16\%]$.
 
+Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidencia de flutuação positiva, o que será considerado como a ação de maior potencial para gerar retornos.
 
 ## Análise Estatística
 
@@ -41,15 +55,63 @@ head(data)
 
 Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mes anterior. Portanto, a linha 1 indica o preço de fechamento do mes atual - 1, a linha 2 representa o mes atual - 2, e assim sucessivamente.
 
+**[matheus] preciso melhorar o grafico abaixo. Ainda nao consegui colocar ele mais bonito**
 
-**[matheus] como compararemos as ações? Acho que uma forma pode ser armazenarmos os deltas entre meses e utilizarmos isso para compararmos (tipo, se os preços de fechamento forem 40, 35, 40, 50, 60 a gente teria um array de deltas assim: -5 5 10 10. Aí estimariamos o potencial do próximo mes assim. Mas não sei se é a melhor maneira...acho que no mercado financeiro o pessoal tenta estimar as series temporais, fazendo altas modelagens e tals. Mas acho que esse nao é o proposito desse trabalho...**
+```{r, include=TRUE, echo=TRUE}
+theme_set(theme_minimal())
+
+# Plot
+plt <- ggplot(data=data, aes(x=1:36, y=A1)) + 
+   geom_line(aes(y = A1), color = "darkred") +
+   geom_line(aes(y = A2), color = "steelblue") + 
+   geom_line(aes(y = A3), color = "red") + 
+   geom_line(aes(y = A4), color = "black") +  
+   geom_line(aes(y = A5), color = "green") +
+   theme(legend.position="bottom") +
+   labs(title = "Progressão das Ações", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+
+plt
+```
 
 ### Tratamento  dos dados
 
+Os dados brutos serão transformados em flutuações percentuais para que se possa realizar a análise estatística.
+```{r, include=TRUE, echo=TRUE}
 
+# Transforma dados em porcentagens
+data_perc <- data
+for(i in 1:(nrow(data)-1)){
+        data_perc[i,] <- 100*( (data[i+1,] - data[i,])/data[i+1,] ) # porcentagem de mudança do fechamento do mes i + 1 em relação ao mes i.
+}
+
+data_perc <- data_perc[-c(36), ] # removendo ultima linha
+
+# Criando uma variável para cada amostra
+data_a1 <- data_perc$A1
+data_a2 <- data_perc$A2
+data_a3 <- data_perc$A3
+data_a4 <- data_perc$A4
+data_a5 <- data_perc$A5
+```
+
+**algum comentario aqui**
+
+```{r, include=TRUE}
+# boxplot
+boxplot(data_a1, data_a2, data_a3, data_a4, data_a5,
+main = "Boxplots das flutuações percentuais",
+at = c(1,2,3,4,5),
+names = c("Ação 1", "Ação 2", "Ação 3", "Ação 4", "Ação 5"),
+las = 2,
+horizontal = TRUE,
+notch = FALSE
+)
+```
+**algum comentario sobre o boxplot**
 
 ### Dados estatísticos
 
+**comparação entre as ações aqui**
 
 ## Discussão e Conclusão
 
