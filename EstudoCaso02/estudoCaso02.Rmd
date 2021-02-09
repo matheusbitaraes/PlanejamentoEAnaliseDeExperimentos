@@ -52,25 +52,28 @@ colnames(data) <- c("A1","A2","A3","A4","A5") # Adicionando nomes às colunas
 head(data)
 ```
 
-
 Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mes anterior. Portanto, a linha 1 indica o preço de fechamento do mes atual - 1, a linha 2 representa o mes atual - 2, e assim sucessivamente.
-
-**[matheus] preciso melhorar o grafico abaixo. Ainda nao consegui colocar ele mais bonito**
 
 ```{r, include=TRUE, echo=TRUE}
 theme_set(theme_minimal())
 
 # Plot
-plt <- ggplot(data=data, aes(x=1:36, y=A1)) + 
-   geom_line(aes(y = A1), color = "darkred") +
-   geom_line(aes(y = A2), color = "steelblue") + 
-   geom_line(aes(y = A3), color = "red") + 
-   geom_line(aes(y = A4), color = "black") +  
-   geom_line(aes(y = A5), color = "green") +
-   theme(legend.position="bottom") +
-   labs(title = "Progressão das Ações", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+plot_a1 <- ggplot(data=data, aes(x=1:36, y=A1)) + geom_line() + 
+  labs(title = "Progressão da Ação 1", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+plot_a2 <- ggplot(data=data, aes(x=1:36, y=A2)) + geom_line() + 
+  labs(title = "Progressão da Ação 2", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+plot_a3 <- ggplot(data=data, aes(x=1:36, y=A3)) + geom_line() + 
+  labs(title = "Progressão da Ação 3", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+plot_a4 <- ggplot(data=data, aes(x=1:36, y=A4)) + geom_line() + 
+  labs(title = "Progressão da Ação 4", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+plot_a5 <- ggplot(data=data, aes(x=1:36, y=A5)) + geom_line() + 
+  labs(title = "Progressão da Ação 5", x = "Tempo (meses)", y = "Preço de fechamento das ações")
 
-plt
+plot_a1
+plot_a2
+plot_a3
+plot_a4
+plot_a5
 ```
 
 ### Tratamento  dos dados
