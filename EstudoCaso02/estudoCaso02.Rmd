@@ -46,7 +46,9 @@ Os dados das ações foram importados do arquivo *DadosAcoesGrupoC.csv*.
 
 # importação dos dados
 data <- read.csv(file = 'DadosAcoesGrupoC.csv', header = FALSE)
-colnames(data) <- c("A1","A2","A3","A4","A5") # Adicionando nomes às colunas
+data <- data %>% 
+dplyr::mutate(numeracao = 0:-(nrow(data)-1))
+colnames(data) <- c("A1","A2","A3","A4","A5", "MES") # Adicionando nomes às colunas
 
 # plot dos primeiros 6 dados da tabela
 head(data)
@@ -58,15 +60,15 @@ Cada coluna representa uma ação e cada linha representa o preço de fechamento
 theme_set(theme_minimal())
 
 # Plot
-plot_a1 <- ggplot(data=data, aes(x=1:36, y=A1)) + geom_line() + 
+plot_a1 <- ggplot(data=data, aes(x=MES, y=A1)) + geom_line() + 
   labs(title = "Progressão da Ação 1", x = "Tempo (meses)", y = "Preço de fechamento das ações")
-plot_a2 <- ggplot(data=data, aes(x=1:36, y=A2)) + geom_line() + 
+plot_a2 <- ggplot(data=data, aes(x=MES, y=A2)) + geom_line() + 
   labs(title = "Progressão da Ação 2", x = "Tempo (meses)", y = "Preço de fechamento das ações")
-plot_a3 <- ggplot(data=data, aes(x=1:36, y=A3)) + geom_line() + 
+plot_a3 <- ggplot(data=data, aes(x=MES, y=A3)) + geom_line() + 
   labs(title = "Progressão da Ação 3", x = "Tempo (meses)", y = "Preço de fechamento das ações")
-plot_a4 <- ggplot(data=data, aes(x=1:36, y=A4)) + geom_line() + 
+plot_a4 <- ggplot(data=data, aes(x=MES, y=A4)) + geom_line() + 
   labs(title = "Progressão da Ação 4", x = "Tempo (meses)", y = "Preço de fechamento das ações")
-plot_a5 <- ggplot(data=data, aes(x=1:36, y=A5)) + geom_line() + 
+plot_a5 <- ggplot(data=data, aes(x=MES, y=A5)) + geom_line() + 
   labs(title = "Progressão da Ação 5", x = "Tempo (meses)", y = "Preço de fechamento das ações")
 
 plot_a1
@@ -84,7 +86,7 @@ Os dados brutos serão transformados em flutuações percentuais para que se pos
 # Transforma dados em porcentagens
 data_perc <- data
 for(i in 1:(nrow(data)-1)){
-        data_perc[i,] <- 100*( (data[i+1,] - data[i,])/data[i+1,] ) # porcentagem de mudança do fechamento do mes i + 1 em relação ao mes i.
+        data_perc[i,] <- 100*( (data[i,] - data[i+1,])/data[i+1,] ) # porcentagem de mudança do fechamento do mes i + 1 em relação ao mes i.
 }
 
 data_perc <- data_perc[-c(36), ] # removendo ultima linha
@@ -95,6 +97,15 @@ data_a2 <- data_perc$A2
 data_a3 <- data_perc$A3
 data_a4 <- data_perc$A4
 data_a5 <- data_perc$A5
+head(data_perc)
+```
+
+```{r, include=TRUE}
+library(car)
+#apply(data_perc, 2, leveneTest)
+
+apply(data_perc, 2, shapiro.test)
+#model <- aov(data = data_perc)
 ```
 
 **algum comentario aqui**
