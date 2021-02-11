@@ -15,9 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Importação das bibliotecas (descomentar caso não tenha instalado)
 # install.packages(c("ggplot2", "AICcmodavg"))
+# install.packages("gridExtra")
+# install.packages("agricolae")
 
 # Importação de bibliotecas
 library(ggplot2)
+library(gridExtra)
 library(dplyr)
 library(car)
 
@@ -59,21 +62,17 @@ theme_set(theme_minimal())
 
 # Plot
 plot_a1 <- ggplot(data=data, aes(x=nrow(data):1, y=A1)) + geom_line() + 
-  labs(title = "Progressão da Ação 1", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 1", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a2 <- ggplot(data=data, aes(x=nrow(data):1, y=A2)) + geom_line() + 
-  labs(title = "Progressão da Ação 2", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 2", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a3 <- ggplot(data=data, aes(x=nrow(data):1, y=A3)) + geom_line() + 
-  labs(title = "Progressão da Ação 3", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 3", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a4 <- ggplot(data=data, aes(x=nrow(data):1, y=A4)) + geom_line() + 
-  labs(title = "Progressão da Ação 4", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 4", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a5 <- ggplot(data=data, aes(x=nrow(data):1, y=A5)) + geom_line() + 
-  labs(title = "Progressão da Ação 5", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 5", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 
-plot_a1
-plot_a2
-plot_a3
-plot_a4
-plot_a5
+grid.arrange(plot_a1, plot_a2, plot_a3, plot_a4, plot_a5, nrow = 3)
 ```
 
 ### Tratamento  dos dados
@@ -146,8 +145,6 @@ bartlett.test(y, group)
 ```
 Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os grupos de amotras não possuem equivalencia de variâncias. Como o p-valor > 0.05 , não há evidências para se rejeitar a hipótese nula e portanto podemos considerar homocedasticidade entre as amostras.
 
-```
-
 Outro teste apenas para comprovar...
 
 
@@ -173,6 +170,7 @@ Para dar sequência aos estudos é necessário fazer uma análise por pares para
 
 
 ```{r, include=TRUE}
+
 # teste Tukey
 library(agricolae)
 data3 = data.frame(y,group) 
