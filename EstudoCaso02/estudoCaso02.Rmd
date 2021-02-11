@@ -14,10 +14,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, include=FALSE}
 
 # Importação das bibliotecas (descomentar caso não tenha instalado)
-# install.packages("ggplot2")
+
+# install.packages("ggplot2"))
+# install.packages("gridExtra")
+# install.packages("agricolae")
 
 # Importação de bibliotecas
 library(ggplot2)
+library(gridExtra)
 library(dplyr)
 library(car)
 
@@ -59,26 +63,17 @@ Cada coluna representa uma ação e cada linha representa o preço de fechamento
 theme_set(theme_minimal())
 # Plot
 plot_a1 <- ggplot(data=data, aes(x=nrow(data):1, y=A1)) + geom_line() + 
-  labs(title = "Progressão da Ação 1", 
-      x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 1", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a2 <- ggplot(data=data, aes(x=nrow(data):1, y=A2)) + geom_line() + 
-  labs(title = "Progressão da Ação 2",
-      x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 2", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a3 <- ggplot(data=data, aes(x=nrow(data):1, y=A3)) + geom_line() + 
-  labs(title = "Progressão da Ação 3", 
-      x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 3", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a4 <- ggplot(data=data, aes(x=nrow(data):1, y=A4)) + geom_line() + 
-  labs(title = "Progressão da Ação 4", 
-      x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 4", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 plot_a5 <- ggplot(data=data, aes(x=nrow(data):1, y=A5)) + geom_line() + 
-  labs(title = "Progressão da Ação 5", 
-      x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Ação 5", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 
-plot_a1
-plot_a2
-plot_a3
-plot_a4
-plot_a5
+grid.arrange(plot_a1, plot_a2, plot_a3, plot_a4, plot_a5, nrow = 3)
 ```
 
 ### Tratamento  dos dados
@@ -153,7 +148,9 @@ group <- as.factor(c(rep(1, length(data_a1)), rep(2, length(data_a2)),
 bartlett.test(y, group)
 ```
 
-Outro teste apenas para comprovar... **desenvolver um parágrafo**
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os grupos de amotras não possuem equivalencia de variâncias. Como o p-valor > 0.05 , não há evidências para se rejeitar a hipótese nula e portanto podemos considerar homocedasticidade entre as amostras.
+
+Outro teste apenas para comprovar...**desenvolver um parágrafo**
 
 
 ```{r, include=TRUE}
