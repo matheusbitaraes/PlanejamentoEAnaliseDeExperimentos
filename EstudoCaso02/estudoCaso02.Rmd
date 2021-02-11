@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, include=FALSE}
 
 # Importação das bibliotecas (descomentar caso não tenha instalado)
-# install.packages(c("ggplot2", "AICcmodavg"))
+# install.packages("ggplot2")
 
 # Importação de bibliotecas
 library(ggplot2)
@@ -25,6 +25,8 @@ library(car)
 
 ## Descrição do problema
 
+Neste estudo, deseja-se comparar a rentabilidade de cinco ações diferentes no decorrer dos últimos 36 meses a fim de encontrar aquela com maior rentabilidade para que determinado investidor possa aplicar todo montante financeiro para um maior rendimento para o próximo mês.
+
 ## Introdução
 
 
@@ -32,7 +34,6 @@ library(car)
 
 Os dados de entrada do experimento são as informações de preços de fechamento mensais de 5 ações diferentes, onde cada coluna representa uma ação e cada linha representa um mes de fechamento. 
 O que se deseja é comparar o potencial de cada ação em gerar maior ganho mensal ao investidor. Como modelos regressivos de previsão não são o escopo deste trabalho, pode-se realizar uma transformação nestes dados, de forma que haja um vetor com as flutuações percentuais das ações em cada mês. Por exemplo, se houver uma ação com preços de fechamento $[10, 11, 12, 10]$, pode-se gerar o seguinte vetor de flutuações percentuais: $[10\%, 9\%, -16\%]$.
-
 Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidencia de flutuação positiva, o que será considerado como a ação de maior potencial para gerar retornos.
 
 ## Análise Estatística
@@ -56,18 +57,22 @@ Cada coluna representa uma ação e cada linha representa o preço de fechamento
 
 ```{r, include=TRUE, echo=TRUE}
 theme_set(theme_minimal())
-
 # Plot
 plot_a1 <- ggplot(data=data, aes(x=nrow(data):1, y=A1)) + geom_line() + 
-  labs(title = "Progressão da Ação 1", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Progressão da Ação 1", 
+      x = "Tempo (meses)", y = "Preço de fechamento das ações")
 plot_a2 <- ggplot(data=data, aes(x=nrow(data):1, y=A2)) + geom_line() + 
-  labs(title = "Progressão da Ação 2", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Progressão da Ação 2",
+      x = "Tempo (meses)", y = "Preço de fechamento das ações")
 plot_a3 <- ggplot(data=data, aes(x=nrow(data):1, y=A3)) + geom_line() + 
-  labs(title = "Progressão da Ação 3", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Progressão da Ação 3", 
+      x = "Tempo (meses)", y = "Preço de fechamento das ações")
 plot_a4 <- ggplot(data=data, aes(x=nrow(data):1, y=A4)) + geom_line() + 
-  labs(title = "Progressão da Ação 4", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Progressão da Ação 4", 
+      x = "Tempo (meses)", y = "Preço de fechamento das ações")
 plot_a5 <- ggplot(data=data, aes(x=nrow(data):1, y=A5)) + geom_line() + 
-  labs(title = "Progressão da Ação 5", x = "Tempo (meses)", y = "Preço de fechamento das ações")
+  labs(title = "Progressão da Ação 5", 
+      x = "Tempo (meses)", y = "Preço de fechamento das ações")
 
 plot_a1
 plot_a2
@@ -79,16 +84,18 @@ plot_a5
 ### Tratamento  dos dados
 
 Os dados brutos serão transformados em flutuações percentuais para que se possa realizar a análise estatística.
+
 ```{r, include=TRUE, echo=TRUE}
 
 # Transforma dados em porcentagens
 data_perc <- data
 for(i in (nrow(data)-1):1){
         data_perc[i,] <- 100*( (data[i,] - data[i+1,])/data[i+1,] ) 
-        # porcentagem de mudança do fechamento do mes i + 1 em relação ao mes i.
+# porcentagem de mudança do fechamento do mes i + 1 em relação ao mes i.
 }
 
-data_perc <- data_perc[-c(36), ] # removendo ultima linha
+# removendo ultima linha
+data_perc <- data_perc[-c(36), ] 
 
 # Criando uma variável para cada amostra
 data_a1 <- data_perc$A1
@@ -102,6 +109,7 @@ head(data_perc)
 **algum comentario aqui**
 
 ```{r, include=TRUE}
+
 # boxplot
 boxplot(data_a1, data_a2, data_a3, data_a4, data_a5,
 main = "Boxplots das flutuações percentuais",
@@ -116,13 +124,12 @@ notch = FALSE
 
 ### Dados estatísticos
 
-O teste escolhido foi o ANOVA......**elaborar**
+O teste escolhido foi o ANOVA......**elaborar com referências**
 
 
 #### Premissas do teste:
-Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas: As amostras devem ser independentes, as amostras devem apresentar distribuição normal e as variâncias podem ser consideradas iguais (homocedasticidade).
 
-[falar sobre independencia das amostras]
+Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas: as amostras devem ser independentes, as amostras devem apresentar distribuição normal e as variâncias podem ser consideradas iguais (homocedasticidade).**falar sobre independencia das amostras**
 
 **Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses:
 
@@ -131,31 +138,29 @@ $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuiç�
 library(car)
 apply(data_perc, 2, shapiro.test)
 ```
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as amostras de todas as flutuações percentuais das ações seguem distribuição normal.
+Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, pode-se considerar que as amostras de todas as flutuações percentuais das ações seguem distribuição normal.
 
-**Verificação de homocedasticidade**: Para a verificação de homocedasticidade entre dois ou mais grupos de amostras, pode-se utilizar o teste de Bartlett, , onde têm-se as seguintes hipóteses: [Explicar mais sobre o teste de Bartlett]
+**Verificação de homocedasticidade**: Para a verificação de homocedasticidade entre dois ou mais grupos de amostras, pode-se utilizar o teste de Bartlett, , onde têm-se as seguintes hipóteses: **Explicar mais sobre o teste de Bartlett**
 
 $$\begin{cases} H_0: \text{As variâncias dos erros são homogêneas}\\H_1: \text{As variâncias dos erros não são homogêneas} \end{cases}$$
 
 ```{r, include=TRUE}
+
 # teste de Bartlett
 y <- c(data_a1, data_a2, data_a3, data_a4, data_a5)
 group <- as.factor(c(rep(1, length(data_a1)), rep(2, length(data_a2)), 
                      rep(3, length(data_a3)), rep(4, length(data_a4)), rep(5, length(data_a5))))
 bartlett.test(y, group)
 ```
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os grupos de amotras não possuem equivalencia de variâncias. Como o p-valor > 0.05 , não há evidências para se rejeitar a hipótese nula e portanto podemos considerar homocedasticidade entre as amostras.
 
-```
-
-Outro teste apenas para comprovar...
+Outro teste apenas para comprovar... **desenvolver um parágrafo**
 
 
 ```{r, include=TRUE}
 # teste de Levene
 leveneTest(y, group)
 ```
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as variâncias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as variâncias são homogêneas.
+Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as variâncias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, pode-se considerar que as variâncias são homogêneas.
 
 Dada a análise e confirmação da normalidade e homocedasticidade dos dados, pode-se aplicar o teste ANOVA, onde têm-se as seguintes hipóteses:
 
@@ -169,40 +174,34 @@ summary(anova)
 
 
 Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as médias dos grupos não iguais. Ou seja, pelo menos uma das amostras tem sua média diferente.
-Para dar sequência aos estudos é necessário fazer uma análise por pares para encontrar-se.... *dar explicação*
+Para dar sequência aos estudos é necessário fazer uma análise por pares para encontrar-se.... **dar explicação**
 
 
 ```{r, include=TRUE}
+
 # teste Tukey
 library(agricolae)
 data3 = data.frame(y,group) 
 model2 <- aov(y~group, data = data3)
-#tukey = HSD.test(model2, "group")
 tukey = TukeyHSD(x=model2, "group")
-
 tukey
-#plot(tukey)
 plot(tukey, las=1, col="brown")
-
-#library(MASS)
-#data("crabs")
-#crabs$groups.4 <- with(crabs, paste(sp,sex,sep = "."))
-#crab.aov <- aov(FL ~ groups.4, data = crabs)
-#crab.Tukey <- TukeyHSD(crab.aov)
-#plot(crab.Tukey)
-
-
-#Gerar o gráfico
-#library(tibble)
-#tukey$groups %>% 
-#  rownames_to_column(var = "trt") %>% 
-#  mutate(trt = reorder(trt, -y, mean)) %>% 
-#  ggplot(aes(trt, y)) +
-#    geom_col(alpha = 0.8, color = "black") +
-#    geom_text(aes(label = groups), vjust = 1.8, size = 9, color = "white") +
-#    labs(x = "Ação", y = "Médias") +
-#    theme_bw(16)
 ```
+
+Pela análise do teste de Tukey, pode-se fazer algumas observações:**explicar melhor o resultado**
+
+•	A ação 1 possui média maior que a ação 2, 3 e 4 e média estatisticamente igual a ação 5;
+
+•	A ação 2 possui média estatisticamente igual a ação 3 e 4;
+
+•	A ação 5 possui média maior que a ação 2, 3 e 4 e média estatisticamente igual a ação 1;
+
+Portanto, pode-se concluir que, estatisticamente, a ação 1 e 5 possuem médias iguais e maiores do que as outras três ações.
+
+Com isso, percebe-se que, através de testes estatísticos, a ação 1 e ação 5 seriam boas escolhas para o investidor. No entanto, a proposta é que seja escolhida apenas uma e, portanto, outro parâmetro de análise deve ser utilizado para decisão entre as duas em questão. 
+
+**Precisamos decidir qual teste vamos usar para escolher entre as duas ações**
+
 
 ## Discussão e Conclusão
 
