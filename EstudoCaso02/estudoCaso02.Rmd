@@ -33,19 +33,21 @@ Neste estudo, deseja-se comparar a rentabilidade de cinco ações diferentes no 
 
 ## Introdução
 
+**Não sei se é necessário introdução**
 
 ## Design do Experimento
 
-Os dados de entrada do experimento são as informações de preços de fechamento mensais de 5 ações diferentes, onde cada coluna representa uma ação e cada linha representa um mes de fechamento. 
+Os dados de entrada do experimento são as informações de preços de fechamento dos últimos 36 meses de 5 ações diferentes.
 O que se deseja é comparar o potencial de cada ação em gerar maior ganho mensal ao investidor. Como modelos regressivos de previsão não são o escopo deste trabalho, pode-se realizar uma transformação nestes dados, de forma que haja um vetor com as flutuações percentuais das ações em cada mês. Por exemplo, se houver uma ação com preços de fechamento $[10, 11, 12, 10]$, pode-se gerar o seguinte vetor de flutuações percentuais: $[10\%, 9\%, -16\%]$.
 Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidencia de flutuação positiva, o que será considerado como a ação de maior potencial para gerar retornos.
 
 ## Análise Estatística
 
+**Não sei se é necessário introdução**
 
 ### Importação dos dados
 
-Os dados das ações foram importados do arquivo *DadosAcoesGrupoC.csv*. 
+Os dados das ações foram importados do arquivo *DadosAcoesGrupoC.csv*.  
 
 ```{r, include=TRUE, echo=TRUE}
 
@@ -57,20 +59,25 @@ colnames(data) <- c("A1","A2","A3","A4","A5") # Adicionando nomes às colunas
 head(data)
 ```
 
-Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mes anterior. Portanto, a linha 1 indica o preço de fechamento do mes atual - 1, a linha 2 representa o mes atual - 2, e assim sucessivamente.
-
+Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mes anterior. Portanto, a linha 1 indica o preço de fechamento do mes atual - 1, a linha 2 representa o mes atual - 2, e assim sucessivamente. Desta forma, foi plotado os seguintes gráficos sendo que em x igual a 0 o mês atual, x igual a -1 o mês anterior... 
 ```{r, include=TRUE, echo=TRUE}
 theme_set(theme_minimal())
+numeracao <- -1:-36 #numerando o eixo x do valor mais antigo (mesatual - 36) ao mês anterior (mesatual - 1)
+
 # Plot
-plot_a1 <- ggplot(data=data, aes(x=nrow(data):1, y=A1)) + geom_line() + 
+
+#bkp:nrow(data):1 basta trocar o numeracao e retirar 
+#o texto do paragrafo acima
+
+plot_a1 <- ggplot(data=data, aes(x=numeracao, y=A1)) + geom_line() + 
   labs(title = "Ação 1", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
-plot_a2 <- ggplot(data=data, aes(x=nrow(data):1, y=A2)) + geom_line() + 
+plot_a2 <- ggplot(data=data, aes(x=numeracao, y=A2)) + geom_line() + 
   labs(title = "Ação 2", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
-plot_a3 <- ggplot(data=data, aes(x=nrow(data):1, y=A3)) + geom_line() + 
+plot_a3 <- ggplot(data=data, aes(x=numeracao, y=A3)) + geom_line() + 
   labs(title = "Ação 3", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
-plot_a4 <- ggplot(data=data, aes(x=nrow(data):1, y=A4)) + geom_line() + 
+plot_a4 <- ggplot(data=data, aes(x=numeracao, y=A4)) + geom_line() + 
   labs(title = "Ação 4", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
-plot_a5 <- ggplot(data=data, aes(x=nrow(data):1, y=A5)) + geom_line() + 
+plot_a5 <- ggplot(data=data, aes(x=numeracao, y=A5)) + geom_line() + 
   labs(title = "Ação 5", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
 
 grid.arrange(plot_a1, plot_a2, plot_a3, plot_a4, plot_a5, nrow = 3)
@@ -101,7 +108,7 @@ data_a5 <- data_perc$A5
 head(data_perc)
 ```
 
-**algum comentario aqui**
+Em posse das flutuações percentuais, foi plotado o seguinte boxplot para um análise visual das variações destes valores para cada uma das ações.
 
 ```{r, include=TRUE}
 
@@ -115,18 +122,29 @@ horizontal = TRUE,
 notch = FALSE
 )
 ```
-**algum comentario sobre o boxplot**
+
+Em uma análise visual, é possível perceber que as ações 1 e 5 possuem os maiores valores de variações positivos de um mês para outro nestes 36 meses, enquanto a ação 2 possui a maior variação negativa nesta mesma situação. No entanto, esta inferências não são suficientes visto que, hipoteticamente, uma ação pode ter uma subida abrupta em um determinado momento e uma sequência considerável de quedas de forma a atingir valores menores do que o valor inicial dessa suposição. Da mesma forma, esta mesma ação pode ter uma queda abrupta em um determinado momento e uma sequência onsiderável de subidas de forma a atingir valores maiores do que o valor inicial dessa suposição.
+Assim, percebe-se a importância de uma análise estatística dos dados históricos no período em comparação para uma tomada de decisão mais pertinente, visto que a média do comportamento de uma ação carrega um valor estatístico maior do que uma análise isolada de algum mês específico, por exemplo.
+
 
 ### Dados estatísticos
 
-O teste escolhido foi o ANOVA......**elaborar com referências**
+Para a análise destas ações, foi escohido o teste da Análise de Variância (ANOVA) pode determinar se as médias de três ou mais grupos são diferentes. A ANOVA usa testes F para testar estatisticamente a igualdade entre médias \cite{anova}.
 
 
 #### Premissas do teste:
 
-Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas: as amostras devem ser independentes, as amostras devem apresentar distribuição normal e as variâncias podem ser consideradas iguais (homocedasticidade).**falar sobre independencia das amostras**
+Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas \cite{anova_premissas}: 
 
-**Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses:
+•	As amostras devem ser independentes;
+
+•	As amostras devem apresentar distribuição normal;
+
+•	As variâncias podem ser consideradas iguais (homocedasticidade).
+
+**Verificação da independência**: Como não há maiores informações sobre o ramo d atuação das empresas e suas origens, assume-se que elas não possuem nenhum fator que causa interferência entre elas de forma a considerá-las independentes.
+
+**Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses \cite{teste_norm_R}:
 
 $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuição normal}\\H_1: \text{A amostra não provém de uma população com distribuição normal} \end{cases}$$
 ```{r, include=TRUE}
@@ -135,9 +153,10 @@ apply(data_perc, 2, shapiro.test)
 ```
 Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, pode-se considerar que as amostras de todas as flutuações percentuais das ações seguem distribuição normal.
 
-**Verificação de homocedasticidade**: Para a verificação de homocedasticidade entre dois ou mais grupos de amostras, pode-se utilizar o teste de Bartlett, , onde têm-se as seguintes hipóteses: **Explicar mais sobre o teste de Bartlett**
+**Verificação de homocedasticidade**: Para a verificação de homocedasticidade entre dois ou mais grupos de amostras, pode-se utilizar o teste de Levene ou Bartlett, onde têm-se as seguintes hipóteses \cite{bartlett}:
 
 $$\begin{cases} H_0: \text{As variâncias dos erros são homogêneas}\\H_1: \text{As variâncias dos erros não são homogêneas} \end{cases}$$
+O teste de Bartlett é sensível em relação a hipótese de normalidade dos dados. Se a hipótese da normalidade tivesse sido rejeitada, seria melhor utilizar o teste proposto por Levene. Porém, se a hipótese de normalidade não for rejeitada, o teste proposto por Bartlett tem um comportamento melhor que o teste proposto por Levene. Para agregar ao estudo, ambos foram efetuados:
 
 ```{r, include=TRUE}
 
@@ -148,20 +167,16 @@ group <- as.factor(c(rep(1, length(data_a1)), rep(2, length(data_a2)),
 bartlett.test(y, group)
 ```
 
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os grupos de amotras não possuem equivalencia de variâncias. Como o p-valor > 0.05 , não há evidências para se rejeitar a hipótese nula e portanto podemos considerar homocedasticidade entre as amostras.
-
-Outro teste apenas para comprovar...**desenvolver um parágrafo**
-
-
 ```{r, include=TRUE}
 # teste de Levene
 leveneTest(y, group)
 ```
-Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as variâncias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, pode-se considerar que as variâncias são homogêneas.
 
-Dada a análise e confirmação da normalidade e homocedasticidade dos dados, pode-se aplicar o teste ANOVA, onde têm-se as seguintes hipóteses:
+Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as variâncias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, onde o p-valor é maior que 0.05, pode-se considerar que as variâncias são homogêneas.
 
-$$\begin{cases} H_0: \text{A média de todas as populações são iguais}\\H_1: \text{A média de todas as populações não são iguais} \end{cases}$$
+Dada a independência considerada entre os valores, a análise e confirmação da normalidade e homocedasticidade dos dados, pode-se aplicar o teste ANOVA, onde têm-se as seguintes hipóteses:
+
+$$\begin{cases} H_0: \text{A média de todas as populações são iguais}\\H_1: \text{A média de pelo menos uma população é diferente} \end{cases}$$
 ```{r, include=TRUE}
 # teste ANOVA
 anova <- aov(y~group)
@@ -169,10 +184,17 @@ anova
 summary(anova)
 ```
 
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as médias dos grupos não são iguais. Ou seja, pelo menos uma das amostras tem sua média diferente. Desta forma, é possível concluir que, estatisticamente, haverá diferença em pelo menos uma ação dentre as cinco possíveis para investimento.
+Essa conclusão, embora importante, não é suficiente, pois ainda não se sabe quantas possuem médias diferentes e se são superiores ou inferiores as demais.
+Portanto, para que seja dada sequência aos estudos é necessário fazer uma análise por pares para que seja feita uma varredura entre todas elas em busca de daquelas onde a diferença entre as médias é significativa, as chamadas comparações múltiplas. Neste contexto, o teste que será aplicado será o Teste de Tukey. Para realizar o Teste de Tukey, deve ser levada em conta as seguintes suposições \cite{teste_norm_R}:
 
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as médias dos grupos não iguais. Ou seja, pelo menos uma das amostras tem sua média diferente.
-Para dar sequência aos estudos é necessário fazer uma análise por pares para encontrar-se.... **dar explicação**
+•	As observações são independentes dentro e entre os grupos;
 
+•	Os grupos devem ser normalmente distribuídos;
+
+•	A variância dentro do grupo deve ser constante.
+
+Como não houve alteração nas amostras, pode-se concluir que todas as premissas foram atendidas e, portanto, o teste pode ser efetuado.
 
 ```{r, include=TRUE}
 
@@ -182,6 +204,13 @@ data3 = data.frame(y,group)
 model2 <- aov(y~group, data = data3)
 tukey = TukeyHSD(x=model2, "group")
 tukey
+```
+
+
+Para facilitar a análise, o seguinte gráfico foi plotado.
+
+```{r, include=TRUE}
+#plot teste Tukey
 plot(tukey, las=1, col="brown")
 ```
 
