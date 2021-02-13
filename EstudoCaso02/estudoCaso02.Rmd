@@ -33,17 +33,20 @@ Neste estudo, deseja-se comparar a rentabilidade de cinco ações diferentes no 
 
 ## Introdução
 
-**Não sei se é necessário introdução**
+Nos últimos anos, o mercado financeiro no Brasil tem ganhado bastante destaque. Devido a queda na taxa básica de juros, que está em sua mínima histórica e, consequentemente, a redução nos rendimentos dos investimentos em renda fixa, os investidores estão migrando cada vez mais da renda fixa para a renda variável buscando um maior retorno em seus investimentos.
+
+Esse cenário tem impulsionado o setor financeiro de uma forma como nunca tinha sido vista no país. Com isso, corretoras, casas de análises, agentes de investimentos e outros serviços têm sido cada vez mais procurados e solicitados pelos novos investidores que desejam entrar na renda variável, em especial na bolsa de valores.
+
+Esses novos investidores, são motivados principalmente pela possibilidade de maiores retornos que a renda variável oferece  aos seus investimentos. Porém, quanto maior a possibilidade de retorno, geralmente também, maior será o risco envolvido em um investimento. Por isso, cada vez mais o agentes financeiros tem procurado meios de melhorar suas análises, buscando os melhores ativos para seus clientes.
 
 ## Design do Experimento
 
 Os dados de entrada do experimento são as informações de preços de fechamento dos últimos 36 meses de 5 ações diferentes.
 O que se deseja é comparar o potencial de cada ação em gerar maior ganho mensal ao investidor. Como modelos regressivos de previsão não são o escopo deste trabalho, pode-se realizar uma transformação nestes dados, de forma que haja um vetor com as flutuações percentuais das ações em cada mês. Por exemplo, se houver uma ação com preços de fechamento $[10, 11, 12, 10]$, pode-se gerar o seguinte vetor de flutuações percentuais: $[10\%, 9\%, -16\%]$.
-Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidencia de flutuação positiva, o que será considerado como a ação de maior potencial para gerar retornos.
+Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidência de flutuação positiva, por exemplo.
 
 ## Análise Estatística
 
-**Não sei se é necessário introdução**
 
 ### Importação dos dados
 
@@ -59,7 +62,7 @@ colnames(data) <- c("A1","A2","A3","A4","A5") # Adicionando nomes às colunas
 head(data)
 ```
 
-Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mes anterior. Portanto, a linha 1 indica o preço de fechamento do mes atual - 1, a linha 2 representa o mes atual - 2, e assim sucessivamente. Desta forma, foi plotado os seguintes gráficos sendo que em x igual a 0 o mês atual, x igual a -1 o mês anterior... 
+Cada coluna representa uma ação e cada linha representa o preço de fechamento das ações no mês anterior. Portanto, a linha 1 indica o preço de fechamento do mês atual - 1, a linha 2 representa o mês atual - 2, e assim sucessivamente. Desta forma, foi plotado os gráficos abaixo, nos quais o eixo x, que representa os meses, inicia do mês mais antigo e progride para o mais recente, sendo x igual a zero o mês atual. 
 ```{r, include=TRUE, echo=TRUE}
 theme_set(theme_minimal())
 numeracao <- -1:-36 #numerando o eixo x do valor mais antigo (mesatual - 36) ao mês anterior (mesatual - 1)
@@ -108,7 +111,7 @@ data_a5 <- data_perc$A5
 head(data_perc)
 ```
 
-Em posse das flutuações percentuais, foi plotado o seguinte boxplot para um análise visual das variações destes valores para cada uma das ações.
+Em posse das flutuações percentuais, foi plotado o seguinte boxplot para uma análise visual das variações destes valores para cada uma das ações.
 
 ```{r, include=TRUE}
 
@@ -123,13 +126,13 @@ notch = FALSE
 )
 ```
 
-Em uma análise visual, é possível perceber que as ações 1 e 5 possuem os maiores valores de variações positivos de um mês para outro nestes 36 meses, enquanto a ação 2 possui a maior variação negativa nesta mesma situação. No entanto, esta inferências não são suficientes visto que, hipoteticamente, uma ação pode ter uma subida abrupta em um determinado momento e uma sequência considerável de quedas de forma a atingir valores menores do que o valor inicial dessa suposição. Da mesma forma, esta mesma ação pode ter uma queda abrupta em um determinado momento e uma sequência onsiderável de subidas de forma a atingir valores maiores do que o valor inicial dessa suposição.
+Em uma análise visual, é possível perceber que as ações 1 e 5 possuem os maiores valores de variações positivos de um mês para outro nestes 36 meses, enquanto a ação 2 possui a maior variação negativa nesta mesma situação. No entanto, estas inferências não são suficientes visto que, hipoteticamente, uma ação pode ter uma subida abrupta em um determinado momento e uma sequência considerável de quedas de forma a atingir valores menores do que o valor inicial dessa suposição. Da mesma forma, esta mesma ação pode ter uma queda abrupta em um determinado momento e uma sequência considerável de subidas de forma a atingir valores maiores do que o valor inicial dessa suposição.
 Assim, percebe-se a importância de uma análise estatística dos dados históricos no período em comparação para uma tomada de decisão mais pertinente, visto que a média do comportamento de uma ação carrega um valor estatístico maior do que uma análise isolada de algum mês específico, por exemplo.
 
 
 ### Dados estatísticos
 
-Para a análise destas ações, foi escohido o teste da Análise de Variância (ANOVA) pode determinar se as médias de três ou mais grupos são diferentes. A ANOVA usa testes F para testar estatisticamente a igualdade entre médias \cite{anova}.
+Para a análise destas ações, foi escohido o teste da Análise de Variância (ANOVA) capaz de determinar se as médias de três ou mais grupos são diferentes. A ANOVA usa testes F para testar estatisticamente a igualdade entre médias \cite{anova}.
 
 
 #### Premissas do teste:
@@ -142,7 +145,7 @@ Para a realização do teste ANOVA, é necessário que as seguintes premissas se
 
 •	As variâncias podem ser consideradas iguais (homocedasticidade).
 
-**Verificação da independência**: Como não há maiores informações sobre o ramo d atuação das empresas e suas origens, assume-se que elas não possuem nenhum fator que causa interferência entre elas de forma a considerá-las independentes.
+**Verificação da independência**: Como não há maiores informações sobre o ramo de atuação das empresas e suas origens, assume-se que elas não possuem nenhum fator que causa interferência entre elas. Portanto, serão consideradas independentes.
 
 **Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses \cite{teste_norm_R}:
 
@@ -156,7 +159,7 @@ Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-s
 **Verificação de homocedasticidade**: Para a verificação de homocedasticidade entre dois ou mais grupos de amostras, pode-se utilizar o teste de Levene ou Bartlett, onde têm-se as seguintes hipóteses \cite{bartlett}:
 
 $$\begin{cases} H_0: \text{As variâncias dos erros são homogêneas}\\H_1: \text{As variâncias dos erros não são homogêneas} \end{cases}$$
-O teste de Bartlett é sensível em relação a hipótese de normalidade dos dados. Se a hipótese da normalidade tivesse sido rejeitada, seria melhor utilizar o teste proposto por Levene. Porém, se a hipótese de normalidade não for rejeitada, o teste proposto por Bartlett tem um comportamento melhor que o teste proposto por Levene. Para agregar ao estudo, ambos foram efetuados:
+O teste de Bartlett é sensível em relação a hipótese de normalidade dos dados. Se a hipótese da normalidade tivesse sido rejeitada, seria melhor utilizar o teste proposto por Levene. Porém, se a hipótese de normalidade não for rejeitada, o teste proposto por Bartlett tem um comportamento melhor que o teste proposto por Levene. Com o objetivo de agregar mais valor ao estudo, ambos foram efetuados:
 
 ```{r, include=TRUE}
 
@@ -172,7 +175,7 @@ bartlett.test(y, group)
 leveneTest(y, group)
 ```
 
-Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as variâncias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, onde o p-valor é maior que 0.05, pode-se considerar que as variâncias são homogêneas.
+Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as variâncias dos grupos de amostras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, onde o p-valor é maior que 0.05, pode-se considerar que as variâncias são homogêneas.
 
 Dada a independência considerada entre os valores, a análise e confirmação da normalidade e homocedasticidade dos dados, pode-se aplicar o teste ANOVA, onde têm-se as seguintes hipóteses:
 
@@ -184,9 +187,12 @@ anova
 summary(anova)
 ```
 
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amotras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as médias dos grupos não são iguais. Ou seja, pelo menos uma das amostras tem sua média diferente. Desta forma, é possível concluir que, estatisticamente, haverá diferença em pelo menos uma ação dentre as cinco possíveis para investimento.
-Essa conclusão, embora importante, não é suficiente, pois ainda não se sabe quantas possuem médias diferentes e se são superiores ou inferiores as demais.
-Portanto, para que seja dada sequência aos estudos é necessário fazer uma análise por pares para que seja feita uma varredura entre todas elas em busca de daquelas onde a diferença entre as médias é significativa, as chamadas comparações múltiplas. Neste contexto, o teste que será aplicado será o Teste de Tukey. Para realizar o Teste de Tukey, deve ser levada em conta as seguintes suposições \cite{teste_norm_R}:
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amostras são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, podemos considerar que as médias dos grupos não são iguais. Ou seja, pelo menos uma das amostras tem sua média diferente. Desta forma, é possível concluir que, estatisticamente, haverá diferença em pelo menos uma ação dentre as cinco possíveis para investimento.
+Essa conclusão, embora importante, não é suficiente, pois ainda não se sabe quantas ações possuem médias diferentes e se são superiores ou inferiores às demais.
+
+Portanto, para dar sequência aos estudos, optou-se por fazer uma análise por pares, para que seja feita uma varredura entre todas as ações em busca daquelas onde a diferença entre as médias é significativa, as chamadas comparações múltiplas. Neste contexto, será aplicado o Teste de Tukey. Este teste foi escolhido, pois quando os tamanhos amostrais dos grupos são iguais, o Teste de Tukey é um teste exato, ou seja, para o conjunto de todas as comparações par a par, a taxa de erro do conjunto dos testes é exatamente $\alpha$ (nível de significância) e o intervalo de confiança é também exatamente 1 – $\alpha$. Vale ressaltar que testes de comparações múltiplas exatos são raros, uma vez que a maioria não controla o nível de significância adotado \cite{tukey}.
+
+Para realizar o Teste de Tukey, deve ser levada em conta as seguintes suposições \cite{teste_norm_R}:
 
 •	As observações são independentes dentro e entre os grupos;
 
@@ -216,20 +222,69 @@ plot(tukey, las=1, col="brown")
 
 Pela análise do teste de Tukey, pode-se fazer algumas observações:**explicar melhor o resultado**
 
-•	A ação 1 possui média maior que a ação 2, 3 e 4 e média estatisticamente igual a ação 5;
+•	A ação 1 possui média maior que as ações 2, 3 e 4 e média estatisticamente semelhante a ação 5;
 
-•	A ação 2 possui média estatisticamente igual a ação 3 e 4;
+•	A ação 2 possui média estatisticamente igual às ações 3 e 4;
 
-•	A ação 5 possui média maior que a ação 2, 3 e 4 e média estatisticamente igual a ação 1;
+•	A ação 5 possui média maior que as ações 2, 3 e 4 e média estatisticamente semelhante a ação 1;
 
-Portanto, pode-se concluir que, estatisticamente, a ação 1 e 5 possuem médias iguais e maiores do que as outras três ações.
+Portanto, pode-se concluir que, estatisticamente, as ações 1 e 5 possuem médias semelhantes entre si e maiores do que as outras três ações.
 
-Com isso, percebe-se que, através de testes estatísticos, a ação 1 e ação 5 seriam boas escolhas para o investidor. No entanto, a proposta é que seja escolhida apenas uma e, portanto, outro parâmetro de análise deve ser utilizado para decisão entre as duas em questão. 
+Com isso, percebe-se que, através de testes estatísticos, as ações 1 e 5 seriam boas escolhas para o investidor. No entanto, a proposta é que seja escolhida apenas uma e, portanto, outro parâmetro de análise deve ser utilizado para a tomada de decisão entre as duas ações em questão. 
 
-**Precisamos decidir qual teste vamos usar para escolher entre as duas ações**
+Para escolher entre as duas ações foi levado em consideração a tendência baseada no valor de fechamento mensal histórico de cada uma delas. O gráfico abaixo apresenta os valores de fechamento (pontos) de cada uma das duas ações em análise e a linha de tendência (linha azul) de cada uma.
+
+```{r, include=TRUE, echo=TRUE}
+
+#Plot
+
+plot_a1 <- ggplot(data=data, aes(x=numeracao, y=A1)) + geom_point() + geom_smooth() +
+  labs(title = "Ação 1", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
+
+plot_a5 <- ggplot(data=data, aes(x=numeracao, y=A5)) + geom_point() + geom_smooth() +
+  labs(title = "Ação 5", x = "Tempo (meses)", y = "$ fechamento") + ylim(10, 35)
+
+grid.arrange(plot_a1, plot_a5, nrow = 1)
+
+```
+
+
+Com base na observação dos gráficos, infere-se que ambas ações apresentam uma tendência de alta. Porém, a inclinação da linha de tendência da ação 5 é maior quando comparada à ação 1. Isto sugere que, historicamente, a ação 5 apresentou maiores altas nos seus fechamentos quando comparada à ação 1. Portanto, embora ambas apresentem uma tendência de alta, a ação 5 possui um potencial de maior alta, já que sua tendência de alta é maior. Assim, se o investimento busca a maior rentabilidade, esta seria a melhor escolha.
+
+Porém, também é interessante que se faça a análise do risco apresentado por cada uma das duas ações. Para isso, será analisado qual das duas ações apresentou a maior queda ao longo dos 36 meses. Portanto, abaixo são mostrados os valores mínimos das flutuações mensais para as duas ações.
+
+```{r, include=TRUE, echo=TRUE}
+
+min_a1 = min(data_a1)
+min_a5 = min(data_a5)
+data_min1 <- 1:2
+data_min1[1] <- min_a1
+data_min1[2] <- min_a5
+
+data_min <- matrix(data_min1,1,2)
+colnames(data_min) <- c("A1","A5") # Adicionando nomes às colunas
+rownames(data_min) <- c("Minimo")
+
+head(data_min)
+
+
+```
+Através da análise dos mínimos, aplicada aos dados de flutuação percentual mensal de cada uma das ações, pode-se inferir que ao longo dos 36 meses a ação 1 apresentou a maior flutuação negativa. Portanto, ao comparar-se as duas, o investidor correrá um risco de maior queda caso opte pela ação 1. Desta maneira, do ponto de vista de risco, também é mais recomendável que o investimento seja realizado na ação 5.
 
 
 ## Discussão e Conclusão
+
+O estudo teve como objetivo definir entre cinco ações previamente selecionadas, qual apresenta o maior potencial de ganho mensal para um investidor que deseja investir todo seu capital em uma única ação da bolsa de valores. Foram fornecidos os dados de fechamento dos preços mensais das cinco ações ao longo dos últimos 36 meses.
+
+Para a análise ser realizada, os dados fornecidos foram analisados sob a ótica das flutuações percentuais das ações em cada mês, o que possibilitou por exemplo, determinar quais ações apresentam a maior média nas flutuações dos preços mensais.
+
+Escolheu-se o teste ANOVA para determinar se havia diferença significativa entre a médias das flutuações das ações analisadas. Para utilização da ANOVA foi necessário verificar a independência entre as amostras, a normalidade na distribuição dos dados e, também, a homocedasticidade. Para verificar a independência, como não havia informações sobre as empresas, assumiu-se que elas não possuíam interferência entre si. Para verificação de normalidade, utilizou-se o teste Shapiro-Wilk e para verificação da homocedasticidade utilizou-se os testes de Bartlett e Levene, todos foram apresentados neste relatório.
+
+Após a verificação dos requisitos, aplicou-se a ANOVA e através de seu resultado foi possível inferir que pelo menos uma das amostras possuía sua média diferente das outras. Porém, ainda não haviam dados suficientes para determinar o que foi solicitado. Escolheu-se então o Teste de Tukey para determinar quais ações entre as cinco analisadas, possuíam diferenças significativas entre suas médias.
+
+Através do Teste de Turkey foi possível concluir que as ações 1 e 5 se destacavam das demais, do ponto de vista de rentabilidade, apresentando as melhores flutuações nos preços dos fechamentos mensais. A partir desta conclusão, a análise prosseguiu apenas para as ações 1 e 5. Para escolher a melhor entre as duas, analisou-se as tendências de cada uma delas e pôde-se perceber que, embora ambas apresentassem tendência de alta, a ação 5 apresentou a maior tendência de alta entre as duas e, portanto, do ponto de vista de rentabilidade ela foi a mais recomendada. Optou-se ainda por realizar uma última análise, levando em consideração o risco envolvido em cada uma das opções, para isso analisou-se os valores mínimos das flutuações nos preços de fechamento mensal das duas ações e observou-se que a ação 1 apresentou a maior queda percentual ao longo dos 36 meses. Portanto, considerando o risco, a ação 5 também foi a mais recomendada.
+
+Desta forma, concluiu-se que para os dados fornecidos e através das análises realizadas e apresentadas, a ação 5 é a mais recomendada para o investidor que deseja investir todo seu capital em uma única ação da bolsa.
 
 
 ### Atividades dos membros
@@ -251,3 +306,4 @@ Elaboração das hipóteses e definição das premissas.
 \renewcommand\refname{Referências Bibliográficas}
 \bibliographystyle{unsrt}
 \bibliography{referencias}
+
