@@ -43,7 +43,7 @@ Esses novos investidores, são motivados principalmente pela possibilidade de ma
 
 Os dados de entrada do experimento são as informações de preços de fechamento dos últimos 36 meses de 5 ações diferentes.
 O que se deseja é comparar o potencial de cada ação em gerar maior ganho mensal ao investidor. Como modelos regressivos de previsão não são o escopo deste trabalho, pode-se realizar uma transformação nestes dados, de forma que haja um vetor com as flutuações percentuais das ações em cada mês. Por exemplo, se houver uma ação com preços de fechamento $[10, 11, 12, 10]$, pode-se gerar o seguinte vetor de flutuações percentuais: $[10\%, 9\%, -16\%]$.
-Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidência de flutuação positiva, por exemplo.
+Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidência de flutuação positiva.
 
 ## Análise Estatística
 
@@ -151,7 +151,6 @@ Para a realização do teste ANOVA, é necessário que as seguintes premissas se
 
 $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuição normal}\\H_1: \text{A amostra não provém de uma população com distribuição normal} \end{cases}$$
 ```{r, include=TRUE}
-library(car)
 apply(data_perc, 2, shapiro.test)
 ```
 Como interpretação do teste, tem-se que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, pode-se considerar que as amostras de todas as flutuações percentuais das ações seguem distribuição normal.
@@ -220,7 +219,7 @@ Para facilitar a análise, o seguinte gráfico foi plotado.
 plot(tukey, las=1, col="brown")
 ```
 
-Pela análise do teste de Tukey, pode-se fazer algumas observações:**explicar melhor o resultado**
+Pela análise do teste de Tukey, pode-se fazer algumas observações:
 
 •	A ação 1 possui média maior que as ações 2, 3 e 4 e média estatisticamente semelhante a ação 5;
 
@@ -291,12 +290,15 @@ Desta forma, concluiu-se que para os dados fornecidos e através das análises r
 
 **Diego**
 
+Elaboração dos testes e construção textual.
 
 **Elias**
 
+Elaboração textural, análise dos resultas e tomada de decisão.
 
 **Matheus**
 
+Elaboração do experimento e estruturação dos códigos.
 
 **Todos**
 
