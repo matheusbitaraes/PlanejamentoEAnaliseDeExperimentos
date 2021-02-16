@@ -37,13 +37,13 @@ Nos últimos anos, o mercado financeiro no Brasil tem ganhado bastante destaque.
 
 Esse cenário tem impulsionado o setor financeiro de uma forma como nunca tinha sido vista no país. Com isso, corretoras, casas de análises, agentes de investimentos e outros serviços têm sido cada vez mais procurados e solicitados pelos novos investidores que desejam entrar na renda variável, em especial na bolsa de valores.
 
-Esses novos investidores, são motivados principalmente pela possibilidade de maiores retornos que a renda variável oferece  aos seus investimentos. Porém, quanto maior a possibilidade de retorno, geralmente também, maior será o risco envolvido em um investimento. Por isso, cada vez mais o agentes financeiros tem procurado meios de melhorar suas análises, buscando os melhores ativos para seus clientes.
+Esses novos investidores, são motivados principalmente pela possibilidade de maiores retornos que a renda variável oferece  aos seus investimentos. Porém, quanto maior a possibilidade de retorno, geralmente também, maior será o risco envolvido em um investimento. Por isso, cada vez mais os agentes financeiros tem procurado meios de melhorar suas análises, buscando os melhores ativos para seus clientes.
 
 ## Design do Experimento
 
 Os dados de entrada do experimento são as informações de preços de fechamento dos últimos 36 meses de 5 ações diferentes.
 O que se deseja é comparar o potencial de cada ação em gerar maior ganho mensal ao investidor. Como modelos regressivos de previsão não são o escopo deste trabalho, pode-se realizar uma transformação nestes dados, de forma que haja um vetor com as flutuações percentuais das ações em cada mês. Por exemplo, se houver uma ação com preços de fechamento $[10, 11, 12, 10]$, pode-se gerar o seguinte vetor de flutuações percentuais: $[10\%, 9\%, -16\%]$.
-Desta forma, é possivel realizar uma análise estatistica entre as 5 ações e identificar a que apresenta maior incidência de flutuação positiva.
+Desta forma, é possivel realizar uma análise estatística entre as 5 ações e identificar a que apresenta maior incidência de flutuação positiva.
 Para este estudo, tem-se a seguinte escolha:
 
 Nível de significância ($\alpha$) de 0,05. O nível de significância é a probabilidade de ocorrência de um falso positivo em qualquer procedimento de teste de hipótese \cite{NotasdeAula}.
@@ -296,7 +296,7 @@ Elaboração dos testes e construção textual.
 
 **Elias**
 
-Elaboração textural, análise dos resultas e tomada de decisão.
+Elaboração textual, análise dos resultados e tomada de decisão.
 
 **Matheus**
 
@@ -310,4 +310,3 @@ Elaboração das hipóteses e definição das premissas.
 \renewcommand\refname{Referências Bibliográficas}
 \bibliographystyle{unsrt}
 \bibliography{referencias}
-
