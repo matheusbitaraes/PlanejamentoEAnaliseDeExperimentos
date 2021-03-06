@@ -11,12 +11,6 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, include=FALSE}
-
-# Importação das bibliotecas (descomentar caso não tenha instalado)
-
-```
-
 ## Descrição do problema
 
 
@@ -24,24 +18,96 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Design do Experimento
+```{r, include=TRUE}
 
-## Análise Estatística
+# Importação dos pacotes (descomentar caso não tenha instalado)
+# install.packages("ExpDE")
+# install.packages("smoof")
+
+```
+
+Definição da função de Rosenbrock para uma dada dimensão *dim* *(código abaixo copiado da descrição do problema)*
+```{r, include=TRUE}
+
+suppressPackageStartupMessages(library(smoof))
+fn <- function(X){
+if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
+Y <- apply(X, MARGIN = 1,
+FUN = smoof::makeRosenbrockFunction(dimensions = dim))
+return(Y)
+}
+```
+
+?*(código abaixo copiado da descrição do problema)*
+```{r, include=TRUE}
+# EXEMPLO
+dim <- 10
+selpars <- list(name = "selection_standard")
+stopcrit <- list(names = "stop_maxeval", maxevals = 5000 * dim, maxiter = 100 * dim)
+probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
+popsize = 5 * dim
+```
+
+Este artigo é importante: https://link.springer.com/article/10.1007%2Fs10732-018-9396-7
+
+Configurações que devem ser comparadas:
+```{r, include=TRUE}
+# Equipe C
+
+## Config 1
+recpars1 <- list(name = "recombination_blxAlphaBeta", alpha = 0, beta = 0)
+mutpars1 <- list(name = "mutation_rand", f = 4)
+
+## Config 2
+recpars2 <- list(name = "recombination_linear")
+mutpars2 <- list(name = "mutation_rand", f = 1.5)
+```
 
 
-### Importação dos dados
+```{r, include=TRUE}
+suppressPackageStartupMessages(library(ExpDE))
+
+# Run algorithm on problem:
+#out <- ExpDE(mutpars = mutparsX,
+#recpars = recparsX,
+#popsize = popsize,
+#selpars = selpars,
+#stopcrit = stopcrit,
+#probpars = probpars,
+#showpars = list(show.iters = "dots", showevery = 20))
+
+# Extract observation:
+#out$Fbest
+```
+
+- Necessario calcular o numero de instancias necessarias e o numero de repetições de cada algoritmo por instancia para que consigamos chegar na significancia e potencia desejadas
 
 
-### Tratamento  dos dados
+Calculo do numero de instancias (artigo https://link.springer.com/article/10.1007%2Fs10732-018-9396-7)
+```{r, include=TRUE}
 
+# dados do trabalho
+alpha <- 0.05
+delta <- 0.5
+beta <- 0.2
 
-### Dados estatísticos
+n <- 2
+while (qt(1 - alpha/2, n-1) > qt(beta, n - 1, delta*sqrt(n))) n <- n + 1
 
+print(n)
 
-#### Premissas do teste:
+```
+34 é o numero minimo de blocos para a comparação dos dois algoritmos.
 
-## Discussão e Conclusão
+falta:
+-  coleta e tabulação dos dados
+- testes das hipoteses
+- estimacao da magnitude da diferença entre os metodos
+- verificação das premissas dos testes
+- conclusoes
+- possiveis limitações do estudo e sugestoes de melhoria
 
-### Atividades dos membros
+## Atividades dos membros
 
 **Diego**
 
