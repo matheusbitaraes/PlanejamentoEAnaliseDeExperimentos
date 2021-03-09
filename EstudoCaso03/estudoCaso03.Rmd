@@ -127,27 +127,10 @@ Além disto, os seguintes parâmetros experimentais foram dados para este estudo
 
 Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150 que podem ser geradas a partir de uma dada dimensão dim com o seguinte código:
 
-```{r, include=TRUE}
-suppressPackageStartupMessages(library(smoof))
-fn <- function(X){
-if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
-Y <- apply(X, MARGIN = 1,
-FUN = smoof::makeRosenbrockFunction(dimensions = dim))
-return(Y)
-}
-```
+A coleta dos resultados das execuções será de acordo com o Algoritmo 2 disponivel em campelo(2018) **CITAR CORRETAMENTE**.
+**colocar o algoritmo aqui?** 
 
-Com os parâmetros experimentais fornecidos, pode-se calcular o número de instâncias necessárias:
-
-```{r, include=TRUE}
-# dados do trabalho
-alpha <- 0.05
-delta <- 0.5
-beta <- 0.2
-n <- 2
-while (qt(1 - alpha/2, n-1) > qt(beta, n - 1, delta*sqrt(n))) n <- n + 1
-print(n)
-```
+Como primeiro passo, deve-se estimar o número de instancias de acordo com o parâmetros experimentais fornecidos:
 
 ***Função que a menina usou. Autor é o Felipe Campelo...***
 
@@ -161,52 +144,166 @@ O método calc_instances do pacote CAISEr em linguagem R permite estimar o núme
 Como $K$ = 2, tem-se que ncomparisons = 1.
 
 ```{r}
+# dados do trabalho
+alpha <- 0.05
+delta <- 0.5
+beta <- 0.2
+
 out <- calc_instances(ncomparisons = 1, 
-                      d = 0.5, 
-                      power = 0.80, 
-                      sig.level = 0.05, 
-                      alternative.side = "one.sided", 
+                      d = delta, 
+                      power = 1 - beta, 
+                      sig.level = alpha, 
+                      alternative.side = "two.sided", 
                       power.target = "mean")
 cat('Número de instâncias necessárias:', out$ninstances)
 ```
 
-O número de instâncias necessárias para se realizar o experimento descrito é de apenas (27 ou 34) instâncias. Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 27 ou 34 instâncias:
+Como pode-se concluir pelo resultado da execução do algoritmo, o número de instâncias necessárias para se realizar o experimento descrito é 34. Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 34 instâncias:
 
 ```{r}
-round(linspace(2, 150, 27), digits = 0)
-round(linspace(2, 150, 34), digits = 0)
+num_dims <- 34
+dims = round(linspace(2, 150, num_dims), digits = 0)
+print(dims)
 ```
 
-***Precisamos definir se usaremos 27 ou 34***
+Seguindo o Algoritmo 2, disponivel em campelo(2018) **CITAR CORRETAMENTE**, deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, utilizar o Algoritmo 1 (disponível em campelo(2018) **CITAR CORRETAMENTE**) para executar cada instancia *n* vezes, onde *n* é o numero mínimo de instancias necessarias para comparação. O valor de *n* pode variar de acordo com cada instância, pois cada uma pode possuir diferentes variâncias.
 
-Este artigo é importante: https://link.springer.com/article/10.1007%2Fs10732-018-9396-7
-
-***Aqui é a hora que precisamos entender qual a relação de D e as instancias...***
-
+Primeiramente será feita uma definição de funções que serão utilizadas:
 ```{r, include=TRUE}
-dim = 10
+
+# Execução de n funções de rosenbrock para determinada dimensao
+executeRosenbrock <- function(dim, num_exec) {
+  # Função de ronsebrock para determinada dimensao
+  fn <<- function(X) {
+        if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
+        Y <- apply(X, MARGIN = 1,
+        FUN = smoof::makeRosenbrockFunction(dimensions = dim))
+        return(Y)
+  }
+  
+  # definições dadas no enunciado
+  selpars <- list(name = "selection_standard")
+  stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
+  probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
+  popsize <- 5*dim
+  
+  y1 <- vector(,num_exec)
+  y2 <- vector(,num_exec)
+  for (i in 1:num_exec){
+    
+    # rodando problema para instancia 1
+    out <-  ExpDE(mutpars = mutpars1,
+            recpars = recpars1,
+            popsize = popsize,
+            selpars = selpars,
+            stopcrit = stopcrit,
+            probpars = probpars,
+            showpars = list(show.iters = "dots", showevery = 20))
+    y1[i] <- out$Fbest
+    
+    # rodando problema para instancia 2
+    out <-  ExpDE(mutpars = mutpars2,
+            recpars = recpars2,
+            popsize = popsize,
+            selpars = selpars,
+            stopcrit = stopcrit,
+            probpars = probpars,
+            showpars = list(show.iters = "dots", showevery = 20))
+    y2[i] <- out$Fbest
+  }
+  
+  return(
+    data.frame(
+      mean1 = mean(y1),
+      mean2 = mean(y2),
+      sd1 = sd(y1),
+      sd2 = sd(y2)))
+}
+
+# Execução de n funções de rosenbrock para uma lista de dimensões
+executeRosenbrockForDims <- function(dims, num_exec){
+  num_dims <- length(dims)
+  mean_y1 <- vector(,num_dims)
+  mean_y2 <- vector(,num_dims)
+  sd_y1 <- vector(,num_dims)
+  sd_y2 <- vector(,num_dims)
+  
+  for (d in 1:num_dims){
+    dim <- dims[d]
+    
+    # multiplas execuções
+    Y = executeRosenbrock(dim, num_exec)
+    
+    mean_y1[d] <- Y$mean1
+    mean_y2[d] <- Y$mean2
+    sd_y1[d] <- Y$sd1
+    sd_y2[d] <- Y$sd2
+  }
+  
+  data <- data.frame(
+    dim = dims,
+    mean.instance1 = mean_y1,
+    mean.instance2 = mean_y2,
+    sd.instance1 = sd_y1, 
+    sd.instance2 = sd_y2)
+  
+  return(data)
+}
+```
+
+Execução piloto com escolha inicial de 10 execuções e com os 34 blocos, obtidos anteriormente.
+```{r, include=TRUE}
 suppressPackageStartupMessages(library(ExpDE))
-selparsx <- list(name = "selection_standard")
-stopcritx <- list(names = "stop_maxeval", maxevals = 5000 * dim, maxiter = 100 * dim)
-probparsx <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
-popsizex = 5 * dim
+suppressPackageStartupMessages(library(smoof))
+
+file_name = "pilot_execution_backup.csv"
+num_exec <- 10
+
+if (file.exists(file_name)) {
+  
+  # se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. Apenas será feita a leitura do arquivo
+  print("Arquivo de backup encontrado. Recuperando dados ao inves de realizar uma nova execução")
+  initial_data <- read.csv(file=file_name, header = TRUE, sep=",")
+  dims <- initial_data$dim
+  mean_y1 <- initial_data$mean.instance1
+  mean_y2 <- initial_data$mean.instance2
+  sd_y1 <- initial_data$sd.instance1
+  sd_y2 <- initial_data$sd.instance2
+} else {
+  
+  # execução das funções de rosenbrock
+  initial_data = executeRosenbrockForDims(dims, num_exec)
+  
+  # escreve no arquivo de backup os resultados coletados
+  write.csv(initial_data, file = file_name)
+}
+initial_data$n1 <- rep(num_exec, num_dims)
+initial_data$n2 <- rep(num_exec, num_dims)
 ```
 
-```{r, include=TRUE}
-# Run algorithm on problem:
-out <-  ExpDE(mutpars = mutpars1,
-        recpars = recpars1,
-        popsize = popsizex,
-        selpars = selparsx,
-        stopcrit = stopcritx,
-        probpars = probparsx,
-        showpars = list(show.iters = "dots", showevery = 20))
+Após esta execução, pode-se prosseguir com o Algoritmo 1. **detalhar**
 
-# Extract observation:
-out$Fbest
+O numero máximo de observações foi estipulado como 45, devido a limitações de poder computacional.
+
+**implementar este algoritmo**
+```{r}
+file_name = "execution_backup.csv"
+num_exec <- 10
+
+if (file.exists(file_name)) {
+  
+  # se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. Apenas será feita a leitura do arquivo
+  print("Arquivo de backup encontrado. Recuperando dados ao inves de realizar uma nova execução")
+  data <- read.csv(file=file_name, header = TRUE, sep=",")
+} else {
+  
+  n_max <- 45
+  #
+}
 ```
 
-- Necessario calcular o numero de instancias necessarias e o numero de repetições de cada algoritmo por instancia para que consigamos chegar na significancia e potencia desejadas
+a partir daqui, já teremos os dados para realizar o teste ANOVA.
+
 
 
 falta:
