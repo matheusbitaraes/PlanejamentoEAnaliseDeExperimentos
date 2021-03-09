@@ -6,29 +6,128 @@ output:
     pdf_document:
     fig_caption: yes
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, results='hide', warning=FALSE, include = FALSE, message = FALSE, echo=FALSE}
+if (!require(ggplot2, quietly = TRUE)){
+      install.packages("ggplot2")
+      }
+if (!require(devtools, quietly = TRUE)){
+      install.packages("devtools")
+}
+if (!require(GGally, quietly = TRUE)){
+      install.packages("GGally")
+      }
+ if (!require(broom, quietly = TRUE)){
+       devtools::install_github("dgrtwo/broom")
+      }
+if (!require(stats, quietly = TRUE)){
+      suppressMessages(install.packages("stats"))
+      }
+if (!require(plotly, quietly = TRUE)){
+      suppressMessages(install.packages("plotly"))
+      }
+if (!require(reshape2, quietly = TRUE)){
+      suppressMessages(install.packages("reshape2"))
+      }
+if (!require(tidyr, quietly = TRUE)){
+      suppressMessages(install.packages("tidyr"))
+}
+if (!require(pracma, quietly = TRUE)){
+      suppressMessages(install.packages("pracma"))
+      }
+if (!require(lsr, quietly = TRUE)){
+      suppressMessages(install.packages("lsr"))
+      }
+if (!require(car, quietly = TRUE)){
+      suppressMessages(install.packages("car"))
+      }
+if (!require(pwr, quietly = TRUE)){
+      suppressMessages(install.packages("pwr"))
+      }
+if (!require(multcompView, quietly = TRUE)){
+      suppressMessages(install.packages("multcompView"))
+      }
+if (!require(multcomp, quietly = TRUE)){
+      suppressMessages(install.packages("multcomp"))
+      }
+if (!require(lmtest, quietly = TRUE)){
+      suppressMessages(install.packages("lmtest"))
+      }
+if (!require(effectsize, quietly = TRUE)){
+      suppressMessages(install.packages("effectsize"))
+      }
+if (!require(CAISEr, quietly = TRUE)){
+      suppressMessages(install.packages("CAISEr"))
+      }
 ```
 
+```{r, message = FALSE, warning = FALSE, results = 'hide', echo = FALSE}
+library(stats)
+library(ggplot2)
+library(plotly)
+library(reshape2)
+library(GGally)
+library(tidyr)
+library(pracma)
+library(lsr)
+library(car)
+library(pwr)
+library(multcompView)
+library(multcomp)
+library(lmtest)
+library(effectsize)
+library(CAISEr)
+options(Encoding="UTF-8")
+```
+
+
 ## Descrição do problema
+
+**Retirado do enunciado do exercício**
+
+Suponha que um pesquisador está interessado em investigar o efeito de duas configurações distintas de um algoritmo em seu desempenho para uma dada classe de problemas de otimização.
+Como forma de análise deste problema, foi proposto a tarefa de efetuar a  comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste fornecida. O objetivo deste estudo é responder às seguintes perguntas:
+
+• Há alguma diferença no desempenho médio do algoritmo quando equipado com estas diferentes configurações, para a classe de problemas de interesse? 
+
+• Caso haja, qual a melhor configuração em termos de desempenho médio (atenção: quanto menor o valor retornado, melhor o algoritmo), e qual a magnitude das diferenças encontradas?
+
+•Há alguma configuração que deva ser recomendada em relação à outra?
 
 
 ## Introdução
 
+**Retirado do enunciado do exercício**
+
+Algoritmos baseados em populações são uma alternativa comum para a solução de problemas de otimização em engenharia. Tais algoritmos normalmente consistem de um ciclo iterativo, no qual um conjunto de soluções-candidatas ao problema são repetidamente sujeitas a operadores de variação e seleção, de forma a promover uma exploração do espaço de variáveis do problema em busca de um ponto de ótimo (máximo ou mínimo) de uma dada função-objetivo.
+Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como evolução diferencial (DE, do inglês differential evolution)(Storn and Price, 1997).
 
 ## Design do Experimento
+
+A tarefa para este estudo de caso é a comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste. As duas configurações são apresentadas a seguir:
+
 ```{r, include=TRUE}
+## Configuração 1
+recpars1 <- list(name = "recombination_blxAlphaBeta", alpha = 0, beta = 0)
+mutpars1 <- list(name = "mutation_rand", f = 4)
 
-# Importação dos pacotes (descomentar caso não tenha instalado)
-# install.packages("ExpDE")
-# install.packages("smoof")
-
+## Configuração 2
+recpars2 <- list(name = "recombination_linear")
+mutpars2 <- list(name = "mutation_rand", f = 1.5)
 ```
 
-Definição da função de Rosenbrock para uma dada dimensão *dim* *(código abaixo copiado da descrição do problema)*
-```{r, include=TRUE}
+**Retirado do enunciado do exercício**
 
+Além disto, os seguintes parâmetros experimentais foram dados para este estudo:
+
+• Mínima diferença de importância prática (padronizada): (d* = $\delta$*/$\sigma$) = 0.5
+
+• Significância desejada: $\alpha$ = 0.05
+
+• Potência mínima desejada (para o caso d = d*): $\pi$ = 1 - $\beta$ = 0.8
+
+Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150 que podem ser geradas a partir de uma dada dimensão dim com o seguinte código:
+
+```{r, include=TRUE}
 suppressPackageStartupMessages(library(smoof))
 fn <- function(X){
 if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
@@ -38,66 +137,77 @@ return(Y)
 }
 ```
 
-?*(código abaixo copiado da descrição do problema)*
-```{r, include=TRUE}
-# EXEMPLO
-dim <- 10
-selpars <- list(name = "selection_standard")
-stopcrit <- list(names = "stop_maxeval", maxevals = 5000 * dim, maxiter = 100 * dim)
-probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
-popsize = 5 * dim
-```
-
-Este artigo é importante: https://link.springer.com/article/10.1007%2Fs10732-018-9396-7
-
-Configurações que devem ser comparadas:
-```{r, include=TRUE}
-# Equipe C
-
-## Config 1
-recpars1 <- list(name = "recombination_blxAlphaBeta", alpha = 0, beta = 0)
-mutpars1 <- list(name = "mutation_rand", f = 4)
-
-## Config 2
-recpars2 <- list(name = "recombination_linear")
-mutpars2 <- list(name = "mutation_rand", f = 1.5)
-```
-
+Com os parâmetros experimentais fornecidos, pode-se calcular o número de instâncias necessárias:
 
 ```{r, include=TRUE}
-suppressPackageStartupMessages(library(ExpDE))
-
-# Run algorithm on problem:
-#out <- ExpDE(mutpars = mutparsX,
-#recpars = recparsX,
-#popsize = popsize,
-#selpars = selpars,
-#stopcrit = stopcrit,
-#probpars = probpars,
-#showpars = list(show.iters = "dots", showevery = 20))
-
-# Extract observation:
-#out$Fbest
-```
-
-- Necessario calcular o numero de instancias necessarias e o numero de repetições de cada algoritmo por instancia para que consigamos chegar na significancia e potencia desejadas
-
-
-Calculo do numero de instancias (artigo https://link.springer.com/article/10.1007%2Fs10732-018-9396-7)
-```{r, include=TRUE}
-
 # dados do trabalho
 alpha <- 0.05
 delta <- 0.5
 beta <- 0.2
-
 n <- 2
 while (qt(1 - alpha/2, n-1) > qt(beta, n - 1, delta*sqrt(n))) n <- n + 1
-
 print(n)
-
 ```
-34 é o numero minimo de blocos para a comparação dos dois algoritmos.
+
+***Função que a menina usou. Autor é o Felipe Campelo...***
+
+O método calc_instances do pacote CAISEr em linguagem R permite estimar o número de instâncias mínimas necessárias para se comparar múltiplos algoritmos, de modo que os requisitos experimentais sejam atingidos. O parâmetro número de comparações ncomparisons é dado pela seguinte equação, onde $K$ é o número de algoritmos que se deseja comparar:
+
+\begin{equation}
+  \label{eq:ncomparisons}
+  \texttt{ncomparisons} = \frac{K\times(K-1)}{2}
+\end{equation}
+
+Como $K$ = 2, tem-se que ncomparisons = 1.
+
+```{r}
+out <- calc_instances(ncomparisons = 1, 
+                      d = 0.5, 
+                      power = 0.80, 
+                      sig.level = 0.05, 
+                      alternative.side = "one.sided", 
+                      power.target = "mean")
+cat('Número de instâncias necessárias:', out$ninstances)
+```
+
+O número de instâncias necessárias para se realizar o experimento descrito é de apenas (27 ou 34) instâncias. Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 27 ou 34 instâncias:
+
+```{r}
+round(linspace(2, 150, 27), digits = 0)
+round(linspace(2, 150, 34), digits = 0)
+```
+
+***Precisamos definir se usaremos 27 ou 34***
+
+Este artigo é importante: https://link.springer.com/article/10.1007%2Fs10732-018-9396-7
+
+***Aqui é a hora que precisamos entender qual a relação de D e as instancias...***
+
+```{r, include=TRUE}
+dim = 10
+suppressPackageStartupMessages(library(ExpDE))
+selparsx <- list(name = "selection_standard")
+stopcritx <- list(names = "stop_maxeval", maxevals = 5000 * dim, maxiter = 100 * dim)
+probparsx <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
+popsizex = 5 * dim
+```
+
+```{r, include=TRUE}
+# Run algorithm on problem:
+out <-  ExpDE(mutpars = mutpars1,
+        recpars = recpars1,
+        popsize = popsizex,
+        selpars = selparsx,
+        stopcrit = stopcritx,
+        probpars = probparsx,
+        showpars = list(show.iters = "dots", showevery = 20))
+
+# Extract observation:
+out$Fbest
+```
+
+- Necessario calcular o numero de instancias necessarias e o numero de repetições de cada algoritmo por instancia para que consigamos chegar na significancia e potencia desejadas
+
 
 falta:
 -  coleta e tabulação dos dados
