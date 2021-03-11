@@ -127,14 +127,11 @@ Além disto, os seguintes parâmetros experimentais foram dados para este estudo
 
 Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150 que podem ser geradas a partir de uma dada dimensão dim com o seguinte código:
 
-A coleta dos resultados das execuções será de acordo com o Algoritmo 2 disponivel em campelo(2018) **CITAR CORRETAMENTE**.
-**colocar o algoritmo aqui?** 
+Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessario que se execute os algortimos em uma quantidade de dimensões representativas e também é necessário que se execute cada instância um numero de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejadas. Realizar um alto número de execuções em cada dimensão e realizar a coleta para todas as dimensões pode-se tornar computacionalmente pesado ou até infactível em alguns casos. Este é um desses casos. Portanto será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instancias (no nosso caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero minimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
 
-Como primeiro passo, deve-se estimar o número de instancias de acordo com o parâmetros experimentais fornecidos:
+Como primeiro passo, deve-se estimar o número de instâncias de acordo com o parâmetros experimentais fornecidos:
 
-***Função que a menina usou. Autor é o Felipe Campelo...***
-
-O método calc_instances do pacote CAISEr em linguagem R permite estimar o número de instâncias mínimas necessárias para se comparar múltiplos algoritmos, de modo que os requisitos experimentais sejam atingidos. O parâmetro número de comparações ncomparisons é dado pela seguinte equação, onde $K$ é o número de algoritmos que se deseja comparar:
+O método calc_instances do pacote CAISEr em linguagem R **citar** permite estimar o número de instâncias mínimas necessárias para se comparar múltiplos algoritmos, de modo que os requisitos experimentais sejam atingidos. O parâmetro número de comparações ncomparisons é dado pela seguinte equação, onde $K$ é o número de algoritmos que se deseja comparar:
 
 \begin{equation}
   \label{eq:ncomparisons}
@@ -166,90 +163,7 @@ dims = round(linspace(2, 150, num_dims), digits = 0)
 print(dims)
 ```
 
-Seguindo o Algoritmo 2, disponivel em campelo(2018) **CITAR CORRETAMENTE**, deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, utilizar o Algoritmo 1 (disponível em campelo(2018) **CITAR CORRETAMENTE**) para executar cada instancia *n* vezes, onde *n* é o numero mínimo de instancias necessarias para comparação. O valor de *n* pode variar de acordo com cada instância, pois cada uma pode possuir diferentes variâncias.
-
-Primeiramente será feita uma definição de funções que serão utilizadas:
-```{r, include=TRUE}
-
-# Execução de n funções de rosenbrock para determinada dimensao
-executeRosenbrock <- function(dim, num_exec) {
-  # Função de ronsebrock para determinada dimensao
-  fn <<- function(X) {
-        if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
-        Y <- apply(X, MARGIN = 1,
-        FUN = smoof::makeRosenbrockFunction(dimensions = dim))
-        return(Y)
-  }
-  
-  # definições dadas no enunciado
-  selpars <- list(name = "selection_standard")
-  stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
-  probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
-  popsize <- 5*dim
-  
-  y1 <- vector(,num_exec)
-  y2 <- vector(,num_exec)
-  for (i in 1:num_exec){
-    
-    # rodando problema para instancia 1
-    out <-  ExpDE(mutpars = mutpars1,
-            recpars = recpars1,
-            popsize = popsize,
-            selpars = selpars,
-            stopcrit = stopcrit,
-            probpars = probpars,
-            showpars = list(show.iters = "dots", showevery = 20))
-    y1[i] <- out$Fbest
-    
-    # rodando problema para instancia 2
-    out <-  ExpDE(mutpars = mutpars2,
-            recpars = recpars2,
-            popsize = popsize,
-            selpars = selpars,
-            stopcrit = stopcrit,
-            probpars = probpars,
-            showpars = list(show.iters = "dots", showevery = 20))
-    y2[i] <- out$Fbest
-  }
-  
-  return(
-    data.frame(
-      mean1 = mean(y1),
-      mean2 = mean(y2),
-      sd1 = sd(y1),
-      sd2 = sd(y2)))
-}
-
-# Execução de n funções de rosenbrock para uma lista de dimensões
-executeRosenbrockForDims <- function(dims, num_exec){
-  num_dims <- length(dims)
-  mean_y1 <- vector(,num_dims)
-  mean_y2 <- vector(,num_dims)
-  sd_y1 <- vector(,num_dims)
-  sd_y2 <- vector(,num_dims)
-  
-  for (d in 1:num_dims){
-    dim <- dims[d]
-    
-    # multiplas execuções
-    Y = executeRosenbrock(dim, num_exec)
-    
-    mean_y1[d] <- Y$mean1
-    mean_y2[d] <- Y$mean2
-    sd_y1[d] <- Y$sd1
-    sd_y2[d] <- Y$sd2
-  }
-  
-  data <- data.frame(
-    dim = dims,
-    mean.instance1 = mean_y1,
-    mean.instance2 = mean_y2,
-    sd.instance1 = sd_y1, 
-    sd.instance2 = sd_y2)
-  
-  return(data)
-}
-```
+Seguindo o Algoritmo 2 proposto por Campelo e Takahashi (2018), deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi (2018)) \cite{campelo2019}
 
 Execução piloto com escolha inicial de 10 execuções e com os 34 blocos, obtidos anteriormente.
 ```{r, include=TRUE}
@@ -271,21 +185,106 @@ if (file.exists(file_name)) {
   sd_y2 <- initial_data$sd.instance2
 } else {
   
+  # Função para execução de n funções de rosenbrock para determinada dimensao
+  executeRosenbrock <- function(dim, num_exec) {
+    # Função de ronsebrock para determinada dimensao
+    fn <<- function(X) {
+          if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
+          Y <- apply(X, MARGIN = 1,
+          FUN = smoof::makeRosenbrockFunction(dimensions = dim))
+          return(Y)
+    }
+    
+    # definições dadas no enunciado
+    selpars <- list(name = "selection_standard")
+    stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
+    probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
+    popsize <- 5*dim
+    
+    y1 <- vector(,num_exec)
+    y2 <- vector(,num_exec)
+    for (i in 1:num_exec){
+      
+      # rodando problema para instancia 1
+      out <-  ExpDE(mutpars = mutpars1,
+              recpars = recpars1,
+              popsize = popsize,
+              selpars = selpars,
+              stopcrit = stopcrit,
+              probpars = probpars,
+              showpars = list(show.iters = "dots", showevery = 20))
+      y1[i] <- out$Fbest
+      
+      # rodando problema para instancia 2
+      out <-  ExpDE(mutpars = mutpars2,
+              recpars = recpars2,
+              popsize = popsize,
+              selpars = selpars,
+              stopcrit = stopcrit,
+              probpars = probpars,
+              showpars = list(show.iters = "dots", showevery = 20))
+      y2[i] <- out$Fbest
+      cat("\n y1", y1[i])
+      cat("\n y2", y2[i])
+    }
+    
+    return(
+      data.frame(
+        mean1 = mean(y1),
+        mean2 = mean(y2),
+        sd1 = sd(y1),
+        sd2 = sd(y2)))
+  }
+  
+  # Função para execução de n funções de rosenbrock para uma lista de dimensões
+  executeRosenbrockForDims <- function(dims, num_exec){
+    num_dims <- length(dims)
+    mean_y1 <- vector(,num_dims)
+    mean_y2 <- vector(,num_dims)
+    sd_y1 <- vector(,num_dims)
+    sd_y2 <- vector(,num_dims)
+    
+    for (d in 1:num_dims){
+      dim <- dims[d]
+      
+      # multiplas execuções
+      Y = executeRosenbrock(dim, num_exec)
+      
+      cat("dim:",dim, " \n")
+      cat("mu1:",Y$mean1, " \n")
+      cat("sd1:",Y$sd1, " \n")
+      cat("mu2:",Y$mean2, " \n")
+      cat("sd2:",Y$sd2, " \n")
+      
+      mean_y1[d] <- Y$mean1
+      mean_y2[d] <- Y$mean2
+      sd_y1[d] <- Y$sd1
+      sd_y2[d] <- Y$sd2
+    }
+    
+    data <- data.frame(
+      dim = dims,
+      mean.instance1 = mean_y1,
+      mean.instance2 = mean_y2,
+      sd.instance1 = sd_y1, 
+      sd.instance2 = sd_y2)
+    
+    return(data)
+  }
+  
   # execução das funções de rosenbrock
   initial_data = executeRosenbrockForDims(dims, num_exec)
   
   # escreve no arquivo de backup os resultados coletados
   write.csv(initial_data, file = file_name)
 }
+
 initial_data$n1 <- rep(num_exec, num_dims)
 initial_data$n2 <- rep(num_exec, num_dims)
 ```
 
-Após esta execução, pode-se prosseguir com o Algoritmo 1. **detalhar**
+Após esta execução, pode-se prosseguir com o Algoritmo 1, disponível em \cite{campelo2019}. O algoritmo proposto irá executar as instâncias até que o limite de precisão $se*$ seja atingido **ou** que o número máximo de execuções $n_{max}$ seja alcançado. O valor de $n_{max}$ foi definido como 50 (máximo de 25 execuções de cada instância a ser comparada).
 
-O numero máximo de observações foi estipulado como 45, devido a limitações de poder computacional.
-
-**implementar este algoritmo**
 ```{r}
 file_name = "execution_backup.csv"
 num_exec <- 10
@@ -296,18 +295,121 @@ if (file.exists(file_name)) {
   print("Arquivo de backup encontrado. Recuperando dados ao inves de realizar uma nova execução")
   data <- read.csv(file=file_name, header = TRUE, sep=",")
 } else {
+  data <- initial_data
+  se_opt <- 0.05 # se pretendido
+  n_max <- 50 # máximo número de execuções
   
-  n_max <- 45
-  #
+  # loop de dimensões
+  for (d in 1:num_dims) {
+    dim <- data$dim[d]
+    mu1 <- data$mean.instance1[d]
+    mu2 <- data$mean.instance2[d]
+    sd1 <- data$sd.instance1[d]
+    sd2 <- data$sd.instance2[d]
+    n1 <- 10 # número de execuções que já foram realizadas
+    n2 <- 10
+    
+    # Função de ronsebrock para determinada dimensao
+    fn <- function(X) {
+          if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
+          Y <- apply(X, MARGIN = 1,
+          FUN = smoof::makeRosenbrockFunction(dimensions = dim))
+          return(Y)
+    }
+    
+    # definições dadas no enunciado
+    selpars <- list(name = "selection_standard")
+    stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
+    probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
+    popsize <- 5*dim
+    
+    # calculo do se
+    se <- sqrt(sd1^2/n1 + sd2^2/n2)
+    
+    cat("\n se inicial:", se)
+    
+    # loop de execuções
+    while (se > se_opt && n1 + n2 < n_max){
+      ropt <- sd1/sd2
+      if (n1/n2 < ropt){
+        
+        # executa algoritmo 1
+        out <- ExpDE(mutpars = mutpars1,
+        recpars = recpars1,
+        popsize = popsize,
+        selpars = selpars,
+        stopcrit = stopcrit,
+        probpars = probpars,
+        showpars = list(show.iters = "dots", showevery = 20))
+        y1 <- out$Fbest
+        
+        # atualiza parâmetros
+        mu_ <- (mu1*n1 + y1)/(n1+1)
+        sd_ <- sqrt(((n1-1)*sd1^2 + (y1 - mu_)*(y1 - mu1))/n1)
+        mu1 <- mu_
+        sd1 <- sd_
+        n1 <- n1 + 1
+      } else {
+        
+        # executa algoritmo 2
+        out <- ExpDE(mutpars = mutpars2,
+        recpars = recpars2,
+        popsize = popsize,
+        selpars = selpars,
+        stopcrit = stopcrit,
+        probpars = probpars,
+        showpars = list(show.iters = "dots", showevery = 20))
+        y2 <- out$Fbest
+        
+        # atualiza parâmetros
+        mu_ <- (mu2*n2 + y2)/(n2+1)
+        sd_ <- sqrt(((n2-1)*sd2^2 + (y2 - mu_)*(y2 - mu2))/n2)
+        mu2 <- mu_
+        sd2 <- sd_
+        n2 <- n2 + 1
+        
+      }
+      
+      # atualiza se
+      se <- sqrt(sd1^2/n1 + sd2^2/n2)
+      cat("se:", se, " \n")
+      cat("dim:",dim, " \n")
+      cat("se:",se, " \n")
+      cat("mu1:",mu1, " \n")
+      cat("sd1:",sd1, " \n")
+      cat("mu2:",mu2, " \n")
+      cat("sd2:",sd2, " \n")
+      cat("n1:",n1, " \n")
+      cat("n2:",n2, " \n")
+    }
+    
+    data$mean.instance1[d] <- mu1
+    data$sd.instance1[d] <- sd1
+    data$n1[d] <- n1
+    data$mean.instance2[d] <- mu2
+    data$sd.instance2[d] <- sd2
+    data$n2[d] <- n2
+  }
+  
+  # escreve dados no arquivo de backup
+  write.csv(data, file = file_name)
 }
 ```
 
-a partir daqui, já teremos os dados para realizar o teste ANOVA.
+Abaixo podemos ver os dados coletados bem como o número de execuções de cada instância
+```{r}
+data
+```
+
+Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. Mas a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
+
+
+A partir daqui, já teremos os dados para realizar o teste ANOVA.
 
 
 
 falta:
--  coleta e tabulação dos dados
+- coleta e tabulação dos dados
 - testes das hipoteses
 - estimacao da magnitude da diferença entre os metodos
 - verificação das premissas dos testes
@@ -331,4 +433,5 @@ falta:
 \renewcommand\refname{Referências Bibliográficas}
 \bibliographystyle{unsrt}
 \bibliography{referencias}
+
 
