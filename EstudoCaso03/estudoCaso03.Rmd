@@ -82,8 +82,6 @@ options(Encoding="UTF-8")
 
 ## Descrição do problema
 
-**Retirado do enunciado do exercício**
-
 Suponha que um pesquisador está interessado em investigar o efeito de duas configurações distintas de um algoritmo em seu desempenho para uma dada classe de problemas de otimização.
 Como forma de análise deste problema, foi proposto a tarefa de efetuar a  comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste fornecida. O objetivo deste estudo é responder às seguintes perguntas:
 
@@ -96,10 +94,23 @@ Como forma de análise deste problema, foi proposto a tarefa de efetuar a  compa
 
 ## Introdução
 
-**Retirado do enunciado do exercício**
+Algoritmos baseados em populações são uma alternativa comum para a solução de problemas de otimização em engenharia. Tais algoritmos normalmente consistem de um ciclo iterativo, no qual um conjunto de soluções-candidatas ao problema são repetidamente sujeitas a operadores de variação e seleção, de forma a promover uma exploração do espaço de variáveis do problema em busca de um ponto ótimo (máximo ou mínimo) de uma dada função-objetivo.
+Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como evolução diferencial (DE, do inglês differential evolution) \cite{Storn1997}.
 
-Algoritmos baseados em populações são uma alternativa comum para a solução de problemas de otimização em engenharia. Tais algoritmos normalmente consistem de um ciclo iterativo, no qual um conjunto de soluções-candidatas ao problema são repetidamente sujeitas a operadores de variação e seleção, de forma a promover uma exploração do espaço de variáveis do problema em busca de um ponto de ótimo (máximo ou mínimo) de uma dada função-objetivo.
-Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como evolução diferencial (DE, do inglês differential evolution)(Storn and Price, 1997).
+A Evolução Diferencial (ED) é um algoritmo evolutivo que se baseia nos mecanismos de seleção natural e na genética de populações, e utiliza operadores de mutação, cruzamento e seleção para gerar novos indivíduos em busca do mais adaptado \cite{Rocha2011}. Inicialmente é realizada uma escolha aleatória com distribuição uniforme de uma população composta por Np indivíduos, que são denominados vetores, os quais devem cobrir todo o espaço de busca \cite{Figueiredo2014}.
+
+Após isso, ocorre a mutação, onde estes vetores sofrem modificações, o que faz surgir novos indivíduos, denominados vetores doadores, pela adição da diferença ponderada entre dois indivíduos escolhidos aleatoriamente da população inicial a um terceiro indivíduo que também é escolhido de forma aleatória com distribuição uniforme da população original \cite{Paiva2011}.
+
+Posteriormente ocorre a operação de cruzamento, onde os vetores doadores são combinados com os componentes de um outro vetor escolhido aleatoriamente, chamado de vetor alvo, a fim de gerar o vetor denominado experimental. Este processo é conhecido por cruzamento \cite{Oliveira2006}.
+
+Por fim, a seleção é feita comparando o valor de custo do vetor experimental e do vetor alvo, sendo assim, se o custo do vetor experimental for menor que o custo do vetor alvo, o vetor alvo da geração seguinte será o vetor experimental, caso contrário, o vetor alvo da geração seguinte será o vetor alvo da geração atual \cite{Lacerda2010}.
+
+O procedimento é finalizado por meio de algum critério de parada, o qual pode ser: um número determinado de iterações consecutivas, um tempo computacional determinado, um número máximo de iterações ou ainda, quando um número máximo de avaliações de indivíduos é atingido \cite{Rosario2011}.
+
+As principais etapas de um algoritmo de evolução diferencial clássico estão mostradas na Figura 1.
+
+**Adicionar Figura**
+
 
 ## Design do Experimento
 
@@ -433,5 +444,3 @@ falta:
 \renewcommand\refname{Referências Bibliográficas}
 \bibliographystyle{unsrt}
 \bibliography{referencias}
-
-
