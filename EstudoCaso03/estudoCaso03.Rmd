@@ -83,7 +83,7 @@ options(Encoding="UTF-8")
 ## Descrição do problema
 
 Suponha que um pesquisador está interessado em investigar o efeito de duas configurações distintas de um algoritmo em seu desempenho para uma dada classe de problemas de otimização.
-Como forma de análise deste problema, foi proposto a tarefa de efetuar a  comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste fornecida. O objetivo deste estudo é responder às seguintes perguntas:
+Como forma de análise deste problema, foi proposta a tarefa de efetuar a  comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste fornecida. O objetivo deste estudo é responder às seguintes perguntas:
 
 • Há alguma diferença no desempenho médio do algoritmo quando equipado com estas diferentes configurações, para a classe de problemas de interesse? 
 
@@ -109,7 +109,8 @@ O procedimento é finalizado por meio de algum critério de parada, o qual pode 
 
 As principais etapas de um algoritmo de evolução diferencial clássico estão mostradas na Figura 1.
 
-**Adicionar Figura**
+
+![Fluxograma do algortimo de evolução diferencial clássico](fluxograma.png){#id .class width=50% height=50%}
 
 
 ## Design do Experimento
@@ -126,8 +127,6 @@ recpars2 <- list(name = "recombination_linear")
 mutpars2 <- list(name = "mutation_rand", f = 1.5)
 ```
 
-**Retirado do enunciado do exercício**
-
 Além disto, os seguintes parâmetros experimentais foram dados para este estudo:
 
 • Mínima diferença de importância prática (padronizada): (d* = $\delta$*/$\sigma$) = 0.5
@@ -136,20 +135,20 @@ Além disto, os seguintes parâmetros experimentais foram dados para este estudo
 
 • Potência mínima desejada (para o caso d = d*): $\pi$ = 1 - $\beta$ = 0.8
 
-Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150 que podem ser geradas a partir de uma dada dimensão dim com o seguinte código:
+Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150 que podem ser .
 
-Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessario que se execute os algortimos em uma quantidade de dimensões representativas e também é necessário que se execute cada instância um numero de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejadas. Realizar um alto número de execuções em cada dimensão e realizar a coleta para todas as dimensões pode-se tornar computacionalmente pesado ou até infactível em alguns casos. Este é um desses casos. Portanto será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instancias (no nosso caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero minimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
+Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessario que sejam executados os algortimos em uma quantidade de dimensões representativas, além de que cada instância seja executada um número de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejadas. Realizar um alto número de execuções em cada dimensão e realizar a coleta para todas as dimensões pode ser computacionalmente pesado ou infactível em alguns casos. Este é um desses casos. Portanto será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instancias (neste caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero mínimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
 
 Como primeiro passo, deve-se estimar o número de instâncias de acordo com o parâmetros experimentais fornecidos:
 
-O método calc_instances do pacote CAISEr em linguagem R **citar** permite estimar o número de instâncias mínimas necessárias para se comparar múltiplos algoritmos, de modo que os requisitos experimentais sejam atingidos. O parâmetro número de comparações ncomparisons é dado pela seguinte equação, onde $K$ é o número de algoritmos que se deseja comparar:
+O método calc_instances do pacote CAISEr em linguagem R \cite{CAISEr} permite estimar o número de instâncias mínimas necessárias para se comparar múltiplos algoritmos, de modo que os requisitos experimentais sejam atingidos. O parâmetro número de comparações ncomparisons é dado pela seguinte equação, onde $K$ é o número de algoritmos que se deseja comparar:
 
 \begin{equation}
   \label{eq:ncomparisons}
   \texttt{ncomparisons} = \frac{K\times(K-1)}{2}
 \end{equation}
 
-Como $K$ = 2, tem-se que ncomparisons = 1.
+Como $K$ = 2 para o problema em questão, tem-se que ncomparisons = 1.
 
 ```{r}
 # dados do trabalho
@@ -166,7 +165,9 @@ out <- calc_instances(ncomparisons = 1,
 cat('Número de instâncias necessárias:', out$ninstances)
 ```
 
-Como pode-se concluir pelo resultado da execução do algoritmo, o número de instâncias necessárias para se realizar o experimento descrito é 34. Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 34 instâncias:
+Como pode-se concluir pelo resultado da execução da função, o número de instâncias necessárias para se realizar o experimento descrito é 34. 
+
+Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 34 instâncias:
 
 ```{r}
 num_dims <- 34
@@ -174,9 +175,10 @@ dims = round(linspace(2, 150, num_dims), digits = 0)
 print(dims)
 ```
 
-Seguindo o Algoritmo 2 proposto por Campelo e Takahashi (2018), deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi (2018)) \cite{campelo2019}
+Seguindo o Algoritmo 2 proposto por Campelo e Takahashi (2018), deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi (2018)) \cite{campelo2019}.
 
 Execução piloto com escolha inicial de 10 execuções e com os 34 blocos, obtidos anteriormente.
+
 ```{r, include=TRUE}
 suppressPackageStartupMessages(library(ExpDE))
 suppressPackageStartupMessages(library(smoof))
@@ -407,16 +409,86 @@ if (file.exists(file_name)) {
 }
 ```
 
-Abaixo podemos ver os dados coletados bem como o número de execuções de cada instância
+Abaixo pode ser visto os dados coletados bem como o número de execuções de cada instância: 
 ```{r}
 data
 ```
 
 Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. Mas a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
 
+Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas \cite{anova_premissas}: 
 
-A partir daqui, já teremos os dados para realizar o teste ANOVA.
+•	As amostras devem ser independentes;
 
+•	As amostras devem apresentar distribuição normal;
+
+•	As variâncias podem ser consideradas iguais (homocedasticidade).
+
+**Verificação da independência**: Por ser dois algortimos diferentes, tem-se a independência das amostras.
+
+**Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses \cite{teste_norm_R}:
+
+$$\begin{cases} H_0: \text{A amostra provém de uma população com distribuição normal}\\H_1: \text{A amostra não provém de uma população com distribuição normal} \end{cases}$$
+```{r, include=TRUE}
+#Execução do Shapiro Wilk
+shapiro.test(data$mean.instance1)
+shapiro.test(data$mean.instance2)
+```
+**Eu fiz o teste já na coluna meaninstance 1 e 2**
+
+
+**Matheus, o trabalho do seu amigo dá um pvalor menor e outro maior e ele assumiu que é normal... ai nao sei hahahah**
+
+
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Como pode ser visto, em uma das análises a hipótese nula foi rejeitada e, portanto, o teste ANOVA. não pode ser executado.
+Como alternativa, tem-se o teste de Friedman com as seguintes hipóteses:
+
+$$\begin{cases} H_0: \text{A média das duas populações são iguais}\\H_1: \text{A média das duas populações são diferentes} \end{cases}$$
+
+```{r, include=TRUE}
+y <- c(data$mean.instance1, data$mean.instance2)
+group <- as.factor(c(rep(1, length(data$mean.instance1)), rep(2, length(data$mean.instance2))))
+datatable = cbind (y, group)
+friedman.test(datatable)
+```
+
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amostras não são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados  do teste, pode-se considerar que a média dos grupos não são homogêneas.
+
+**Problemas: se considerarmos que o shapiro wilk deu que nao sao normais, precisamos fazer um teste diferente do ANOVA. Foi o que eu fiz com o teste de Friedman. No entanto, como esperado, deu que as médias são diferentes. No entanto, como não consideramos normais, não podemos usar o teste de Tukey... Mas não achei outro que poderia ser usado... na aula o professor falou que o anova é robusto a pesquenas violações, mas não sei interpretar se podemos ignorar o shapior e fazar o anova...**
+
+**Portanto, precisamos decidir o que será feito ou se a gente encontra um teste nao parametrico para usar depois que o teste de Friedman teve a hipótese nula rejeitada**
+
+** GAlera... coloquei esse gráfico aqui pq na pior das hipóteses podemos escrever que não conseguimos testar mas visualmente o algoritmo dois é melhor**
+
+```{r, include=FALSE}
+#Organização dos dados para o gráfico
+med1t = t(data$mean.instance1)
+med2t = t(data$mean.instance2)
+colnames(med1t) <- as.character(data$dim)
+colnames(med2t) <- as.character(data$dim)
+medAlg1 <- as.vector(colMeans(med1t))
+medAlg2 <- as.vector(colMeans(med2t))
+
+# Dados para grafico do Algoritmo 1
+label <- rep('Algoritmo 1', 34)
+var <- data$dim
+vec <- melt(medAlg1, id.vars = NULL)
+graf1 <- cbind(var, vec, label)
+
+# Dados para o grafico do Algoritmo 2
+label <- rep('Algoritmo 2', 34)
+var <- data$dim
+vec <- melt(medAlg2, id.vars = NULL)
+graf2 <- cbind(var, vec, label)
+```
+
+```{r, include=TRUE}
+merged <- rbind(graf1, graf2)
+p <- ggplot(merged, aes(x = var, y = value, color = label)) + geom_line()
+p + labs(x = "Dimensão", y = "Valor médio") +
+    guides(color=guide_legend(title="Legenda")) +
+    scale_color_manual(values = c("green", "blue"))
+```
 
 
 falta:
