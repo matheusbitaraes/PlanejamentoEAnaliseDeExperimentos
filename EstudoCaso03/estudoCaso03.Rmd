@@ -449,17 +449,46 @@ $$\begin{cases} H_0: \text{A média das duas populações são iguais}\\H_1: \te
 y <- c(data$mean.instance1, data$mean.instance2)
 group <- as.factor(c(rep(1, length(data$mean.instance1)), rep(2, length(data$mean.instance2))))
 datatable = cbind (y, group)
-datatable1 = c(data$mean.instance1)
-datatable2 = c(data$mean.instance2)
-
 friedman.test(datatable)
 ```
 
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amostras não são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados dos testes dispostos acima, onde o p-valor é maior que 0.05, pode-se considerar que a média das populações são diferentes.
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amostras não são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados  do teste, pode-se considerar que a média dos grupos não são homogêneas.
 
 **Problemas: se considerarmos que o shapiro wilk deu que nao sao normais, precisamos fazer um teste diferente do ANOVA. Foi o que eu fiz com o teste de Friedman. No entanto, como esperado, deu que as médias são diferentes. No entanto, como não consideramos normais, não podemos usar o teste de Tukey... Mas não achei outro que poderia ser usado... na aula o professor falou que o anova é robusto a pesquenas violações, mas não sei interpretar se podemos ignorar o shapior e fazar o anova...**
 
 **Portanto, precisamos decidir o que será feito ou se a gente encontra um teste nao parametrico para usar depois que o teste de Friedman teve a hipótese nula rejeitada**
+
+** GAlera... coloquei esse gráfico aqui pq na pior das hipóteses podemos escrever que não conseguimos testar mas visualmente o algoritmo dois é melhor**
+
+```{r, include=FALSE}
+#Organização dos dados para o gráfico
+med1t = t(data$mean.instance1)
+med2t = t(data$mean.instance2)
+colnames(med1t) <- as.character(data$dim)
+colnames(med2t) <- as.character(data$dim)
+medAlg1 <- as.vector(colMeans(med1t))
+medAlg2 <- as.vector(colMeans(med2t))
+
+# Dados para grafico do Algoritmo 1
+label <- rep('Algoritmo 1', 34)
+var <- data$dim
+vec <- melt(medAlg1, id.vars = NULL)
+graf1 <- cbind(var, vec, label)
+
+# Dados para o grafico do Algoritmo 2
+label <- rep('Algoritmo 2', 34)
+var <- data$dim
+vec <- melt(medAlg2, id.vars = NULL)
+graf2 <- cbind(var, vec, label)
+```
+
+```{r, include=TRUE}
+merged <- rbind(graf1, graf2)
+p <- ggplot(merged, aes(x = var, y = value, color = label)) + geom_line()
+p + labs(x = "Dimensão", y = "Valor médio") +
+    guides(color=guide_legend(title="Legenda")) +
+    scale_color_manual(values = c("green", "blue"))
+```
 
 
 falta:
