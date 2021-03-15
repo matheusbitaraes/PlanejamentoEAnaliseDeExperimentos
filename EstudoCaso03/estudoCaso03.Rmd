@@ -83,7 +83,7 @@ options(Encoding="UTF-8")
 ## Descrição do problema
 
 Suponha que um pesquisador está interessado em investigar o efeito de duas configurações distintas de um algoritmo em seu desempenho para uma dada classe de problemas de otimização.
-Como forma de análise deste problema, foi proposta a tarefa de efetuar a  comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste fornecida. O objetivo deste estudo é responder às seguintes perguntas:
+Como forma de análise, foi proposta a tarefa de efetuar a  comparação experimental de duas configurações em uma classe de problemas, representada por um conjunto de instâncias de teste fornecidas. O objetivo deste estudo é responder às seguintes perguntas:
 
 • Há alguma diferença no desempenho médio do algoritmo quando equipado com estas diferentes configurações, para a classe de problemas de interesse? 
 
@@ -95,22 +95,22 @@ Como forma de análise deste problema, foi proposta a tarefa de efetuar a  compa
 ## Introdução
 
 Algoritmos baseados em populações são uma alternativa comum para a solução de problemas de otimização em engenharia. Tais algoritmos normalmente consistem de um ciclo iterativo, no qual um conjunto de soluções-candidatas ao problema são repetidamente sujeitas a operadores de variação e seleção, de forma a promover uma exploração do espaço de variáveis do problema em busca de um ponto ótimo (máximo ou mínimo) de uma dada função-objetivo.
-Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como evolução diferencial (DE, do inglês differential evolution) \cite{Storn1997}.
+Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como Evolução Diferencial - ED (do inglês, differential evolution - ED) \cite{Storn1997}.
 
-A Evolução Diferencial (ED) é um algoritmo evolutivo que se baseia nos mecanismos de seleção natural e na genética de populações, e utiliza operadores de mutação, cruzamento e seleção para gerar novos indivíduos em busca do mais adaptado \cite{Rocha2011}. Inicialmente é realizada uma escolha aleatória com distribuição uniforme de uma população composta por Np indivíduos, que são denominados vetores, os quais devem cobrir todo o espaço de busca \cite{Figueiredo2014}.
+A Evolução Diferencial é um algoritmo evolutivo que se baseia nos mecanismos de seleção natural e na genética de populações e utiliza operadores de mutação, cruzamento e seleção para gerar novos indivíduos em busca do mais adaptado \cite{Rocha2011}. Inicialmente é realizada uma escolha aleatória com distribuição uniforme de uma população composta por Np indivíduos, que são denominados vetores, os quais devem cobrir todo o espaço de busca \cite{Figueiredo2014}.
 
 Após isso, ocorre a mutação, onde estes vetores sofrem modificações, o que faz surgir novos indivíduos, denominados vetores doadores, pela adição da diferença ponderada entre dois indivíduos escolhidos aleatoriamente da população inicial a um terceiro indivíduo que também é escolhido de forma aleatória com distribuição uniforme da população original \cite{Paiva2011}.
 
 Posteriormente ocorre a operação de cruzamento, onde os vetores doadores são combinados com os componentes de um outro vetor escolhido aleatoriamente, chamado de vetor alvo, a fim de gerar o vetor denominado experimental. Este processo é conhecido por cruzamento \cite{Oliveira2006}.
 
-Por fim, a seleção é feita comparando o valor de custo do vetor experimental e do vetor alvo, sendo assim, se o custo do vetor experimental for menor que o custo do vetor alvo, o vetor alvo da geração seguinte será o vetor experimental, caso contrário, o vetor alvo da geração seguinte será o vetor alvo da geração atual \cite{Lacerda2010}.
+Por fim, a seleção é feita comparando o valor de custo do vetor experimental e do vetor alvo. Sendo assim, se o custo do vetor experimental for menor que o custo do vetor alvo, o vetor alvo da geração seguinte será o vetor experimental, caso contrário, o vetor alvo da geração seguinte será o vetor alvo da geração atual \cite{Lacerda2010}.
 
 O procedimento é finalizado por meio de algum critério de parada, o qual pode ser: um número determinado de iterações consecutivas, um tempo computacional determinado, um número máximo de iterações ou ainda, quando um número máximo de avaliações de indivíduos é atingido \cite{Rosario2011}.
 
 As principais etapas de um algoritmo de evolução diferencial clássico estão mostradas na Figura 1.
 
 
-![Fluxograma do algortimo de evolução diferencial clássico](fluxograma.jpeg){#id .class width=50% height=50%}
+![Fluxograma do algortimo de evolução diferencial clássico](fluxograma.png){#id .class width=50% height=50%}
 
 
 ## Design do Experimento
@@ -135,23 +135,24 @@ Além disto, os seguintes parâmetros experimentais foram dados para este estudo
 
 • Potência mínima desejada (para o caso d = d*): $\pi$ = 1 - $\beta$ = 0.8
 
-Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150 que podem ser .
+Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150.
 
-Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessario que sejam executados os algortimos em uma quantidade de dimensões representativas, além de que cada instância seja executada um número de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejadas. Realizar um alto número de execuções em cada dimensão e realizar a coleta para todas as dimensões pode ser computacionalmente pesado ou infactível em alguns casos. Este é um desses casos. Portanto será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instancias (neste caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero mínimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
+Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessario que sejam executados os algortimos em uma quantidade de dimensões representativas, além de que cada instância seja executada um número de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejadas. Realizar um alto número de execuções em cada dimensão e realizar a coleta para todas as dimensões pode ser computacionalmente pesado ou infactível em alguns casos, como este, por exemplo. Portanto, será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instancias (neste caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero mínimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
 
 Como primeiro passo, deve-se estimar o número de instâncias de acordo com o parâmetros experimentais fornecidos:
 
-O método calc_instances do pacote CAISEr em linguagem R \cite{CAISEr} permite estimar o número de instâncias mínimas necessárias para se comparar múltiplos algoritmos, de modo que os requisitos experimentais sejam atingidos. O parâmetro número de comparações ncomparisons é dado pela seguinte equação, onde $K$ é o número de algoritmos que se deseja comparar:
+A função calc_instances do pacote CAISEr \cite{CAISEr} permite estimar o número mínimo de instâncias necessárias para se comparar múltiplos algoritmos, de maneira que os requisitos experimentais sejam atingidos. O número de comparações (ncomparisons) é dado pela seguinte equação: 
 
-\begin{equation}
-  \label{eq:ncomparisons}
-  \texttt{ncomparisons} = \frac{K\times(K-1)}{2}
-\end{equation}
+\begin{equation} ncomparisons = \frac{K\times(K-1)}{2} \end{equation}
+
+onde $K$ é o número de algoritmos que se deseja comparar.
+
+**alterei este parágrafo porque era cpóia ue a menina me enviou. Ai evitamos qualquer stress**
 
 Como $K$ = 2 para o problema em questão, tem-se que ncomparisons = 1.
 
 ```{r}
-# dados do trabalho
+# Dados do trabalho
 alpha <- 0.05
 delta <- 0.5
 beta <- 0.2
@@ -165,9 +166,7 @@ out <- calc_instances(ncomparisons = 1,
 cat('Número de instâncias necessárias:', out$ninstances)
 ```
 
-Como pode-se concluir pelo resultado da execução da função, o número de instâncias necessárias para se realizar o experimento descrito é 34. 
-
-## Coleta dos Dados
+Pode-se concluir pelo resultado da execução da função que são necessárias 34 instâncias para se realizar o experimento descrito. 
 
 Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 34 instâncias:
 
@@ -177,9 +176,9 @@ dims = round(linspace(2, 150, num_dims), digits = 0)
 print(dims)
 ```
 
-Seguindo o Algoritmo 2 proposto por Campelo e Takahashi (2018), deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi (2018)) \cite{campelo2019}.
+Seguindo o Algoritmo 2 proposto por Campelo e Takahashi, deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi \cite{campelo2019}.
 
-Execução piloto com escolha inicial de 10 execuções e com os 34 blocos, obtidos anteriormente.
+Execução piloto com a escolha inicial de 10 execuções e com os 34 blocos obtidos anteriormente.
 
 ```{r, include=TRUE}
 suppressPackageStartupMessages(library(ExpDE))
@@ -190,7 +189,8 @@ num_exec <- 10
 
 if (file.exists(file_name)) {
   
-  # se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. Apenas será feita a leitura do arquivo
+  # Se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. 
+  #Apenas será feita a leitura do arquivo
   print("Arquivo de backup encontrado. Recuperando dados ao inves de realizar uma nova execução")
   initial_data <- read.csv(file=file_name, header = TRUE, sep=",")
   dims <- initial_data$dim
@@ -202,7 +202,7 @@ if (file.exists(file_name)) {
   
   # Função para execução de n funções de rosenbrock para determinada dimensao
   executeRosenbrock <- function(dim, num_exec) {
-    # Função de ronsebrock para determinada dimensao
+    # Função de Ronsebrock para determinada dimensao
     fn <<- function(X) {
           if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
           Y <- apply(X, MARGIN = 1,
@@ -210,7 +210,7 @@ if (file.exists(file_name)) {
           return(Y)
     }
     
-    # definições dadas no enunciado
+    # Definições dadas no enunciado
     selpars <- list(name = "selection_standard")
     stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
     probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
@@ -220,7 +220,7 @@ if (file.exists(file_name)) {
     y2 <- vector(,num_exec)
     for (i in 1:num_exec){
       
-      # rodando problema para instancia 1
+      # Rodando problema para instancia 1
       out <-  ExpDE(mutpars = mutpars1,
               recpars = recpars1,
               popsize = popsize,
@@ -230,7 +230,7 @@ if (file.exists(file_name)) {
               showpars = list(show.iters = "dots", showevery = 20))
       y1[i] <- out$Fbest
       
-      # rodando problema para instancia 2
+      # Rodando problema para instancia 2
       out <-  ExpDE(mutpars = mutpars2,
               recpars = recpars2,
               popsize = popsize,
@@ -262,7 +262,7 @@ if (file.exists(file_name)) {
     for (d in 1:num_dims){
       dim <- dims[d]
       
-      # multiplas execuções
+      # Múltiplas execuções
       Y = executeRosenbrock(dim, num_exec)
       
       cat("dim:",dim, " \n")
@@ -287,10 +287,10 @@ if (file.exists(file_name)) {
     return(data)
   }
   
-  # execução das funções de rosenbrock
+  # Execução das funções de rosenbrock
   initial_data = executeRosenbrockForDims(dims, num_exec)
   
-  # escreve no arquivo de backup os resultados coletados
+  # Escreve no arquivo de backup os resultados coletados
   write.csv(initial_data, file = file_name)
 }
 
@@ -306,7 +306,8 @@ num_exec <- 10
 
 if (file.exists(file_name)) {
   
-  # se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. Apenas será feita a leitura do arquivo
+  # Se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. 
+  # Apenas será feita a leitura do arquivo
   print("Arquivo de backup encontrado. Recuperando dados ao inves de realizar uma nova execução")
   data <- read.csv(file=file_name, header = TRUE, sep=",")
 } else {
@@ -314,7 +315,7 @@ if (file.exists(file_name)) {
   se_opt <- 0.05 # se pretendido
   n_max <- 50 # máximo número de execuções
   
-  # loop de dimensões
+  # Loop de dimensões
   for (d in 1:num_dims) {
     dim <- data$dim[d]
     mu1 <- data$mean.instance1[d]
@@ -324,7 +325,7 @@ if (file.exists(file_name)) {
     n1 <- 10 # número de execuções que já foram realizadas
     n2 <- 10
     
-    # Função de ronsebrock para determinada dimensao
+    # Função de Ronsebrock para determinada dimensão
     fn <- function(X) {
           if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
           Y <- apply(X, MARGIN = 1,
@@ -332,23 +333,23 @@ if (file.exists(file_name)) {
           return(Y)
     }
     
-    # definições dadas no enunciado
+    # Definições dadas no enunciado
     selpars <- list(name = "selection_standard")
     stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
     probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
     popsize <- 5*dim
     
-    # calculo do se
+    # Calculo do se
     se <- sqrt(sd1^2/n1 + sd2^2/n2)
     
     cat("\n se inicial:", se)
     
-    # loop de execuções
+    # Loop de execuções
     while (se > se_opt && n1 + n2 < n_max){
       ropt <- sd1/sd2
       if (n1/n2 < ropt){
         
-        # executa algoritmo 1
+        # Executa algoritmo 1
         out <- ExpDE(mutpars = mutpars1,
         recpars = recpars1,
         popsize = popsize,
@@ -358,7 +359,7 @@ if (file.exists(file_name)) {
         showpars = list(show.iters = "dots", showevery = 20))
         y1 <- out$Fbest
         
-        # atualiza parâmetros
+        # Atualiza parâmetros
         mu_ <- (mu1*n1 + y1)/(n1+1)
         sd_ <- sqrt(((n1-1)*sd1^2 + (y1 - mu_)*(y1 - mu1))/n1)
         mu1 <- mu_
@@ -366,7 +367,7 @@ if (file.exists(file_name)) {
         n1 <- n1 + 1
       } else {
         
-        # executa algoritmo 2
+        # Executa algoritmo 2
         out <- ExpDE(mutpars = mutpars2,
         recpars = recpars2,
         popsize = popsize,
@@ -376,7 +377,7 @@ if (file.exists(file_name)) {
         showpars = list(show.iters = "dots", showevery = 20))
         y2 <- out$Fbest
         
-        # atualiza parâmetros
+        # Atualiza parâmetros
         mu_ <- (mu2*n2 + y2)/(n2+1)
         sd_ <- sqrt(((n2-1)*sd2^2 + (y2 - mu_)*(y2 - mu2))/n2)
         mu2 <- mu_
@@ -385,7 +386,7 @@ if (file.exists(file_name)) {
         
       }
       
-      # atualiza se
+      # Atualiza se
       se <- sqrt(sd1^2/n1 + sd2^2/n2)
       cat("se:", se, " \n")
       cat("dim:",dim, " \n")
@@ -406,21 +407,23 @@ if (file.exists(file_name)) {
     data$n2[d] <- n2
   }
   
-  # escreve dados no arquivo de backup
+  # Escreve dados no arquivo de backup
   write.csv(data, file = file_name)
 }
 ```
 
 Abaixo pode ser visto os dados coletados bem como o número de execuções de cada instância: 
+
 ```{r}
 data
 ```
 
 Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. Mas a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
 
-## Teste de Hipóteses
+**Aqui é minimizar o limite de precisao?**
 
-Optou-se por utilizar o ANOVA para realizar a comparação das amostras. Será realizada uma validação das premissas *a posteriori*.
+**REALIZAÇÃO DO PRIMEIRO TESTE ANOVA**
+Anova inicial:
 ```{r}
 d <- data.frame(dim = rep(data$dim,2), config = c(rep(1,num_dims), rep(2,num_dims)), Y = c(data$mean.instance1, data$mean.instance2))
 
@@ -431,6 +434,11 @@ for (i in 1:2){
 model <- aov(Y~dim+config, data = d)
 summary(model)
 ```
+
+```{r}
+shapiro.test(model$residuals)
+```
+
 
 Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas \cite{anova_premissas}: 
 
@@ -448,21 +456,21 @@ $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuiç�
 ```{r}
 shapiro.test(model$residuals)
 ```
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Como pode ser visto pelo teste acima, não se pode assumir normalidade para este modelo e portanto o ANOVA não pode ser utilizado para estes dados.
 
-Pode-se tentar realizar uma transformação logaritmica nos dados a fim de se conseguir residuos normalizados no ANOVA:
+Rejeitou, portanto não podemos assumir normalidade. Iremos tentar o log.
+
 ```{r}
-model_log <- aov(log(Y)~dim+config, data = d)
+model_log <- aov(log(log(Y))~dim+config, data = d)
 summary(model_log)
 ```
 
-Validação de normalidade dos residuos do modelo com escala logaritmica:
+Validação de normalidade dos residuos do modelo com escala logaritmica
 ```{r}
 shapiro.test(model_log$residuals)
 ```
 
-Como pode-se observar pelo resultado do teste de Shapiro-Wilk, não podemos assumir normalidade para as amostras em escala logaritmica. O que implica que não podemos realizar o ANOVA.
 
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Como pode ser visto, em uma das análises a hipótese nula foi rejeitada e, portanto, o teste ANOVA. não pode ser executado.
 Como alternativa, tem-se o teste de Friedman com as seguintes hipóteses:
 
 $$\begin{cases} H_0: \text{A média das duas populações são iguais}\\H_1: \text{A média das duas populações são diferentes} \end{cases}$$
@@ -476,7 +484,7 @@ friedman.test(datatable)
 
 Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amostras não são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados  do teste, pode-se considerar que a média dos grupos não são homogêneas.
 
-**explicação grafica**
+Visto que os dados não possuem a média dos grupos com uma distribuição homogênea, foi plotado um gráfico com o rendimento dos dois algoritmos para uma análise visual.
 
 ```{r, include=FALSE}
 # Organização dos dados para o gráfico
@@ -508,13 +516,9 @@ p + labs(x = "Dimensão", y = "Valor médio") +
     scale_color_manual(values = c("green", "blue"))
 ```
 
-falta:
-- coleta e tabulação dos dados
-- testes das hipoteses
-- estimacao da magnitude da diferença entre os metodos
-- verificação das premissas dos testes
-- conclusoes
-- possiveis limitações do estudo e sugestoes de melhoria
+Dado o gráfico anterior, é possível observar que a solução ótima do Algoritmo 1 é maior que a solução ótima do Algoritmo 2 para todas as dimensões escolhidas, como pode ser confirmado analisando as colunas mean.instance1 e mean.instance2 da tabela data. Portanto, conclui-se, sem a necessidade de novos testes, que o Algoritmo 2 possui melhor solução média em relação ao primeiro algoritmo.
+
+**Achei melhor não entrar no mérito da existência ou não de testes... Não perguntamos o professor e se a gente fizer conclusões erradas ficará pior... ai pensei em concluir essa informação no visualmente e pronto. o que acham?**
 
 ## Discussões e Conclusões
 
