@@ -95,7 +95,7 @@ Como forma de análise, foi proposta a tarefa de efetuar a  comparação experim
 ## Introdução
 
 Algoritmos baseados em populações são uma alternativa comum para a solução de problemas de otimização em engenharia. Tais algoritmos normalmente consistem de um ciclo iterativo, no qual um conjunto de soluções-candidatas ao problema são repetidamente sujeitas a operadores de variação e seleção, de forma a promover uma exploração do espaço de variáveis do problema em busca de um ponto ótimo (máximo ou mínimo) de uma dada função-objetivo.
-Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como Evolução Diferencial - ED (do inglês, differential evolution - ED) \cite{Storn1997}.
+Dentre estes algoritmos, um método que tem sido bastante utilizado nos últimos anos é conhecido como Evolução Diferencial - ED (do inglês, differential evolution - DE) \cite{Storn1997}.
 
 A Evolução Diferencial é um algoritmo evolutivo que se baseia nos mecanismos de seleção natural e na genética de populações e utiliza operadores de mutação, cruzamento e seleção para gerar novos indivíduos em busca do mais adaptado \cite{Rocha2011}. Inicialmente é realizada uma escolha aleatória com distribuição uniforme de uma população composta por Np indivíduos, que são denominados vetores, os quais devem cobrir todo o espaço de busca \cite{Figueiredo2014}.
 
@@ -110,7 +110,7 @@ O procedimento é finalizado por meio de algum critério de parada, o qual pode 
 As principais etapas de um algoritmo de evolução diferencial clássico estão mostradas na Figura 1.
 
 
-![Fluxograma do algortimo de evolução diferencial clássico](fluxograma.png){#id .class width=50% height=50%}
+![Fluxograma do algortimo de evolução diferencial clássico](fluxograma.jpeg){#id .class width=50% height=50%}
 
 
 ## Design do Experimento
@@ -168,6 +168,8 @@ cat('Número de instâncias necessárias:', out$ninstances)
 
 Pode-se concluir pelo resultado da execução da função que são necessárias 34 instâncias para se realizar o experimento descrito. 
 
+## Coleta dos Dados
+
 Para que seja possível utilizar todo o intervalo de valores possíveis de D ($D \in [2, 150]$), espaçou-se uniformemente as 34 instâncias:
 
 ```{r}
@@ -190,7 +192,7 @@ num_exec <- 10
 if (file.exists(file_name)) {
   
   # Se ja existir uma arquivo com o dados da execução, não é necessário executar novamente. 
-  #Apenas será feita a leitura do arquivo
+  # Apenas será feita a leitura do arquivo
   print("Arquivo de backup encontrado. Recuperando dados ao inves de realizar uma nova execução")
   initial_data <- read.csv(file=file_name, header = TRUE, sep=",")
   dims <- initial_data$dim
@@ -420,10 +422,10 @@ data
 
 Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. Mas a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
 
-**Aqui é minimizar o limite de precisao?**
+## Teste de Hipóteses
 
-**REALIZAÇÃO DO PRIMEIRO TESTE ANOVA**
-Anova inicial:
+Optou-se por utilizar o ANOVA para realizar a comparação das amostras. Será realizada uma validação das premissas *a posteriori*.
+
 ```{r}
 d <- data.frame(dim = rep(data$dim,2), config = c(rep(1,num_dims), rep(2,num_dims)), Y = c(data$mean.instance1, data$mean.instance2))
 
@@ -434,11 +436,6 @@ for (i in 1:2){
 model <- aov(Y~dim+config, data = d)
 summary(model)
 ```
-
-```{r}
-shapiro.test(model$residuals)
-```
-
 
 Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas \cite{anova_premissas}: 
 
@@ -456,21 +453,20 @@ $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuiç�
 ```{r}
 shapiro.test(model$residuals)
 ```
+Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Como pode ser visto pelo teste acima, não se pode assumir normalidade para este modelo e portanto o ANOVA não pode ser utilizado para estes dados.
 
-Rejeitou, portanto não podemos assumir normalidade. Iremos tentar o log.
-
+Pode-se tentar realizar uma transformação logaritmica nos dados a fim de se conseguir residuos normalizados no ANOVA:
 ```{r}
-model_log <- aov(log(log(Y))~dim+config, data = d)
+model_log <- aov(log(Y)~dim+config, data = d)
 summary(model_log)
 ```
 
-Validação de normalidade dos residuos do modelo com escala logaritmica
+Validação de normalidade dos residuos do modelo com escala logaritmica:
 ```{r}
 shapiro.test(model_log$residuals)
 ```
+Como pode-se observar pelo resultado do teste de Shapiro-Wilk, não podemos assumir normalidade para as amostras em escala logaritmica. O que implica que não podemos realizar o ANOVA.
 
-
-Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Como pode ser visto, em uma das análises a hipótese nula foi rejeitada e, portanto, o teste ANOVA. não pode ser executado.
 Como alternativa, tem-se o teste de Friedman com as seguintes hipóteses:
 
 $$\begin{cases} H_0: \text{A média das duas populações são iguais}\\H_1: \text{A média das duas populações são diferentes} \end{cases}$$
