@@ -416,6 +416,24 @@ data
 
 Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. Mas a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
 
+**REALIZAÇÃO DO PRIMEIRO TESTE ANOVA**
+Anova inicial:
+```{r}
+d <- data.frame(dim = rep(data$dim,2), config = c(rep(1,num_dims), rep(2,num_dims)), Y = c(data$mean.instance1, data$mean.instance2))
+
+for (i in 1:2){
+  d[, i] <- as.factor(d[, i])
+}
+
+model <- aov(Y~dim+config, data = d)
+summary(model)
+```
+
+```{r}
+shapiro.test(model$residuals)
+```
+
+
 Para a realização do teste ANOVA, é necessário que as seguintes premissas sejam cumpridas \cite{anova_premissas}: 
 
 •	As amostras devem ser independentes;
@@ -429,15 +447,21 @@ Para a realização do teste ANOVA, é necessário que as seguintes premissas se
 **Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses \cite{teste_norm_R}:
 
 $$\begin{cases} H_0: \text{A amostra provém de uma população com distribuição normal}\\H_1: \text{A amostra não provém de uma população com distribuição normal} \end{cases}$$
-```{r, include=TRUE}
-#Execução do Shapiro Wilk
-shapiro.test(data$mean.instance1)
-shapiro.test(data$mean.instance2)
+```{r}
+shapiro.test(model$residuals)
 ```
-**Eu fiz o teste já na coluna meaninstance 1 e 2**
 
+Rejeitou, portanto não podemos assumir normalidade. Iremos tentar o log.
 
-**Matheus, o trabalho do seu amigo dá um pvalor menor e outro maior e ele assumiu que é normal... ai nao sei hahahah**
+```{r}
+model_log <- aov(log(log(Y))~dim+config, data = d)
+summary(model_log)
+```
+
+Validação de normalidade dos residuos do modelo com escala logaritmica
+```{r}
+shapiro.test(model_log$residuals)
+```
 
 
 Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, os dados não possuem distribuição normal \cite{teste_norm_R}, caso contrário, não há evidências para se rejeitar a hipótese nula. Como pode ser visto, em uma das análises a hipótese nula foi rejeitada e, portanto, o teste ANOVA. não pode ser executado.
@@ -454,11 +478,7 @@ friedman.test(datatable)
 
 Como interpretação do teste, temos que se o p-valor < 0.05 ($\alpha$), deve-se rejeitar a hipótese nula, ou seja, as médias dos grupos de amostras não são homogêneas, caso contrário, não há evidências para se rejeitar a hipótese nula. Portanto, analisando os resultados  do teste, pode-se considerar que a média dos grupos não são homogêneas.
 
-**Problemas: se considerarmos que o shapiro wilk deu que nao sao normais, precisamos fazer um teste diferente do ANOVA. Foi o que eu fiz com o teste de Friedman. No entanto, como esperado, deu que as médias são diferentes. No entanto, como não consideramos normais, não podemos usar o teste de Tukey... Mas não achei outro que poderia ser usado... na aula o professor falou que o anova é robusto a pesquenas violações, mas não sei interpretar se podemos ignorar o shapior e fazar o anova...**
-
-**Portanto, precisamos decidir o que será feito ou se a gente encontra um teste nao parametrico para usar depois que o teste de Friedman teve a hipótese nula rejeitada**
-
-** GAlera... coloquei esse gráfico aqui pq na pior das hipóteses podemos escrever que não conseguimos testar mas visualmente o algoritmo dois é melhor**
+**explicação grafica**
 
 ```{r, include=FALSE}
 #Organização dos dados para o gráfico
@@ -489,7 +509,6 @@ p + labs(x = "Dimensão", y = "Valor médio") +
     guides(color=guide_legend(title="Legenda")) +
     scale_color_manual(values = c("green", "blue"))
 ```
-
 
 falta:
 - coleta e tabulação dos dados
