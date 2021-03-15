@@ -109,7 +109,6 @@ O procedimento é finalizado por meio de algum critério de parada, o qual pode 
 
 As principais etapas de um algoritmo de evolução diferencial clássico estão mostradas na Figura 1.
 
-
 ![Fluxograma do algortimo de evolução diferencial clássico](fluxograma.jpeg){#id .class width=50% height=50%}
 
 
@@ -139,15 +138,13 @@ Para a execuçao dos experimentos, foram utilizados os pacotes ExpDE e smoof. A 
 
 Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessario que sejam executados os algortimos em uma quantidade de dimensões representativas, além de que cada instância seja executada um número de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejadas. Realizar um alto número de execuções em cada dimensão e realizar a coleta para todas as dimensões pode ser computacionalmente pesado ou infactível em alguns casos, como este, por exemplo. Portanto, será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instancias (neste caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero mínimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
 
-Como primeiro passo, deve-se estimar o número de instâncias de acordo com o parâmetros experimentais fornecidos:
+Como primeiro passo, deve-se estimar o número de instâncias de acordo com os parâmetros experimentais fornecidos:
 
 A função calc_instances do pacote CAISEr \cite{CAISEr} permite estimar o número mínimo de instâncias necessárias para se comparar múltiplos algoritmos, de maneira que os requisitos experimentais sejam atingidos. O número de comparações (ncomparisons) é dado pela seguinte equação: 
 
 \begin{equation} ncomparisons = \frac{K\times(K-1)}{2} \end{equation}
 
 onde $K$ é o número de algoritmos que se deseja comparar.
-
-**alterei este parágrafo porque era cpóia ue a menina me enviou. Ai evitamos qualquer stress**
 
 Como $K$ = 2 para o problema em questão, tem-se que ncomparisons = 1.
 
@@ -178,9 +175,9 @@ dims = round(linspace(2, 150, num_dims), digits = 0)
 print(dims)
 ```
 
-Seguindo o Algoritmo 2 proposto por Campelo e Takahashi, deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi \cite{campelo2019}.
+Seguindo o Algoritmo 2 proposto por Campelo e Takahashi, deve-se realizar um conjunto de execuções piloto para que se possa obter os dados de média e variância das instâncias e, dessa forma, iniciar-se a execução iterativa até que se obtenha o erro padrão (a estimativa da diferença em performance entre os dois algoritmos) com a precisão pretendida (Algoritmo 1 proposto por Campelo e Takahashi) \cite{campelo2019}.
 
-Execução piloto com a escolha inicial de 10 execuções e com os 34 blocos obtidos anteriormente.
+Desta forma, foi feita uma execução piloto com a escolha inicial de 10 execuções e com os 34 blocos obtidos anteriormente.
 
 ```{r, include=TRUE}
 suppressPackageStartupMessages(library(ExpDE))
@@ -414,13 +411,13 @@ if (file.exists(file_name)) {
 }
 ```
 
-Abaixo pode ser visto os dados coletados bem como o número de execuções de cada instância: 
+Abaixo pode ser visto os dados coletados, bem como o número de execuções de cada instância: 
 
 ```{r}
 data
 ```
 
-Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. Mas a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
+Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execuçoes $n_{max}$, que era de 50 execuções. No entanto, a distribuição deste número de execuções é balanceada de uma forma que minimize o limite de precisão $se$.
 
 ## Teste de Hipóteses
 
@@ -512,13 +509,13 @@ p + labs(x = "Dimensão", y = "Valor médio") +
     scale_color_manual(values = c("green", "blue"))
 ```
 
-Dado o gráfico anterior, é possível observar que a solução ótima do Algoritmo 1 é maior que a solução ótima do Algoritmo 2 para todas as dimensões escolhidas, como pode ser confirmado analisando as colunas mean.instance1 e mean.instance2 da tabela data. Portanto, conclui-se, sem a necessidade de novos testes, que o Algoritmo 2 possui melhor solução média em relação ao primeiro algoritmo.
+Dado o gráfico anterior, é possível observar que a solução ótima do Algoritmo 1 é maior que a solução ótima do Algoritmo 2 para todas as dimensões escolhidas, como pode ser confirmado analisando as colunas *mean.instance1* e *mean.instance2* da tabela *data*. Portanto, conclui-se, sem a necessidade de novos testes, que o Algoritmo 2 possui melhor solução média em relação ao primeiro algoritmo.
 
 **Achei melhor não entrar no mérito da existência ou não de testes... Não perguntamos o professor e se a gente fizer conclusões erradas ficará pior... ai pensei em concluir essa informação no visualmente e pronto. o que acham?**
 
 ## Discussões e Conclusões
 
-O estudo teve como objetivo definir entre dois algoritmos de otimização, qual possui o melhor desempenho para uma dada classe de problemas de otimização. Os dois algoritmos a serem comparados utilizavam o método conhecido como evolução diferencial. Para a análise de desempenho utilizou-se a classe de funções Rosenbrock de dimensão entre 2 e 150. Neste caso, o algoritmo que apresentar os menores valores para suas melhores soluções quando aplicadas à função de Rosenbrock é considerado o algoritmo de melhor desempenho.
+O estudo teve como objetivo definir, entre dois algoritmos de otimização, qual possui o melhor desempenho para uma dada classe de problemas de otimização. Os dois algoritmos a serem comparados utilizavam o método conhecido como evolução diferencial. Para a análise de desempenho utilizou-se a classe de funções Rosenbrock de dimensão entre 2 e 150. Neste caso, o algoritmo que apresenta os menores valores para suas melhores soluções quando aplicadas à função de Rosenbrock é considerado o algoritmo de melhor desempenho.
 
 Inicialmente, definiu-se as duas configurações a serem utilizadas. Então, utilizou-se o método calc_instances e através dele, concluiu-se que seriam necessárias 34 instâncias, ou seja, as duas configurações deveriam ser executadas para 34 valores distintos de dimensões da função de Rosenbrock. Para cada valor de dimensão, os códigos de otimização foram executados 10 vezes inicialmente.
 
