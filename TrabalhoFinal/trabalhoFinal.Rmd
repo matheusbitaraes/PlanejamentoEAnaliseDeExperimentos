@@ -1,0 +1,20 @@
+---
+title: "Trabalho Final"
+author: "Diego Pontes, Elias Vieira, Matheus Bitarães"
+date: "Abril, 2021"
+output:
+    pdf_document:
+    fig_caption: yes
+---
+
+
+```{r, include=TRUE}
+# Leitura de arquivos 
+temp = list.files(pattern="*.csv")
+
+#myfiles = lapply(temp, read.delim)
+
+#for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
+ 
+
+```
