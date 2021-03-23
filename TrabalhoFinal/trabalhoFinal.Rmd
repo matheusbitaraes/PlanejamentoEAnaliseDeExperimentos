@@ -10,11 +10,36 @@ output:
 
 ```{r, include=TRUE}
 # Leitura de arquivos 
-temp = list.files(pattern="*.csv")
+file_names = list.files(pattern="*.csv")
+par(mfrow=c(3,3))
 
-#myfiles = lapply(temp, read.delim)
+data <-  data.frame(matrix(ncol = 2, nrow = 0))
+colnames(data) <- c("file_name","x")
 
-#for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
- 
+for (file_name in file_names) {
+  file <- read.csv(file=file_name, header = FALSE, sep=",")
+  colnames(file) <- c("file_name","x")
+  hist(file$x, breaks = 50, main=file_name)
+  file$file_name <- rep(file_name,nrow(file))
+  data <- rbind(data, file)
+}
+```
 
+```{r, include=TRUE}
+# Histograms
+
+```
+
+
+```{r, include=TRUE}
+# Boxplots
+par(mar=c(4,10,1,1))
+boxplot(x~file_name, data=data,
+main = "Boxplots das Iterações",
+#names = file_names,
+las = 2,
+#col = c("orange","orange", "red", "red"),
+horizontal = TRUE,
+ann=FALSE
+)
 ```
