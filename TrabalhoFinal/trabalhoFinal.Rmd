@@ -23,11 +23,66 @@ for (file_name in file_names) {
   file$file_name <- rep(file_name,nrow(file))
   data <- rbind(data, file)
 }
+
+#write.csv(data, file = "all_data.csv")
 ```
 
 ```{r, include=TRUE}
-# Histograms
+# Libraries
+# PLOT COLORIDO
 
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+library(forcats)
+
+# plot
+p <- data %>%
+  ggplot( aes(x=x, color=file_name, fill=file_name)) +
+    geom_histogram(alpha=0.6, binwidth = 5) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.2, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+    xlab("") +
+    ylab("distribuição de probabilidade (%)") +
+    facet_wrap(~file_name)
+
+last_plot()
+```
+
+```{r, include=TRUE}
+# Libraries
+# PLOT COLORIDO CONSIDERANDO VALORES ATÉ 1000 ITERAÇOES
+
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+library(forcats)
+
+# plot
+p <- data %>%
+  ggplot( aes(x=x, color=file_name, fill=file_name)) +
+    geom_histogram(alpha=0.6, binwidth = 5) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.2, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+  
+    xlim(c(0,1000))+
+    xlab("") +
+    ylab("distribuição de probabilidade (%)") +
+    facet_wrap(~file_name)
+
+last_plot()
 ```
 
 
