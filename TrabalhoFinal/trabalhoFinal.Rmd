@@ -12,10 +12,8 @@ output:
 # Leitura de arquivos 
 file_names = list.files(pattern="*.csv")
 par(mfrow=c(3,3))
-
 data <-  data.frame(matrix(ncol = 2, nrow = 0))
 colnames(data) <- c("file_name","x")
-
 for (file_name in file_names) {
   file <- read.csv(file=file_name, header = FALSE, sep=",")
   colnames(file) <- c("file_name","x")
@@ -23,9 +21,70 @@ for (file_name in file_names) {
   file$file_name <- rep(file_name,nrow(file))
   data <- rbind(data, file)
 }
-
 #write.csv(data, file = "all_data.csv")
 ```
+
+
+```{r, include=TRUE}
+#organizando em colunas para fazer o teste
+data_sw <-  data.frame(matrix(ncol = 9, nrow = 100))
+colnames(data_sw) <- c("C1","C2","C3","C4","C5","C6","C7","C8","C9")
+for (c in 1:9) {
+  for (r in 1:100) {
+    data_sw[r,c] <- data[(c-1)*100+r,2]
+  }
+}
+#data_sw
+apply(data_sw, 2, shapiro.test)
+```
+```{r, include=TRUE}
+#write.csv(data_sw, file = "all_data.csv")
+y <- c(data_sw$C1, data_sw$C2,data_sw$C3, data_sw$C4,data_sw$C5, data_sw$C6,data_sw$C7, data_sw$C8,data_sw$C9)
+group <- as.factor(c(rep(1, length(data_sw$C1)), rep(2, length(data_sw$C2)), rep(3, length(data_sw$C3)), rep(4, length(data_sw$C4)), rep(5, length(data_sw$C5)), rep(6, length(data_sw$C6)), rep(7, length(data_sw$C7)), rep(8, length(data_sw$C8)), rep(9, length(data_sw$C9))))
+datatable = cbind (y, group)
+
+#aplicação do Friedman
+friedman.test(datatable)
+#aplicação do kruskal
+kruskal.test(y~group, data=data_sw)
+```
+
+```{r, include=TRUE}
+if (!require(tsutils, quietly = TRUE)){
+      suppressMessages(install.packages("tsutils"))
+      }
+library(tsutils)
+teste <- as.matrix(data_sw)#, rownames=NULL, rownames.value=NULL, ...)
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vline")
+print(teste1$means)
+summary(teste1)
+```
+
+```{r, include=TRUE}
+if (!require(PMCMR, quietly = TRUE)){
+      suppressMessages(install.packages("PMCMR"))
+      }
+library(PMCMR)
+test2_a <- posthoc.kruskal.nemenyi.test(y ~ group, data=data)
+test2_a
+summary(test2_a)
+
+#Correction tier are present
+test2_b <- posthoc.kruskal.nemenyi.test(y~group, dist="Chisquare")
+test2_b
+summary(test2_b)
+```
+
+
+```{r, include=TRUE}
+if (!require(dunn.test, quietly = TRUE)){
+      suppressMessages(install.packages("dunn.test"))
+      }
+library(dunn.test)
+test3 <- dunn.test (y,group)
+summary(test3)
+```
+
 
 ```{r, include=TRUE}
 # Libraries
