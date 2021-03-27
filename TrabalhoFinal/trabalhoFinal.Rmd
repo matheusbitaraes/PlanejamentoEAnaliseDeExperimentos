@@ -81,7 +81,7 @@ if (!require(tsutils, quietly = TRUE)){
 library(tsutils)
 teste <- as.matrix(data_sw)#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 ```
@@ -124,20 +124,20 @@ library(forcats)
 
 teste <- as.matrix(select(data_sw, m30c30, m50c30, m80c30))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 
 teste <- as.matrix(select(data_sw, m30c50, m50c50, m80c50))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 
 
 teste <- as.matrix(select(data_sw, m30c80, m50c80, m80c80))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 
@@ -145,24 +145,32 @@ summary(teste1)
 
 teste <- as.matrix(select(data_sw, m30c30, m30c50, m30c80))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 
 
 teste <- as.matrix(select(data_sw, m50c30, m50c50, m50c80))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 
 
 teste <- as.matrix(select(data_sw, m80c30, m80c50, m80c80))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
-teste1 = nemenyi(teste,conf.level=0.95,plottype="mcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)
 summary(teste1)
 
+
+```
+```{r}
+teste <- as.matrix(select(data_sw, m80c80, m50c80))#, rownames=NULL, rownames.value=NULL, ...)
+teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
+print(teste1$means)
+summary(teste1)
 
 ```
 
