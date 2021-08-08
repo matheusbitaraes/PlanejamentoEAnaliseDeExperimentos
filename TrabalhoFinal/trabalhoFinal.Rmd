@@ -166,7 +166,7 @@ summary(teste1)
 
 ```
 ```{r}
-teste <- as.matrix(select(data_sw, m80c80, m50c80))#, rownames=NULL, rownames.value=NULL, ...)
+teste <- as.matrix(select(data_sw, m50c50, m50c80))#, rownames=NULL, rownames.value=NULL, ...)
 teste1 = nemenyi(teste,conf.level=0.95,plottype="matrix") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 teste1 = nemenyi(teste,conf.level=0.95,plottype="vmcb") # possiveis plots: "vline", "none", "mcb", "vmcb", "line", "matrix"
 print(teste1$means)

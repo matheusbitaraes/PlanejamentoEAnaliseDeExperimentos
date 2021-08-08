@@ -89,7 +89,7 @@ Como forma de análise, foi proposta a tarefa de efetuar a  comparação experim
 
 • Caso haja, qual a melhor configuração em termos de desempenho médio (atenção: quanto menor o valor retornado, melhor o algoritmo), e qual a magnitude das diferenças encontradas?
 
-•Há alguma configuração que deva ser recomendada em relação à outra?
+• Há alguma configuração que deva ser recomendada em relação à outra?
 
 
 ## Introdução
@@ -136,7 +136,7 @@ Além disto, os seguintes parâmetros experimentais foram dados para este estudo
 
 Para a execução dos experimentos, foram utilizados os pacotes ExpDE e smoof. A classe de funções de interesse para este teste é composta por funções Rosenbrock de dimensão entre 2 e 150.
 
-Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessário que os algortimos sejam executados em uma quantidade de dimensões representativas. Além disso, cada instância deve ser executada um número de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejada. Realizar um alto número de execuções em cada dimensão e coletar os dados de cada execução pode ser computacionalmente pesado ou infactível em alguns casos, como este, por exemplo. Portanto, será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instâncias (neste caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o numero mínimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
+Para a correta comparação entre duas configurações de algoritmos dentro de uma classe de problemas é necessário que os algortimos sejam executados em uma quantidade de dimensões representativas. Além disso, cada instância deve ser executada um número de vezes suficiente para que se consiga alcançar a potência, significância e importância prática desejada. Realizar um alto número de execuções em cada dimensão e coletar os dados de cada execução pode ser computacionalmente pesado ou infactível em alguns casos, como este, por exemplo. Portanto, será utilizada a abordagem criada por Campelo e Takahashi, que propõe a estimativa do número mínimo de instâncias (neste caso, dimensões) a serem avaliadas e também propõe uma estratégia para se obter o número mínimo de execuções em cada instância, através de uma avaliação iterativa, enquanto as execuções forem sendo coletadas \cite{campelo2019}.
 
 Como primeiro passo, deve-se estimar o número de instâncias de acordo com os parâmetros experimentais fornecidos:
 
@@ -297,7 +297,7 @@ initial_data$n1 <- rep(num_exec, num_dims)
 initial_data$n2 <- rep(num_exec, num_dims)
 ```
 
-Após esta execução, pode-se prosseguir com o Algoritmo 1, disponível em \cite{campelo2019}. O algoritmo proposto irá executar as instâncias até que o limite de precisão $se*$ seja atingido ou que o número máximo de execuções $n_{max}$ seja alcançado. O valor de $n_{max}$ foi definido como 50 (máximo de 25 execuções de cada instância a ser comparada).
+Após esta execução, pode-se prosseguir com o Algoritmo 1, disponível em \cite{campelo2019}. O algoritmo proposto irá executar as instâncias até que o limite de precisão $se*$ seja atingido ou que o número máximo de execuções $n_{max}$ seja alcançado. O valor de $n_{max}$ foi definido como 50.
 
 ```{r}
 file_name = "execution_backup.csv"
@@ -424,7 +424,9 @@ Podemos perceber que a maioria dos blocos utilizou o orçamento máximo de execu
 Optou-se por utilizar o ANOVA para realizar a comparação das amostras. Será realizada uma validação das premissas *a posteriori*.
 
 ```{r}
-d <- data.frame(dim = rep(data$dim,2), config = c(rep(1,num_dims), rep(2,num_dims)), Y = c(data$mean.instance1, data$mean.instance2))
+d <- data.frame(dim = rep(data$dim,2),
+                config = c(rep(1,num_dims), rep(2,num_dims)),
+                Y = c(data$mean.instance1, data$mean.instance2))
 
 for (i in 1:2){
   d[, i] <- as.factor(d[, i])
@@ -442,7 +444,7 @@ Para a realização do teste ANOVA, é necessário que as seguintes premissas se
 
 •	As variâncias podem ser consideradas iguais (homocedasticidade).
 
-**Verificação da independência**: Por ser dois algortimos diferentes, tem-se a independência das amostras.
+**Verificação da independência**: Por serem dois algortimos diferentes, foi considerada independência entre as amostras.
 
 **Verificação de Normalidade**: Para uma avaliação estatística sobre a validação da hipótese de uma distribuição normal para as amostras, pode-se usar o teste Shapiro-Wilk, onde têm-se as seguintes hipóteses \cite{teste_norm_R}:
 
@@ -509,11 +511,7 @@ p + labs(x = "Dimensão", y = "Valor médio") +
     scale_color_manual(values = c("green", "blue"))
 ```
 
-Dado o gráfico anterior, é possível observar que a solução ótima do Algoritmo 1 apresenta um valor maior de erro quando aplicada ao conjunto de funções utilizado em relação à solução ótima do Algoritmo 2 para todas as dimensões escolhidas, como pode ser confirmado analisando as colunas *mean.instance1* e *mean.instance2* da tabela *data*. Portanto, conclui-se, sem a necessidade de novos testes, que o Algoritmo 2 possui melhor solução média em relação ao primeiro algoritmo.
-
-**Edit Diego: Achei melhor não entrar no mérito da existência ou não de testes... Não perguntamos o professor e se a gente fizer conclusões erradas ficará pior... ai pensei em concluir essa informação no visualmente e pronto. o que acham?**
-
-**Edit Elias: acho que deveríamos tirar a parte "sem a necessidade de novos testes" to com medo de eles acharem errado, por mim podemos so remover essa parte e deixar direto "conclui-se que o Algoritmo..."**
+Dado o gráfico anterior, é possível observar que a solução ótima do Algoritmo 1 apresenta um valor maior de erro quando aplicada ao conjunto de funções utilizado em relação à solução ótima do Algoritmo 2 para todas as dimensões escolhidas, como pode ser confirmado analisando as colunas *mean.instance1* e *mean.instance2* da tabela *data*. Portanto, conclui-se que o Algoritmo 2 possui melhor solução média em relação ao primeiro algoritmo.
 
 ## Discussões e Conclusões
 
@@ -527,7 +525,7 @@ Após isto, deu-se início ao teste de hipóteses no qual decidiu-se utilizar o 
 
 Como as premissas para aplicação do ANOVA não foram cumpridas, não foi possível utilizá-lo. Desta forma, optou-se pelo teste de Friedman. Através deste teste, foi possível concluir que a média dos grupos não são homogêneas e que, portanto, há diferença significativa do desempenho de um algoritmo para o outro. A partir disto, foi realizada uma análise gráfica, com o objetivo de observar qual algoritmo apresentou melhor desempenho.
 
-Observando-se o gráfico **referenciar o grafico aqui** e as considerações realizadas na sua descrição, concluiu-se que o algoritmo 2 apresentou melhor desempenho na otimização da função de Rosenbrock. 
+Observando-se graficamente os resultados e as considerações realizadas na sua descrição, concluiu-se que o algoritmo 2 apresentou melhor desempenho na otimização da função de Rosenbrock. 
 
 
 ## Atividades dos membros
